@@ -9,6 +9,10 @@ on:
 jobs:
   web:
     runs-on: ubuntu-latest
+    # مطلوب لـ vitest و build: supabaseClient يُحمَّل عند استيراد الخدمات
+    env:
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_ANON_KEY: ci-placeholder-not-a-real-secret
     defaults:
       run:
         working-directory: Mawid-Web
@@ -22,9 +26,6 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-        env:
-          VITE_SUPABASE_URL: https://example.supabase.co
-          VITE_SUPABASE_ANON_KEY: ci-build-placeholder-not-a-real-key
 
   android-unit:
     runs-on: ubuntu-latest
