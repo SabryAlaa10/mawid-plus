@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mawid+ | Queue Management Panel</title>
+<!-- Google Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#bcc7de",
+              "tertiary-fixed-dim": "#ffb691",
+              "primary-fixed-dim": "#adc7ff",
+              "on-background": "#171c1f",
+              "surface-tint": "#005bc0",
+              "surface-container": "#eaeef2",
+              "on-tertiary": "#ffffff",
+              "surface-container-low": "#f0f4f8",
+              "on-surface": "#171c1f",
+              "background": "#f6fafe",
+              "on-secondary-fixed": "#111c2d",
+              "primary-fixed": "#d8e2ff",
+              "inverse-primary": "#adc7ff",
+              "outline": "#727785",
+              "on-secondary": "#ffffff",
+              "tertiary": "#9e4300",
+              "on-tertiary-fixed-variant": "#783100",
+              "on-tertiary-container": "#0e0200",
+              "on-primary-fixed-variant": "#004493",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#edf1f5",
+              "primary-container": "#1a73e8",
+              "on-secondary-container": "#586377",
+              "secondary": "#545f73",
+              "secondary-container": "#d5e0f8",
+              "on-primary-fixed": "#001a41",
+              "secondary-fixed": "#d8e3fb",
+              "surface-dim": "#d6dade",
+              "surface-bright": "#f6fafe",
+              "surface-container-high": "#e4e9ed",
+              "on-error": "#ffffff",
+              "on-primary-container": "#ffffff",
+              "on-surface-variant": "#414754",
+              "surface-container-lowest": "#ffffff",
+              "inverse-surface": "#2c3134",
+              "primary": "#005bbf",
+              "outline-variant": "#c1c6d6",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed-variant": "#3c475a",
+              "surface-container-highest": "#dfe3e7",
+              "error": "#ba1a1a",
+              "tertiary-container": "#c55500",
+              "on-tertiary-fixed": "#341100",
+              "surface": "#f6fafe",
+              "on-primary": "#ffffff",
+              "tertiary-fixed": "#ffdbcb",
+              "surface-variant": "#dfe3e7"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+              "label": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 10px 30px -5px rgba(23, 28, 31, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-slate-900 flex flex-col z-50">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xl font-bold text-white font-headline tracking-tight">Mawid+</span>
+<span class="text-xs text-slate-400 font-label">Doctor Portal</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 mt-4 space-y-1 px-2">
+<!-- Dashboard Tab -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-all duration-200 hover:bg-slate-800 rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label text-sm">Dashboard</span>
+</a>
+<!-- Appointments Tab -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-all duration-200 hover:bg-slate-800 rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label text-sm">Appointments</span>
+</a>
+<!-- Patients Tab (ACTIVE) -->
+<a class="flex items-center gap-3 bg-blue-600 text-white rounded-lg mx-2 px-4 py-3 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-blue-900/20" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label text-sm font-semibold">Patients</span>
+</a>
+<!-- Reports Tab -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-all duration-200 hover:bg-slate-800 rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-label text-sm">Reports</span>
+</a>
+<!-- Settings Tab -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-all duration-200 hover:bg-slate-800 rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label text-sm">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-3 px-4 py-2">
+<img alt="Doctor Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-800" data-alt="portrait of a confident male physician in a white medical coat and blue stethoscope, bright clinical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJkn2p3qNo_VfBZnx6rfyvsbc9cL0LGQu3m3_UEmOgRvKT9N6WFbax8seb3aSKnFyfV_cKpFdqFl7HQaHB1kf6OHwa3-ADWOyd1Xm_tEIGf2duHnNWF8_bXwzXJcaLl3_X1ZYpcCWIgQyVa8YAvEK4BG2tf8jRC4AkM9N3k8fQSMXYu2R9vMrnG4wTrodcJl4rOz7jBXB3hUZ0RpoCk-N_nltSwk4oJwbzL_k5S8dXU10Ypza40hZzQgpC-gqmyzo91sKyeZZHGow"/>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white font-headline">Dr. Julian Vance</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">On Duty</span>
+</div>
+</div>
+<button class="w-full flex items-center gap-3 text-slate-400 hover:text-white px-4 py-3 mt-2 transition-all duration-200 hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label text-sm">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center h-16 px-8 bg-[#f6fafe] border-b border-slate-200/15 sticky top-0 z-40 backdrop-blur-md">
+<div class="flex items-center bg-surface-container-highest rounded-full px-4 py-1.5 w-96">
+<span class="material-symbols-outlined text-outline text-xl mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-label w-full placeholder:text-outline" placeholder="Search patient ID or name..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-low rounded-full">
+<span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+<span class="text-xs font-bold text-on-surface-variant font-label tracking-tight uppercase">Room 402 • General Clinic</span>
+</div>
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium font-label">Wed, Oct 24</span>
+<span class="text-sm font-bold font-headline bg-surface-container-high px-2 py-1 rounded">09:42 AM</span>
+</div>
+</div>
+</header>
+<section class="p-10 max-w-7xl mx-auto">
+<div class="flex flex-col gap-8">
+<!-- Page Header Editorial Style -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-extrabold font-headline text-on-background tracking-tight">Queue Management</h1>
+<p class="text-on-surface-variant mt-2 text-lg">Real-time patient flow for Dr. Vance's morning session.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-high text-on-secondary-container font-semibold px-6 py-3 rounded-lg hover:bg-surface-container-highest transition-all font-label active:scale-95">
+                            Pause Queue
+                        </button>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white font-bold px-8 py-3 rounded-lg editorial-shadow flex items-center gap-2 hover:opacity-90 transition-all font-label active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                            Manual Entry
+                        </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Main Focus: Current Number (Asymmetric Large Card) -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-10 editorial-shadow border border-white/50 flex flex-col justify-between min-h-[440px] relative overflow-hidden">
+<!-- Decorative background element -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+<div>
+<div class="flex items-center gap-2 mb-8">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest font-label">Now Serving</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="flex flex-col items-center justify-center py-4">
+<span class="text-[12rem] font-extrabold font-headline leading-none text-primary-container tracking-tighter">104</span>
+<div class="flex items-center gap-4 mt-2">
+<div class="flex flex-col items-center">
+<span class="text-3xl font-bold font-headline text-on-surface">Ahmed Al-Farsi</span>
+<span class="text-on-surface-variant font-label mt-1">Patient ID: #MW-88219 • Consultation</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full bg-primary-container text-on-primary-container font-extrabold text-xl py-6 rounded-xl editorial-shadow hover:bg-primary transition-all flex items-center justify-center gap-4 active:scale-[0.98]">
+<span class="material-symbols-outlined text-3xl">record_voice_over</span>
+                                Call Next Patient
+                            </button>
+</div>
+</div>
+<!-- Right Column: Waiting List & Stats -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-8">
+<!-- Queue Statistics Cards -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-secondary-container p-6 rounded-xl flex flex-col gap-1">
+<span class="text-on-secondary-container text-xs font-bold uppercase tracking-wider font-label opacity-70">Waiting</span>
+<span class="text-3xl font-extrabold font-headline text-on-secondary-container">12</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-1">
+<span class="text-on-surface-variant text-xs font-bold uppercase tracking-wider font-label opacity-70">Avg. Wait</span>
+<span class="text-3xl font-extrabold font-headline text-on-surface">18m</span>
+</div>
+</div>
+<!-- Real-time Waiting List Card -->
+<div class="bg-surface-container-lowest rounded-xl editorial-shadow border border-white/50 flex-1 flex flex-col overflow-hidden">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="font-bold font-headline text-lg">Next in Line</h3>
+<span class="text-xs font-medium text-on-surface-variant bg-surface-container px-2 py-1 rounded">Refresh • 5s</span>
+</div>
+<div class="overflow-y-auto max-h-[480px]">
+<!-- Patient Row 1 -->
+<div class="p-6 hover:bg-surface-container-low transition-colors group flex items-center justify-between border-b border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-extrabold text-primary font-headline text-lg">105</div>
+<div class="flex flex-col">
+<span class="font-bold font-headline text-on-surface">Sarah Jenkins</span>
+<span class="text-xs text-on-surface-variant font-label">Wait time: 22 mins</span>
+</div>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Follow-up</span>
+</div>
+<!-- Patient Row 2 -->
+<div class="p-6 hover:bg-surface-container-low transition-colors group flex items-center justify-between border-b border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-extrabold text-primary font-headline text-lg">106</div>
+<div class="flex flex-col">
+<span class="font-bold font-headline text-on-surface">Mark Zuckerberg</span>
+<span class="text-xs text-on-surface-variant font-label">Wait time: 15 mins</span>
+</div>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">New Patient</span>
+</div>
+<!-- Patient Row 3 -->
+<div class="p-6 hover:bg-surface-container-low transition-colors group flex items-center justify-between border-b border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-extrabold text-primary font-headline text-lg">107</div>
+<div class="flex flex-col">
+<span class="font-bold font-headline text-on-surface">Elena Rodriguez</span>
+<span class="text-xs text-on-surface-variant font-label">Wait time: 8 mins</span>
+</div>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Lab Results</span>
+</div>
+<!-- Patient Row 4 -->
+<div class="p-6 hover:bg-surface-container-low transition-colors group flex items-center justify-between border-b border-outline-variant/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-extrabold text-primary font-headline text-lg">108</div>
+<div class="flex flex-col">
+<span class="font-bold font-headline text-on-surface">James Wilson</span>
+<span class="text-xs text-on-surface-variant font-label">Wait time: 4 mins</span>
+</div>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">New Patient</span>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low/50 text-center">
+<button class="text-primary text-xs font-bold font-label hover:underline">View Full Queue (12 Total)</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Section: Quick Tools -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-low rounded-xl p-6 flex items-center gap-5 border border-white/40">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary editorial-shadow">
+<span class="material-symbols-outlined">emergency_home</span>
+</div>
+<div>
+<h4 class="font-bold font-headline">Emergency Override</h4>
+<p class="text-xs text-on-surface-variant font-label">Skip current queue for priority</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 flex items-center gap-5 border border-white/40">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary editorial-shadow">
+<span class="material-symbols-outlined">print</span>
+</div>
+<div>
+<h4 class="font-bold font-headline">Print Ticket Batch</h4>
+<p class="text-xs text-on-surface-variant font-label">Generate tickets for walk-ins</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 flex items-center gap-5 border border-white/40">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary editorial-shadow">
+<span class="material-symbols-outlined">tv</span>
+</div>
+<div>
+<h4 class="font-bold font-headline">Display Settings</h4>
+<p class="text-xs text-on-surface-variant font-label">Configure waiting room screen</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for Quick Patient Addition -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary-container text-on-primary-container rounded-full editorial-shadow flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

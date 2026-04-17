@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OAuth Web Client ID فقط — لا تضع Client Secret داخل التطبيق -->
+    <string name="default_web_client_id" translatable="false">938058955016-276jioek2j6opm4tf5mbm7id8kbr51as.apps.googleusercontent.com</string>
+
+    <string name="app_name">+Mawid</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_search">البحث</string>
+    <string name="nav_appointments">مواعيدي</string>
+    <string name="nav_profile">حسابي</string>
+</resources>

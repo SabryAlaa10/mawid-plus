@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>التنبيهات | Mawid+</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline": "#727785",
+              "surface": "#f8f9fa",
+              "tertiary-container": "#c55500",
+              "on-tertiary-fixed-variant": "#783100",
+              "on-secondary-container": "#007165",
+              "surface-container": "#edeeef",
+              "surface-tint": "#005bc0",
+              "tertiary": "#9e4300",
+              "background": "#f8f9fa",
+              "on-secondary-fixed-variant": "#005048",
+              "primary-fixed": "#d8e2ff",
+              "inverse-primary": "#adc7ff",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#ffdbcb",
+              "inverse-surface": "#2e3132",
+              "surface-container-low": "#f3f4f5",
+              "surface-container-high": "#e7e8e9",
+              "primary-fixed-dim": "#adc7ff",
+              "surface-container-highest": "#e1e3e4",
+              "on-primary-fixed": "#001a41",
+              "on-secondary-fixed": "#00201c",
+              "on-tertiary-container": "#0e0200",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#ffb691",
+              "secondary-fixed": "#8df5e4",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#70d8c8",
+              "outline-variant": "#c1c6d6",
+              "on-secondary": "#ffffff",
+              "secondary": "#006b5f",
+              "inverse-on-surface": "#f0f1f2",
+              "on-background": "#191c1d",
+              "on-primary-container": "#ffffff",
+              "primary-container": "#1a73e8",
+              "surface-dim": "#d9dadb",
+              "on-tertiary-fixed": "#341100",
+              "primary": "#005bbf",
+              "surface-variant": "#e1e3e4",
+              "surface-bright": "#f8f9fa",
+              "on-surface-variant": "#414754",
+              "on-tertiary": "#ffffff",
+              "on-primary-fixed-variant": "#004493",
+              "secondary-container": "#8df5e4",
+              "on-surface": "#191c1d",
+              "surface-container-lowest": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Public Sans"],
+              "label": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- Top App Bar (Shared Component Logic) -->
+<header class="bg-slate-50/70 dark:bg-slate-900/70 backdrop-blur-md font-manrope font-bold text-lg docked full-width top-0 sticky z-50 flex justify-between items-center px-6 py-4 w-full rtl:flex-row-reverse no-line logic using surface-container-low shifts">
+<div class="flex items-center gap-4">
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">arrow_back</span>
+</button>
+<h1 class="text-on-surface-variant headline-md">التنبيهات</h1>
+</div>
+<div class="font-manrope font-black text-blue-700 dark:text-blue-400 text-xl tracking-tight">Mawid+</div>
+</header>
+<main class="max-w-2xl mx-auto px-4 mt-6">
+<!-- Section Header -->
+<div class="flex items-center justify-between mb-8 px-2">
+<div>
+<h2 class="font-headline font-extrabold text-2xl text-on-surface tracking-tight">تنبيهات اليوم</h2>
+<p class="text-on-surface-variant font-body text-sm opacity-80">لديك 3 تنبيهات جديدة تتطلب انتباهك</p>
+</div>
+<button class="text-primary font-label font-bold text-sm hover:underline">تحديد الكل كمقروء</button>
+</div>
+<!-- Notification List -->
+<div class="space-y-4">
+<!-- Highlighted: Your Turn Soon -->
+<div class="relative group cursor-pointer transition-all duration-200 scale-98 active:scale-95">
+<div class="bg-primary-container p-6 rounded-xl shadow-[0_8px_24px_rgba(25,28,29,0.06)] relative overflow-hidden">
+<!-- Glassy Background Accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+<div class="flex items-start gap-5 relative z-10">
+<div class="bg-white/20 p-3 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="bg-white/30 text-white font-label text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-2 inline-block">عاجل</span>
+<span class="text-white/80 font-label text-xs">الآن</span>
+</div>
+<h3 class="text-white font-headline font-bold text-xl mb-1">اقترب دورك — رقم 7</h3>
+<p class="text-white/90 font-body text-sm leading-relaxed">يرجى التوجه إلى عيادة د. سارة المنصور خلال 5 دقائق.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Standard: Appointment Confirmed -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-colors duration-200 cursor-pointer group">
+<div class="flex items-start gap-5">
+<div class="bg-secondary-container p-3 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="text-on-surface font-headline font-bold text-lg mb-1">تم تأكيد الموعد</h3>
+<span class="text-on-surface-variant font-body text-xs">منذ ساعة</span>
+</div>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed">موعدك غداً الساعة 10 صباحاً مع عيادة القلب قد تم تأكيده بنجاح.</p>
+<div class="mt-4 flex gap-2">
+<button class="bg-surface-container-high px-4 py-2 rounded-lg font-label font-semibold text-xs text-on-surface-variant hover:bg-surface-variant transition-colors">عرض التفاصيل</button>
+<button class="bg-surface-container-high px-4 py-2 rounded-lg font-label font-semibold text-xs text-on-surface-variant hover:bg-surface-variant transition-colors">إضافة للتقويم</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feedback Request -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-colors duration-200 cursor-pointer group">
+<div class="flex items-start gap-5">
+<div class="bg-tertiary-fixed p-3 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">rate_review</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="text-on-surface font-headline font-bold text-lg mb-1">رأيك يهمنا</h3>
+<span class="text-on-surface-variant font-body text-xs">منذ ٣ ساعات</span>
+</div>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed">كيف كانت زيارتك لعيادة د. أحمد اليوم؟ نود سماع تجربتك لتحسين خدماتنا.</p>
+<!-- Mini Rating Component -->
+<div class="mt-4 flex items-center gap-3">
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-tertiary text-lg">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg">star</span>
+<span class="material-symbols-outlined text-outline-variant text-lg">star</span>
+</div>
+<span class="text-on-surface-variant font-label text-xs font-medium">تقييم سريع</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Past Notifications Divider -->
+<div class="pt-8 pb-4">
+<div class="flex items-center gap-4">
+<span class="font-label text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest whitespace-nowrap">تنبيهات سابقة</span>
+<div class="h-[1px] w-full bg-surface-container-high"></div>
+</div>
+</div>
+<!-- Empty State / Footer Placeholder -->
+<div class="text-center py-12">
+<div class="w-16 h-16 bg-surface-container-low rounded-full mx-auto flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-surface-variant opacity-20 text-3xl">history</span>
+</div>
+<p class="text-on-surface-variant/50 font-body text-sm">لا توجد تنبيهات أقدم</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Shared Component Logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl rounded-t-[3rem] border-t border-slate-100 dark:border-slate-800 shadow-[0_-8px_24px_rgba(25,28,29,0.06)] flex justify-around items-center px-4 pb-6 pt-3 rtl:flex-row-reverse">
+<!-- Home -->
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 scale-98 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined">home</span>
+<span class="font-public-sans text-xs font-semibold">Home</span>
+</div>
+<!-- Search -->
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 scale-98 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined">search</span>
+<span class="font-public-sans text-xs font-semibold">Search</span>
+</div>
+<!-- Appointments -->
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 scale-98 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-public-sans text-xs font-semibold">My Appointments</span>
+</div>
+<!-- Profile (Active State Logic applied here if we assume notifications are part of profile/user context, or none if not top level) -->
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 scale-98 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined">person</span>
+<span class="font-public-sans text-xs font-semibold">Profile</span>
+</div>
+</nav>
+</body></html>

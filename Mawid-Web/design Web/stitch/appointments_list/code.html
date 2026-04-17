@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mawid+ | Appointments Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-fixed-dim": "#bcc7de",
+                "tertiary-fixed-dim": "#ffb691",
+                "primary-fixed-dim": "#adc7ff",
+                "on-background": "#171c1f",
+                "surface-tint": "#005bc0",
+                "surface-container": "#eaeef2",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f0f4f8",
+                "on-surface": "#171c1f",
+                "background": "#f6fafe",
+                "on-secondary-fixed": "#111c2d",
+                "primary-fixed": "#d8e2ff",
+                "inverse-primary": "#adc7ff",
+                "outline": "#727785",
+                "on-secondary": "#ffffff",
+                "tertiary": "#9e4300",
+                "on-tertiary-fixed-variant": "#783100",
+                "on-tertiary-container": "#0e0200",
+                "on-primary-fixed-variant": "#004493",
+                "error-container": "#ffdad6",
+                "inverse-on-surface": "#edf1f5",
+                "primary-container": "#1a73e8",
+                "on-secondary-container": "#586377",
+                "secondary": "#545f73",
+                "secondary-container": "#d5e0f8",
+                "on-primary-fixed": "#001a41",
+                "secondary-fixed": "#d8e3fb",
+                "surface-dim": "#d6dade",
+                "surface-bright": "#f6fafe",
+                "surface-container-high": "#e4e9ed",
+                "on-error": "#ffffff",
+                "on-primary-container": "#ffffff",
+                "on-surface-variant": "#414754",
+                "surface-container-lowest": "#ffffff",
+                "inverse-surface": "#2c3134",
+                "primary": "#005bbf",
+                "outline-variant": "#c1c6d6",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed-variant": "#3c475a",
+                "surface-container-highest": "#dfe3e7",
+                "error": "#ba1a1a",
+                "tertiary-container": "#c55500",
+                "on-tertiary-fixed": "#341100",
+                "surface": "#f6fafe",
+                "on-primary": "#ffffff",
+                "tertiary-fixed": "#ffdbcb",
+                "surface-variant": "#dfe3e7"
+              },
+              fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .status-success-mint { background-color: #d1fae5; color: #065f46; } /* Custom Success Badge per DS */
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col bg-slate-900 dark:bg-slate-950 w-64 z-50">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-white tracking-tight">Mawid+</h1>
+<p class="text-xs text-slate-400 font-medium">Doctor Portal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 mt-4 space-y-1 px-4">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-colors hover:bg-slate-800 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label text-sm font-medium">Dashboard</span>
+</a>
+<!-- Appointments (Active) -->
+<a class="flex items-center gap-3 bg-blue-600 text-white rounded-lg px-4 py-2 transition-all duration-200 scale-100 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label text-sm font-semibold">Appointments</span>
+</a>
+<!-- Patients (Inactive) -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-colors hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="font-label text-sm font-medium">Patients</span>
+</a>
+<!-- Reports (Inactive) -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-colors hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assessment">assessment</span>
+<span class="font-label text-sm font-medium">Reports</span>
+</a>
+<!-- Settings (Inactive) -->
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-colors hover:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800/50">
+<a class="flex items-center gap-3 text-slate-400 hover:text-white px-4 py-2 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="font-label text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-[#f6fafe] dark:bg-slate-900 flex justify-between items-center px-8 z-40 border-b border-slate-200/15">
+<div class="flex-1 flex items-center">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl" data-icon="search">search</span>
+<input class="w-full bg-surface-container-highest/50 border-none rounded-xl pl-11 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/10 transition-all font-body" placeholder="Search appointments or patients..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200/20">
+<div class="text-right hidden xl:block">
+<p class="text-xs font-bold text-on-surface">Dr. Sarah Jenkins</p>
+<p class="text-[10px] text-on-surface-variant">Cardiologist</p>
+</div>
+<img alt="Doctor Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed" data-alt="professional portrait of a confident female doctor in a white coat with a friendly smile, clean medical office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbZN9C3I2_078zJOVTiQCkvdnhw7hCzJOYX1JLE3wYerYyXzI48FNqnm59mbyz92BeMRqMLeQZi5AeNoomGkhENQKftpS5M8r8D6g9A5xNgVuxtHTD25smEXh2H-yfRmJtCYzF4kSeffAGS8GrSt_QhaamxawGH5ezs7mfjj6KCOUFo7pQwg4fWXN_2BcKp9pUCmI_8_ksVTBlQ2F4jMroaT5D1DnY5hDF7ssd_3ebyNmQxFH7FNKtY2cuAmYl7odEQoiFH7PgIH4"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 h-[calc(100vh-64px)] overflow-y-auto">
+<!-- Header & Stats Bento Row -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
+<div>
+<nav class="flex items-center gap-2 text-xs text-on-surface-variant mb-2">
+<span>Portal</span>
+<span class="material-symbols-outlined text-[12px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-semibold">Appointments</span>
+</nav>
+<h2 class="text-4xl font-extrabold text-on-surface tracking-tight font-headline">Patient Queue</h2>
+<p class="text-on-surface-variant mt-1">Managing 24 consultations for today, Oct 24th.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 bg-surface-container-high text-on-secondary-container px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+                    Filters
+                </button>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                    New Appointment
+                </button>
+</div>
+</div>
+<!-- Quick Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-low p-6 rounded-xl border border-transparent">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Waiting</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold text-on-surface">12</span>
+<span class="text-tertiary text-xs font-bold font-label bg-tertiary-fixed px-2 py-0.5 rounded-full">+4 new</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">In Progress</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold text-on-surface">02</span>
+<span class="text-secondary text-xs font-bold font-label bg-secondary-fixed px-2 py-0.5 rounded-full">on time</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Completed</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold text-on-surface">08</span>
+<span class="text-primary text-xs font-bold font-label bg-primary-fixed px-2 py-0.5 rounded-full">85% daily</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-2">Cancelled</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-extrabold text-on-surface">02</span>
+</div>
+</div>
+</div>
+<!-- Main Table Section -->
+<section class="bg-surface-container-lowest rounded-xl p-2">
+<div class="overflow-x-auto">
+<table class="w-full border-separate border-spacing-y-2">
+<thead>
+<tr class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">
+<th class="px-6 py-4 text-left">Queue No.</th>
+<th class="px-6 py-4 text-left">Patient Name</th>
+<th class="px-6 py-4 text-left">Time</th>
+<th class="px-6 py-4 text-left">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm">
+<!-- Row 1: In Progress -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-200">
+<td class="px-6 py-5 rounded-l-xl font-bold text-primary">#042</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-xs text-on-secondary-container">RH</div>
+<div>
+<p class="font-semibold text-on-surface">Robert Harrison</p>
+<p class="text-[11px] text-on-surface-variant">General Checkup</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-medium">10:15 AM</td>
+<td class="px-6 py-5">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight">in-progress</span>
+</td>
+<td class="px-6 py-5 text-right rounded-r-xl">
+<div class="flex justify-end gap-2">
+<button class="bg-primary/5 text-primary hover:bg-primary hover:text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all">Next</button>
+<button class="text-on-surface-variant hover:text-error px-2 py-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Waiting -->
+<tr class="bg-surface-container-low/40 group hover:bg-surface-container-low transition-colors duration-200">
+<td class="px-6 py-5 rounded-l-xl font-bold text-on-surface-variant">#043</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<img alt="Patient" class="w-8 h-8 rounded-full object-cover" data-alt="Portrait of a mature woman with glasses, smiling softly, high-quality professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs5BF3iRl9LRHBVT8qud6QAqv0pY-mCP2J5FPLHQzX6eKKWQCXMOeMrZv-gzIquq30ERAkTPO03ybOuuY6IFdp5nks68KoMPxg50yjXzXHuj8zBDVNzQ2weAfRV4CgYV9j81-8zSuJ7L2FXraGPROiWcdtXisP_j48K2q0ay37AovmkAh8lwMYih7cubgNotcT2gzxz7nL4qR9XPw_trsYrWNc4imU4ssjzvroQLWB3BZ9OqiGxGQokwPUPQ4LKhQi9wqiNSKsfq4"/>
+<div>
+<p class="font-semibold text-on-surface">Elena Rodriguez</p>
+<p class="text-[11px] text-on-surface-variant">Follow-up Consultation</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-medium">10:30 AM</td>
+<td class="px-6 py-5">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight">waiting</span>
+</td>
+<td class="px-6 py-5 text-right rounded-r-xl">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-md shadow-primary/10">Call next</button>
+<button class="bg-error-container text-on-error-container px-4 py-1.5 rounded-lg text-xs font-bold">Cancel</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Done -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-200">
+<td class="px-6 py-5 rounded-l-xl font-bold text-on-surface-variant opacity-50">#041</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-xs text-on-surface-variant">JM</div>
+<div>
+<p class="font-semibold text-on-surface">James Miller</p>
+<p class="text-[11px] text-on-surface-variant">Lab Results Review</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-medium opacity-60">09:45 AM</td>
+<td class="px-6 py-5">
+<span class="status-success-mint px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight">done</span>
+</td>
+<td class="px-6 py-5 text-right rounded-r-xl">
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-1 rounded">Archived</span>
+</td>
+</tr>
+<!-- Row 4: Waiting -->
+<tr class="bg-surface-container-low/40 group hover:bg-surface-container-low transition-colors duration-200">
+<td class="px-6 py-5 rounded-l-xl font-bold text-on-surface-variant">#044</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-xs text-on-primary-fixed-variant">ST</div>
+<div>
+<p class="font-semibold text-on-surface">Sarah Thompson</p>
+<p class="text-[11px] text-on-surface-variant">Initial Consultation</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-medium">11:00 AM</td>
+<td class="px-6 py-5">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight">waiting</span>
+</td>
+<td class="px-6 py-5 text-right rounded-r-xl">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-bold">Call next</button>
+<button class="bg-error-container text-on-error-container px-4 py-1.5 rounded-lg text-xs font-bold">Cancel</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Cancelled -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-200">
+<td class="px-6 py-5 rounded-l-xl font-bold text-on-surface-variant opacity-30">#045</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 opacity-30 line-through">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center font-bold text-xs text-on-error-container">BK</div>
+<div>
+<p class="font-semibold text-on-surface">Bill Kingston</p>
+<p class="text-[11px] text-on-surface-variant">Routine Check</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant font-medium opacity-30">11:15 AM</td>
+<td class="px-6 py-5">
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight">cancelled</span>
+</td>
+<td class="px-6 py-5 text-right rounded-r-xl">
+<button class="text-primary text-xs font-bold hover:underline">Re-schedule</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer/Pagination -->
+<div class="flex justify-between items-center px-6 py-6 border-t border-slate-100 mt-2">
+<p class="text-xs text-on-surface-variant font-medium">Showing 1 to 10 of 24 entries</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-xs">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high font-bold text-xs">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high font-bold text-xs">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

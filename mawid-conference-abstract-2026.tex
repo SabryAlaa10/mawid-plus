@@ -1,0 +1,98 @@
+% Conference Abstract — Student Innovation in AI & Entrepreneurship (5–6 May 2026)
+% Compile with: pdflatex mawid-conference-abstract-2026.tex
+% (XeLaTeX works too; for strict "Times New Roman" use XeLaTeX + uncomment fontspec block below)
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+\usepackage{parskip}
+\setlength{\parskip}{0.55em}
+
+% Times New Roman–like (standard for pdflatex); very close to TNR for submission PDFs
+\usepackage{newtxtext,newtxmath}
+
+% --- Optional: uncomment for exact "Times New Roman" on Windows/macOS (compile with xelatex) ---
+% \usepackage{fontspec}
+% \setmainfont{Times New Roman}
+
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+{\large\bfseries Student Innovation in the Era of Artificial Intelligence and Entrepreneurship}\\[0.35em]
+{\large الابتكار الطلابي في عصر الذكاء الاصطناعي وريادة الأعمال}\\[0.9em]
+{\normalsize 5 -- 6 May 2026 \quad | \quad 6 -- 5 -- 2026}\\[1.1em]
+\rule{\textwidth}{0.4pt}\\[0.75em]
+{\small\bfseries Conference Abstract Template}
+\end{center}
+
+\vspace{0.9em}
+
+\noindent\textbf{Title of the Abstract}\\[0.25em]
+Mawid+: Integrated Appointment and Queue Platform with an AI-Guided Specialty Assistant for Patients
+
+\vspace{0.75em}
+
+\noindent\textbf{Author(s)}\\[0.25em]
+Full Name\textsuperscript{1}, Full Name\textsuperscript{2}
+
+\vspace{0.75em}
+
+\noindent\textbf{Affiliation(s)}\\[0.25em]
+\textsuperscript{1}Department, Faculty, University, Country\\
+\textsuperscript{2}Department, Faculty, University, Country \quad (if applicable)
+
+\vspace{0.5em}
+\noindent\textbf{Email:} corresponding.author@email.com
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.35pt}
+\vspace{0.6em}
+
+\noindent\textbf{Abstract}\\[0.35em]
+\textit{(Word count: 250--300 words.)}
+
+\vspace{0.45em}
+
+\noindent\textbf{Background/Introduction.}
+Outpatient services remain crowded, and patients with vague symptoms often struggle to choose an appropriate specialty, which can delay care. Many digital booking tools list doctors yet rarely connect everyday symptom language to choices grounded in the same institutional directory. \textbf{Mawid+} is a student software project that unifies a patient app, a physician dashboard, and one shared database so ratings and review counts can support transparent provider selection during the care-seeking journey.
+
+\noindent\textbf{Objective.}
+We aim to implement appointment booking and in-clinic queue management, and to add a responsible assistant that suggests a \emph{medical specialty direction} for orientation only---not a definitive diagnosis---then ranks registered physicians by rating for rapid booking.
+
+\noindent\textbf{Methods.}
+The architecture uses a mobile client for patients, a web client for physicians, and a managed PostgreSQL database with row-level security. Data cover physicians, clinics, appointments, and queue settings. A chat-based assistant maps free-text symptoms to supported specialty labels via a large language model, then runs deterministic queries to rank physicians and surface availability under existing scheduling rules.
+
+\noindent\textbf{Results.}
+The prototype supports an end-to-end path from search to booking and live queue updates. The assistant is constrained to specialty guidance and ranked local providers rather than disease labels, keeping recommendations tied to registry data and booking workflows.
+
+\noindent\textbf{Discussion.}
+The contribution is linking cautious AI triage language to verifiable institutional records instead of generic web answers, and closing the loop to ratings and slots. Limits include specialty label alignment, regulatory expectations for health software, and governance beyond a student build.
+
+\noindent\textbf{Conclusion.}
+Mawid+ offers a practical model for digital front-door services combining queues, transparent ranking, and guard-railed artificial intelligence. Next steps include user evaluation, richer specialty mapping, explicit emergency handling, and deeper institutional integration.
+
+\vspace{0.9em}
+\noindent\textbf{Keywords:} digital health, appointment scheduling, artificial intelligence, patient triage, mobile application
+
+\vspace{1.2em}
+\noindent\rule{\textwidth}{0.35pt}
+\vspace{0.5em}
+
+\noindent\textbf{Formatting Instructions (as provided by the committee)}\\
+Font: Times New Roman, 12\,pt \quad|\quad Line spacing: 1.5 \quad|\quad Alignment: Justified \quad|\quad Margins: 2.5\,cm (all sides). This \texttt{.tex} file implements these settings.
+
+\vspace{0.45em}
+\noindent\textbf{Submission Notes}\\
+$\bullet$ Do not include references, figures, or tables in the abstract.\\
+$\bullet$ Avoid abbreviations; if necessary, define them at first mention.\\
+$\bullet$ Ensure clarity, accuracy, and proper language before submission.
+
+\end{document}

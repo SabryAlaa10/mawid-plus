@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline": "#727785",
+              "surface": "#f8f9fa",
+              "tertiary-container": "#c55500",
+              "on-tertiary-fixed-variant": "#783100",
+              "on-secondary-container": "#007165",
+              "surface-container": "#edeeef",
+              "surface-tint": "#005bc0",
+              "tertiary": "#9e4300",
+              "background": "#f8f9fa",
+              "on-secondary-fixed-variant": "#005048",
+              "primary-fixed": "#d8e2ff",
+              "inverse-primary": "#adc7ff",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#ffdbcb",
+              "inverse-surface": "#2e3132",
+              "surface-container-low": "#f3f4f5",
+              "surface-container-high": "#e7e8e9",
+              "primary-fixed-dim": "#adc7ff",
+              "surface-container-highest": "#e1e3e4",
+              "on-primary-fixed": "#001a41",
+              "on-secondary-fixed": "#00201c",
+              "on-tertiary-container": "#0e0200",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#ffb691",
+              "secondary-fixed": "#8df5e4",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#70d8c8",
+              "outline-variant": "#c1c6d6",
+              "on-secondary": "#ffffff",
+              "secondary": "#006b5f",
+              "inverse-on-surface": "#f0f1f2",
+              "on-background": "#191c1d",
+              "on-primary-container": "#ffffff",
+              "primary-container": "#1a73e8",
+              "surface-dim": "#d9dadb",
+              "on-tertiary-fixed": "#341100",
+              "primary": "#005bbf",
+              "surface-variant": "#e1e3e4",
+              "surface-bright": "#f8f9fa",
+              "on-surface-variant": "#414754",
+              "on-tertiary": "#ffffff",
+              "on-primary-fixed-variant": "#004493",
+              "secondary-container": "#8df5e4",
+              "on-surface": "#191c1d",
+              "surface-container-lowest": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Public Sans"],
+              "label": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="bg-slate-50/70 dark:bg-slate-900/70 backdrop-blur-md sticky top-0 z-50 flex justify-between items-center px-6 py-4 w-full rtl:flex-row-reverse">
+<div class="flex items-center gap-4">
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full active:scale-90">
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400">arrow_back</span>
+</button>
+<h1 class="font-manrope font-bold text-lg text-slate-800 dark:text-white">حجز موعد</h1>
+</div>
+<div class="font-manrope font-black text-blue-700 dark:text-blue-400 text-xl tracking-tight">Mawid+</div>
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors p-2 rounded-full active:scale-90">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">notifications</span>
+</button>
+</header>
+<main class="max-w-2xl mx-auto px-4 mt-6 space-y-8">
+<!-- Doctor Summary Card - Asymmetric Editorial Style -->
+<section class="relative">
+<div class="bg-surface-container-lowest rounded-tr-xl rounded-bl-xl rounded-tl-[3rem] rounded-br-[3rem] p-6 shadow-sm flex gap-6 items-center overflow-hidden">
+<div class="relative w-24 h-24 flex-shrink-0">
+<img alt="Doctor profile" class="w-full h-full object-cover rounded-tl-[2rem] rounded-br-[2rem]" data-alt="Professional portrait of a friendly middle-eastern male doctor in a white coat with a stethoscope, bright clinical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8enfq8LiqtygfY6QwwFp2Rz5tZ6CCD_5vf39hYbDIVuRprxljO4BzhSrcbJsgOomTtyL-y-UZwEuR3LrtrLo-6lqfJ_lVvEY0Pa0crv0FUDddpTRzFbUS7HPhqrrOA32t2h6PzX5tQoWCc_Q3Cm-eX7yU-kTI4Mo3UkbihsIXXy9XjYfIcCGWEA57NLWtfSoGUPINlT7Rv3HiQpguwS9XyOJ0MzGvV8VF8iWNkY8XxuS99FKTRtUzy-NOa2HzrPOHGz2ZukERbZU"/>
+<div class="absolute -bottom-1 -right-1 bg-secondary w-6 h-6 rounded-full border-4 border-surface-container-lowest"></div>
+</div>
+<div class="flex-grow">
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1 block">استشاري أمراض القلب</span>
+<h2 class="font-manrope text-2xl font-bold text-primary mb-1">د. فيصل القحطاني</h2>
+<div class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold">4.9</span>
+<span class="text-xs opacity-60">(120+ تقييم)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Calendar Section - Tonal Layering -->
+<section class="space-y-4">
+<div class="flex justify-between items-end px-2">
+<h3 class="font-manrope text-xl font-extrabold text-on-surface">اختر التاريخ</h3>
+<span class="text-sm font-semibold text-primary">أكتوبر 2023</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl">
+<div class="grid grid-cols-7 gap-2">
+<!-- Weekdays -->
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">سبت</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">أحد</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">اثنين</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">ثلاثاء</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">أربعاء</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">خميس</div>
+<div class="text-center text-[10px] font-bold text-outline uppercase pb-2">جمعة</div>
+<!-- Days - Mock Selection -->
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant/40 cursor-not-allowed">١٤</button>
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant/40 cursor-not-allowed">١٥</button>
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-white transition-colors">١٦</button>
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-white transition-colors">١٧</button>
+<button class="h-12 flex items-center justify-center rounded-lg bg-primary text-on-primary font-bold shadow-lg shadow-primary/20 scale-105">١٨</button>
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-white transition-colors">١٩</button>
+<button class="h-12 flex items-center justify-center rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-white transition-colors">٢٠</button>
+</div>
+</div>
+</section>
+<!-- Time Slots - Bento Style -->
+<section class="space-y-4">
+<h3 class="font-manrope text-xl font-extrabold text-on-surface px-2">الوقت المتاح</h3>
+<div class="grid grid-cols-3 gap-3">
+<button class="bg-surface-container-lowest p-4 rounded-xl text-center transition-all hover:bg-primary-fixed hover:text-on-primary-fixed group border border-transparent hover:border-primary/20">
+<span class="block text-lg font-bold font-manrope">09:00</span>
+<span class="text-[10px] font-bold opacity-60 uppercase">صباحاً</span>
+</button>
+<button class="bg-surface-container-lowest p-4 rounded-xl text-center transition-all hover:bg-primary-fixed hover:text-on-primary-fixed group border border-transparent hover:border-primary/20">
+<span class="block text-lg font-bold font-manrope">09:30</span>
+<span class="text-[10px] font-bold opacity-60 uppercase">صباحاً</span>
+</button>
+<button class="bg-primary p-4 rounded-xl text-center text-on-primary shadow-xl shadow-primary/15 transform scale-105">
+<span class="block text-lg font-bold font-manrope">10:00</span>
+<span class="text-[10px] font-bold opacity-80 uppercase">صباحاً</span>
+</button>
+<button class="bg-surface-container-lowest p-4 rounded-xl text-center transition-all hover:bg-primary-fixed hover:text-on-primary-fixed group border border-transparent hover:border-primary/20">
+<span class="block text-lg font-bold font-manrope">10:30</span>
+<span class="text-[10px] font-bold opacity-60 uppercase">صباحاً</span>
+</button>
+<button class="bg-surface-container-low/50 p-4 rounded-xl text-center cursor-not-allowed opacity-40">
+<span class="block text-lg font-bold font-manrope">11:00</span>
+<span class="text-[10px] font-bold uppercase">صباحاً</span>
+</button>
+<button class="bg-surface-container-lowest p-4 rounded-xl text-center transition-all hover:bg-primary-fixed hover:text-on-primary-fixed group border border-transparent hover:border-primary/20">
+<span class="block text-lg font-bold font-manrope">11:30</span>
+<span class="text-[10px] font-bold opacity-60 uppercase">صباحاً</span>
+</button>
+</div>
+</section>
+<!-- Glassmorphism Booking Type -->
+<section class="bg-primary/5 border border-primary/10 rounded-xl p-5 flex items-center justify-between backdrop-blur-sm">
+<div class="flex items-center gap-4">
+<div class="bg-primary-container text-white p-3 rounded-full">
+<span class="material-symbols-outlined">video_chat</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">نوع الاستشارة</h4>
+<p class="text-xs text-on-surface-variant">مكالمة فيديو مباشرة</p>
+</div>
+</div>
+<button class="text-primary font-bold text-sm underline underline-offset-4">تغيير</button>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl z-50 px-6 pb-8 pt-4 border-t border-slate-100 dark:border-slate-800 shadow-[0_-8px_24px_rgba(25,28,29,0.06)]">
+<div class="max-w-2xl mx-auto flex items-center justify-between gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-outline uppercase">إجمالي الرسوم</span>
+<span class="text-2xl font-black font-manrope text-on-surface">٣٥٠ ر.س</span>
+</div>
+<button class="bg-primary text-on-primary px-10 py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/30 transition-transform active:scale-95 flex items-center gap-3">
+                تأكيد الموعد
+                <span class="material-symbols-outlined text-xl">arrow_back</span>
+</button>
+</div>
+</div>
+<!-- Navigation Mirroring logic from JSON -->
+<nav class="hidden md:flex fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl rounded-full px-8 py-3 shadow-2xl items-center gap-10 border border-white/20">
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-blue-600 transition-all cursor-pointer">
+<span class="material-symbols-outlined">home</span>
+<span class="font-public-sans text-xs font-semibold mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-blue-600 transition-all cursor-pointer">
+<span class="material-symbols-outlined">search</span>
+<span class="font-public-sans text-xs font-semibold mt-1">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-100 rounded-[1.5rem] px-5 py-2 scale-105">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-public-sans text-xs font-semibold mt-1">My Appointments</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 p-2 hover:text-blue-600 transition-all cursor-pointer">
+<span class="material-symbols-outlined">person</span>
+<span class="font-public-sans text-xs font-semibold mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

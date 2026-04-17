@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>موعد+ | اختيار الطبيب</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#001a41",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#341100",
+                    "tertiary-fixed": "#ffdbcb",
+                    "surface": "#f8f9fa",
+                    "secondary-fixed": "#8df5e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "outline-variant": "#c1c6d6",
+                    "on-surface": "#191c1d",
+                    "tertiary": "#9e4300",
+                    "surface-tint": "#005bc0",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "secondary": "#006b5f",
+                    "on-secondary-container": "#007165",
+                    "surface-container": "#edeeef",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed": "#00201c",
+                    "secondary-fixed-dim": "#70d8c8",
+                    "on-background": "#191c1d",
+                    "inverse-primary": "#adc7ff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-secondary-fixed-variant": "#005048",
+                    "on-surface-variant": "#414754",
+                    "on-tertiary-container": "#0e0200",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#005bbf",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#783100",
+                    "primary-fixed-dim": "#adc7ff",
+                    "primary-container": "#1a73e8",
+                    "on-primary-fixed-variant": "#004493",
+                    "surface-dim": "#d9dadb",
+                    "inverse-surface": "#2e3132",
+                    "secondary-container": "#8df5e4",
+                    "surface-bright": "#f8f9fa",
+                    "background": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "outline": "#727785",
+                    "on-primary-container": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#c55500",
+                    "primary-fixed": "#d8e2ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e7e8e9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Public Sans"],
+                    "label": ["Public Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .doctor-card-asymmetric {
+            border-top-right-radius: 3rem;
+            border-bottom-left-radius: 3rem;
+            border-top-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/70 dark:bg-slate-900/70 backdrop-blur-lg flex flex-row-reverse justify-between items-center px-6 h-16 w-full shadow-none">
+<div class="flex items-center gap-3">
+<span class="font-manrope font-black text-blue-700 dark:text-blue-400 text-xl">موعد+</span>
+</div>
+<button class="text-blue-700 dark:text-blue-400 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- AI Chat Bubble Section -->
+<section class="mb-10 flex flex-col items-start">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<span class="text-label-sm font-bold tracking-wider text-primary">المساعد الذكي</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl rounded-tr-none shadow-sm border-r-4 border-primary max-w-[90%]">
+<p class="text-headline-sm font-medium leading-relaxed text-on-surface-variant">
+                    بناءً على أعراضك، أنصحك بمراجعة طبيب عظام. إليك أفضل الأطباء المتاحين اليوم.
+                </p>
+</div>
+</section>
+<!-- Doctor List Section -->
+<section class="space-y-6">
+<!-- Doctor Card 1 -->
+<div class="doctor-card-asymmetric bg-surface-container-low p-6 flex flex-col md:flex-row items-center gap-6 transition-all hover:bg-surface-container transition-transform active:scale-98">
+<div class="relative w-24 h-24 shrink-0">
+<img alt="Dr. Faisal Omar" class="w-full h-full object-cover doctor-card-asymmetric shadow-md" data-alt="professional portrait of a middle-aged male doctor with a kind smile wearing a white medical coat in a bright modern clinic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF5BUeWpogTcY7Ph2MxsLBMZ-WE3ZrHjYBD6eZjNaW62PNpanRubjzUUmUABZVhK0xiStaZpm2eoCSPxPzTYaJ51eDy7QySBRBuhiNKSEc0IKNrAUz5OG2qTyxmWKO8_tTp4nUjmw8JYqPIJNyTu93ZWwkGOrl_TZgK1lMs1HkjDlnBEzoLX6xfqTlAgf_JQOz6QpRGHlQfZRKLRpRdQMzZ2Wx7OyYum1mFMM_GrLM7z5kakuTtjDLiaFMF_RWrU3UGoPk6PGGXOY"/>
+<div class="absolute -bottom-2 -right-2 bg-secondary-container text-on-secondary-container px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.9
+                    </div>
+</div>
+<div class="flex-grow text-center md:text-right">
+<h3 class="text-xl font-extrabold text-on-surface mb-1">د. فيصل عمر</h3>
+<p class="text-sm font-semibold text-secondary mb-3 uppercase tracking-tighter">استشاري جراحة العظام</p>
+<div class="flex flex-wrap justify-center md:justify-end gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> متاح اليوم</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> جدة، حي الروضة</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold hover:opacity-90 active:scale-95 transition-all shrink-0">
+                    اختر
+                </button>
+</div>
+<!-- Doctor Card 2 -->
+<div class="doctor-card-asymmetric bg-surface-container-low p-6 flex flex-col md:flex-row items-center gap-6 transition-all hover:bg-surface-container transition-transform active:scale-98">
+<div class="relative w-24 h-24 shrink-0">
+<img alt="Dr. Sarah Khalid" class="w-full h-full object-cover doctor-card-asymmetric shadow-md" data-alt="close-up of a professional female doctor with glasses and a friendly expression wearing a stethoscope and blue scrubs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyDD0w5ZqIZx2lcTKi1RHiuYDs0GXx0ljAnRKwLsMYN-XubO5bxNKrGrva-T-Z4RKO5n3Zy94lH-H_cJFy5Ln_utQhn13O_RmICngb5CnJS1VRaPHUP3iyPO7QOAvOeiktDz13q2DR6EkA67kRhvipoMTO-lQxiL9pHoB-EfMn1MBNnYAIN7OwuId0QxGgE6HaplO2unR-CVGKkJHm_K_DZRMOJ8mMsDFmHha2M7ljM6-wmPyIqAOO_ac42NvgbOMap8rSJTSGX8Y"/>
+<div class="absolute -bottom-2 -right-2 bg-secondary-container text-on-secondary-container px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.8
+                    </div>
+</div>
+<div class="flex-grow text-center md:text-right">
+<h3 class="text-xl font-extrabold text-on-surface mb-1">د. سارة خالد</h3>
+<p class="text-sm font-semibold text-secondary mb-3 uppercase tracking-tighter">أخصائية طب العظام والكسور</p>
+<div class="flex flex-wrap justify-center md:justify-end gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> متاح غداً</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> الرياض، العليا</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold hover:opacity-90 active:scale-95 transition-all shrink-0">
+                    اختر
+                </button>
+</div>
+<!-- Doctor Card 3 -->
+<div class="doctor-card-asymmetric bg-surface-container-low p-6 flex flex-col md:flex-row items-center gap-6 transition-all hover:bg-surface-container transition-transform active:scale-98">
+<div class="relative w-24 h-24 shrink-0">
+<img alt="Dr. Ahmed Mansour" class="w-full h-full object-cover doctor-card-asymmetric shadow-md" data-alt="distinguished male surgeon in late 50s with grey hair and confident posture wearing white coat in professional studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5lXFOWw7A_BrvTj_Ratpn_eqL-C4xYTyq9J-9SkyBIZrNdgKE8raQmgAlJstc9OPQSlnJYk9PSZTAhNEecBoYj-gij0YEBZMaWK7H4UAwnLjbgW_nASG3wFuQWWZvqlJiWajhX-7aAHQLh83VtKg8t33uEerYoB3bfhRwJBtW07Rz7iRY-QWgENWYdrbpEBMnKNXWw2onbfZmgDUWV3bwANQQAgUeWLRu_90-BrB9PvcHX8dZf8tAeP6cXeIyV3czywWQb1URrU8"/>
+<div class="absolute -bottom-2 -right-2 bg-secondary-container text-on-secondary-container px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                        5.0
+                    </div>
+</div>
+<div class="flex-grow text-center md:text-right">
+<h3 class="text-xl font-extrabold text-on-surface mb-1">د. أحمد منصور</h3>
+<p class="text-sm font-semibold text-secondary mb-3 uppercase tracking-tighter">بروفيسور جراحة العمود الفقري</p>
+<div class="flex flex-wrap justify-center md:justify-end gap-3 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> متاح اليوم</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> الدمام، الشاطئ</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold hover:opacity-90 active:scale-95 transition-all shrink-0">
+                    اختر
+                </button>
+</div>
+</section>
+</main>
+<!-- Bottom Chat Input/NavBar Fusion -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white dark:bg-slate-950 rounded-t-[3rem] px-6 py-4 flex flex-row-reverse justify-between items-center pb-safe shadow-[0_-8px_24px_rgba(25,28,29,0.06)]">
+<div class="flex flex-row-reverse w-full items-center gap-4">
+<button class="text-slate-400 p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full active:scale-98 transition-transform">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<div class="flex-grow bg-surface-container-low rounded-full px-6 py-3 flex items-center justify-between">
+<span class="text-on-surface-variant text-sm font-body">اكتب رسالتك هنا...</span>
+<button class="text-slate-400">
+<span class="material-symbols-outlined">mic</span>
+</button>
+</div>
+<button class="bg-blue-600 text-white rounded-full p-3 active:scale-98 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</nav>
+</body></html>

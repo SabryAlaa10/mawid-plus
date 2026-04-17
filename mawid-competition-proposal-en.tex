@@ -1,0 +1,58 @@
+% Compile with: pdflatex mawid-competition-proposal-en.tex
+% (or xelatex / lualatex — both work for this English-only document)
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black}
+
+\title{\textbf{Mawid+ Project\\A Digital Platform for Appointments and Clinic Queues\\with an AI-Powered Assistant to Guide Patients}}
+\author{Student / Team name: \underline{\hspace{6cm}} \quad Student ID: \underline{\hspace{3cm}}}
+\date{\today}
+
+\begin{document}
+\maketitle
+\vspace{-0.5em}
+\begin{center}\small
+\textbf{Competition submission --- problem statement, solution overview, and proposed feature}
+\end{center}
+\vspace{0.6em}
+
+\section*{1. Problem and need}
+Healthcare systems face growing pressure from crowded clinics, long waiting times, and the difficulty of \textbf{choosing the right medical specialty} when patients experience vague or non-specific symptoms. This can delay care or lead to booking the wrong specialty. At the same time, traditional or partially digital booking systems often \textbf{fail to connect} a simple understanding of symptoms with the \textbf{best available options} among physicians actually registered in the system, ranked by quality and ratings.
+
+\section*{2. Overall concept: Mawid+}
+\textbf{Mawid+} is a platform designed to \textbf{simplify the patient journey} from finding a suitable physician to \textbf{booking an appointment} and managing the \textbf{in-clinic queue}, together with a physician dashboard for appointments and queue management. The project uses a modern architecture (a patient mobile app, a web app for physicians, and a centralized database) so that physician data, appointments, and ratings remain \textbf{unified and queryable}, enabling transparent presentation of top-rated providers.
+
+\section*{3. System components (summary)}
+\begin{itemize}
+  \item \textbf{Patient app:} Registration and sign-in, browsing physicians and specialties, viewing details and location, booking within available slots, and queue status when applicable.
+  \item \textbf{Physician dashboard (web):} Profile and schedule management, appointment lists, today's queue, and real-time notifications on updates.
+  \item \textbf{Database and services:} Storage of physician records (including specialty, rating, and review count), appointments, and queue settings, with access policies controlling who can read or modify what.
+\end{itemize}
+
+\section*{4. Proposed feature: in-app ``smart medical assistant''}
+A new interactive layer complements the core product and does \textbf{not} replace the physician:
+
+\begin{enumerate}
+  \item \textbf{Chat interface} inside the patient app to capture symptom descriptions in plain language, with short follow-up questions when needed to improve clarity without burdening the user.
+  \item \textbf{AI-assisted analysis} that suggests an \textbf{appropriate medical specialty} as a first step, under an explicit safety rule: \textbf{no definitive disease diagnosis} --- only guidance such as ``which specialty may be most suitable to visit next'' based on the user's description.
+  \item \textbf{Automatic linkage to the database:} after the specialty is determined (or mapped to the nearest supported specialty in the system), the same database returns physicians in that specialty, \textbf{sorted by highest ratings} (with secondary criteria such as review count when scores tie), ensuring recommendations reflect \textbf{real providers in the system}, not generic web answers.
+  \item \textbf{Short, actionable list:} the assistant shows a limited number of suggested physicians with \textbf{a concise view of availability or bookable slots} according to the app's existing scheduling logic, enabling \textbf{immediate booking} or a fast path to the booking screen for the same physician.
+\end{enumerate}
+
+\section*{5. Safety, responsibility, and value}
+The assistant should ship with \textbf{fixed disclaimers}: it is a support tool, not a substitute for clinical examination, and emergencies require contacting emergency services immediately. The value for the university and the competition lies in combining a \textbf{practical digital health service} with \textbf{responsible use of AI} as a bridge between symptom description and a real specialty in the system, then \textbf{ranking rated physicians} and connecting that directly to the booking flow --- a coherent path from problem to operational solution.
+
+\vfill
+\begin{center}\small
+\textbf{Note for the jury:} screen captures of the patient app and physician dashboard, plus a simple flow diagram (patient $\rightarrow$ chat $\rightarrow$ specialty $\rightarrow$ physician list $\rightarrow$ booking), can accompany the oral presentation or appendix.
+\end{center}
+
+\end{document}

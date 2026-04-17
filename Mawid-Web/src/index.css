@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Dot grid for login hero */
+.login-dot-grid {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.login-gradient-bg {
+  background: linear-gradient(165deg, #0f172a 0%, #1e293b 45%, #0f172a 100%);
+}
+
+/* Logo text glow */
+.login-logo-glow {
+  text-shadow:
+    0 0 20px rgba(26, 115, 232, 0.5),
+    0 0 40px rgba(26, 115, 232, 0.25);
+}
+
+/* Dashboard shell — subtle grid + depth (matches login polish) */
+.dashboard-bg {
+  background-color: #f1f5f9;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dashboard-card {
+  @apply rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_-4px_rgba(15,23,42,0.07)] transition-shadow duration-300;
+}
+
+.dashboard-input {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all duration-200;
+  @apply focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
+}
+
+.btn-gradient-primary {
+  background: linear-gradient(to left, #1a73e8, #0d47a1);
+  @apply font-bold text-white shadow-md transition-all duration-200;
+}
+
+.btn-gradient-primary:hover:not(:disabled) {
+  @apply scale-[1.02] shadow-lg;
+}
+
+.btn-gradient-primary:disabled {
+  @apply opacity-60 scale-100;
+}
+
+/* Skeleton shimmer (no extra deps) */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 0%,
+    #e2e8f0 45%,
+    #f8fafc 55%,
+    #f1f5f9 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Dashboard notifications (TopBar bell) */
+@keyframes notificationSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-notification-slide-down {
+  animation: notificationSlideDown 0.2s ease forwards;
+}
+
+@keyframes notificationBadgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.notification-badge-pulse {
+  animation: notificationBadgePulse 1s ease-in-out;
+}

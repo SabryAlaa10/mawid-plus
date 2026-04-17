@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>موعد+ | مساعد الذكاء الاصطناعي</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#001a41",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#341100",
+                    "tertiary-fixed": "#ffdbcb",
+                    "surface": "#f8f9fa",
+                    "secondary-fixed": "#8df5e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "outline-variant": "#c1c6d6",
+                    "on-surface": "#191c1d",
+                    "tertiary": "#9e4300",
+                    "surface-tint": "#005bc0",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "secondary": "#006b5f",
+                    "on-secondary-container": "#007165",
+                    "surface-container": "#edeeef",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed": "#00201c",
+                    "secondary-fixed-dim": "#70d8c8",
+                    "on-background": "#191c1d",
+                    "inverse-primary": "#adc7ff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-secondary-fixed-variant": "#005048",
+                    "on-surface-variant": "#414754",
+                    "on-tertiary-container": "#0e0200",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#005bbf",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#783100",
+                    "primary-fixed-dim": "#adc7ff",
+                    "primary-container": "#1a73e8",
+                    "on-primary-fixed-variant": "#004493",
+                    "surface-dim": "#d9dadb",
+                    "inverse-surface": "#2e3132",
+                    "secondary-container": "#8df5e4",
+                    "surface-bright": "#f8f9fa",
+                    "background": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "outline": "#727785",
+                    "on-primary-container": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#c55500",
+                    "primary-fixed": "#d8e2ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e7e8e9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Public Sans"],
+                    "label": ["Public Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .message-asymmetric-user {
+            border-radius: 2rem 2rem 0.5rem 2rem;
+        }
+        .message-asymmetric-ai {
+            border-radius: 2rem 2rem 2rem 0.5rem;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<header class="fixed top-0 w-full z-50 bg-slate-50/70 backdrop-blur-lg flex flex-row-reverse justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="font-manrope font-black text-blue-700 text-xl">موعد+</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-600 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</header>
+<main class="flex-grow pt-16 pb-32 max-w-4xl mx-auto w-full px-4">
+<div class="mt-4 mb-8">
+<div class="bg-surface-container-low p-4 rounded-xl flex items-start gap-3 border-r-4 border-primary">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+<p class="text-on-surface-variant text-sm leading-relaxed font-medium">
+                    هذا المساعد يقدم توصيات للفرز الطبي وليس تشخيصاً طبياً. في الحالات الطارئة يرجى الاتصال بالإسعاف فوراً.
+                </p>
+</div>
+</div>
+<section class="space-y-8 flex flex-col">
+<div class="flex flex-row gap-3 max-w-[85%] self-start">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="minimalist 3d medical cross logo icon with clean blue aesthetic on white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa0UEV5se8NZYvVNVrov9fse7pTO69b3Z7SNA677sc-7egO_68-o7owerffKNmPjiG0-tWNVbPfN6ubFB7urcKNH6fBDdkTccltBpg1gN2LPxTpvOgUqePgHE-npmputCbuvjEGdpXJ88Ra1BuU8j_RHKv_lNBS1EN1k5MymbrG1QjPi6HRe3pTuJtJLSzXGY4oYNAxC3H4zxc01MouAF2k592PJ4UtYw5gLB0DkZpIpRAAItz83j44DX0ii_UniR7aTKRPBRmyP0"/>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-lowest text-on-surface p-5 message-asymmetric-ai shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-surface-container-highest/30">
+<p class="text-base leading-relaxed">
+                            أهلاً بك في مساعد موعد+. يرجى وصف ما تشعر به.
+                        </p>
+</div>
+<span class="text-[10px] text-outline px-2 uppercase tracking-widest font-bold">10:30 صباحاً</span>
+</div>
+</div>
+<div class="flex flex-row-reverse gap-3 max-w-[85%] self-end">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional portrait of a young man with a friendly expression in a modern bright setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsnenOVkGqKP9uDyJfs7WvkLQbtUxswbAc4TsaNISfZCnTXaY-XD40yabcpkNVhmk1-PDn8gZ5ANoOerfHvkF2HggZYWTNBJDrooY6-ZrSGohOz8F_w5iw5rMtxb9A72rv12_V86Kzw2epkGPyikQI76bXa8yEEmpU0pOHyN9J2maTuel3g_c6amoX1TCZ_6U5xTqljiOz_PnQ0BM6rugdxItWXVdxwwl8loS3Ni6cMMGtxJs5IgDSJ3-hrklC-uVBTm4sbgg22qA"/>
+</div>
+<div class="space-y-2 flex flex-col items-end">
+<div class="bg-primary text-on-primary p-5 message-asymmetric-user shadow-lg shadow-primary/10">
+<p class="text-base leading-relaxed">
+                            أشعر بصداع مستمر في الجبهة منذ صباح اليوم مع قليل من الدوار.
+                        </p>
+</div>
+<span class="text-[10px] text-outline px-2 uppercase tracking-widest font-bold">10:31 صباحاً</span>
+</div>
+</div>
+<div class="flex flex-row gap-3 max-w-[85%] self-start">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="ai assistant icon representing medical expertise blue and teal gradients" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbXW3PO-yVNF1HxncoRGBOwQNWybOh0bVc262bJ35l5LrFB6p40JfoxReHf4q0Km4JR-oV4qZOFukdlOAqP0Ou4OHWudbULpG-u6KmosolWJbe0wtnz3oWT3Aiq7l5dsDcE1Mn5xYlfSrI7-ENa9krGwKoM_EA49K0nmOcwNRux_8s9Bh2xAaWSe0VjsbmRDokQ5G8Omuk4wJeTCqIhz67UJgbUk4BtTJDEFXovWaFjiPqV8-0XiZpyWqCpfpSORwueXuZKFnTk7I"/>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-lowest text-on-surface p-5 message-asymmetric-ai shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-surface-container-highest/30">
+<div class="space-y-4">
+<p class="text-base leading-relaxed">
+                                يؤسفني سماع ذلك. للمساعدة في تحديد الخطوة التالية، هل يمكنك الإجابة على الأسئلة التالية:
+                            </p>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle">check_circle</span>
+<span class="text-sm">هل الصداع حاد أم نابض؟</span>
+</li>
+<li class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle">check_circle</span>
+<span class="text-sm">هل تعاني من حساسية تجاه الضوء؟</span>
+</li>
+</ul>
+</div>
+</div>
+<span class="text-[10px] text-outline px-2 uppercase tracking-widest font-bold">10:32 صباحاً</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 mt-4">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-surface-container-highest/50 flex flex-col gap-3">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="vital_signs">vital_signs</span>
+<h3 class="font-headline font-bold text-lg">تحليل الأعراض</h3>
+<p class="text-sm text-on-surface-variant">نقوم بتحليل بياناتك بناءً على المعايير الطبية المعتمدة.</p>
+</div>
+<div class="bg-secondary-container/30 p-6 rounded-xl border border-secondary/10 flex flex-col gap-3">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="medical_services">medical_services</span>
+<h3 class="font-headline font-bold text-lg text-on-secondary-container">حجز موعد</h3>
+<p class="text-sm text-on-secondary-container/80">يمكننا اقتراح طبيب مختص بناءً على حالتك.</p>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white shadow-[0_-8px_24px_rgba(25,28,29,0.06)] rounded-t-[3rem] px-6 py-4 flex flex-row-reverse justify-between items-center pb-safe">
+<button class="bg-blue-600 text-white rounded-full p-3 active:scale-98 transition-transform">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+<div class="flex-grow mx-4 relative">
+<input class="w-full bg-surface-container-low border-none rounded-full py-3 px-6 text-on-surface focus:ring-2 focus:ring-primary/20 placeholder:text-outline/60" placeholder="اكتب رسالتك هنا..." type="text"/>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 flex gap-2">
+<button class="text-slate-400 p-2 hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+</div>
+</div>
+<button class="text-slate-400 p-3 hover:bg-slate-100 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+</nav>
+<div class="fixed inset-0 pointer-events-none">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+</div>
+</body></html>

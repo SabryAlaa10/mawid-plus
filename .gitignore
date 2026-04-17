@@ -1,0 +1,45 @@
+# Secrets — لا تُرفع أبداً
+**/local.properties
+**/.env
+**/.env.local
+**/.env.*.local
+!.env.example
+
+# Android / Kotlin
+**/.gradle/
+**/.kotlin/
+**/build/
+**/captures/
+**/.cxx/
+**/*.apk
+**/*.aab
+**/*.dex
+**/output.json
+
+# Node / Web
+**/node_modules/
+**/dist/
+**/dist-ssr/
+
+# IDE
+**/.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.suo
+Thumbs.db
+
+# Claude — إعدادات محلية (مسارات آلية)
+.claude/settings.local.json
+
+# Logs & temp
+*.log
+*.tmp
+*.swp
+
+# LaTeX build (اختياري)
+*.aux
+*.out
+*.toc
+*.synctex.gz
