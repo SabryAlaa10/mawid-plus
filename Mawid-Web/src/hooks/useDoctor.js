@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { supabase } from '../lib/supabaseClient'
 import * as doctorService from '../services/doctorService'
 
 export function useDoctor(userId) {
@@ -29,6 +30,34 @@ export function useDoctor(userId) {
   useEffect(() => {
     refresh()
   }, [refresh])
+
+  /** عند تحديث صف الطبيب (مثلاً بعد تقييم مريض) نحدّث المتوسط والعداد بدون إعادة تحميل الصفحة. */
+  useEffect(() => {
+    if (!userId) return undefined
+    const channel = supabase
+      .channel(`doctor_profile:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'doctors',
+          filter: `id=eq.${userId}`,
+        },
+        () => {
+          refresh()
+        },
+      )
+      .subscribe((status, err) => {
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.warn('[useDoctor] doctors realtime:', status, err)
+        }
+      })
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [userId, refresh])
 
   return { doctor, loading, error, refresh }
 }

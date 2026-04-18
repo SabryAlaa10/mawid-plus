@@ -7,6 +7,7 @@ import com.mawidplus.patient.data.SeedDoctorIds
 import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 private const val HOME_VM_TAG = "HomeVM"
-private val HOME_ZONE: ZoneId = ZoneId.of("Asia/Riyadh")
+private val HOME_ZONE: ZoneId = MawidRegion.timeZone
 
 data class UpcomingAppointmentCardData(
     val doctorId: String,

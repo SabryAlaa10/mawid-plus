@@ -6,6 +6,7 @@ import { useToast } from '../context/ToastContext'
 import * as doctorService from '../services/doctorService'
 import { elementToPdfBlob, downloadBlob, sharePdfBlob } from '../utils/schedulePdfExport'
 import { buildSchedulePdfFilename } from '../utils/scheduleFilename'
+import { AR_LOCALE, CURRENCY_SUFFIX } from '../constants/region'
 
 const WEEK = [
   { v: 6, label: 'السبت' },
@@ -35,7 +36,7 @@ function formatTimeAr(hhmm) {
   const m = parseInt(ms ?? '0', 10) || 0
   const d = new Date()
   d.setHours(h, m, 0, 0)
-  return d.toLocaleTimeString('ar-SA', { hour: 'numeric', minute: '2-digit', hour12: true })
+  return d.toLocaleTimeString(AR_LOCALE, { hour: 'numeric', minute: '2-digit', hour12: true })
 }
 
 export default function SchedulePage() {
@@ -82,19 +83,19 @@ export default function SchedulePage() {
   const receptionRangeAr = useMemo(() => `${formatTimeAr(start)} — ${formatTimeAr(end)}`, [start, end])
 
   const slotLabelAr = useMemo(() => {
-    const n = new Intl.NumberFormat('ar-SA')
+    const n = new Intl.NumberFormat(AR_LOCALE)
     return `${n.format(Number(slot) || 0)} دقيقة`
   }, [slot])
 
   const feeLabelAr = useMemo(() => {
-    const n = new Intl.NumberFormat('ar-SA')
-    return `${n.format(Number(fee) || 0)} ر.س`
+    const n = new Intl.NumberFormat(AR_LOCALE)
+    return `${n.format(Number(fee) || 0)} ${CURRENCY_SUFFIX}`
   }, [fee])
 
   const experienceLabelAr = useMemo(() => {
     const y = Number(doctor?.experience_years)
     if (!Number.isFinite(y) || y <= 0) return null
-    const n = new Intl.NumberFormat('ar-SA')
+    const n = new Intl.NumberFormat(AR_LOCALE)
     return y === 1 ? `${n.format(1)} سنة خبرة` : `${n.format(y)} سنوات خبرة`
   }, [doctor?.experience_years])
 
@@ -259,6 +260,12 @@ export default function SchedulePage() {
                 </p>
                 <p className="text-xl font-black text-slate-900">{doctor.full_name ?? '—'}</p>
                 <p className="text-sm text-slate-600 font-medium">{doctor.specialty ?? '—'}</p>
+                {(doctor.review_count > 0 || doctor.rating != null) && (
+                  <p className="text-xs text-amber-800 font-bold mt-1 m-0 tabular-nums">
+                    ★ {doctor.rating != null ? Number(doctor.rating).toFixed(1) : '—'} من 5 ·{' '}
+                    {doctor.review_count ?? 0} تقييم
+                  </p>
+                )}
               </div>
             </div>
 
@@ -413,7 +420,7 @@ export default function SchedulePage() {
       </section>
 
       <section className="dashboard-card p-6 md:p-7 space-y-3 opacity-0 animate-fade-in-up [animation-fill-mode:forwards] [animation-delay:0.17s]">
-        <h2 className="font-black text-slate-900 text-lg mb-1">رسوم الاستشارة (ر.س)</h2>
+        <h2 className="font-black text-slate-900 text-lg mb-1">رسوم الاستشارة ({CURRENCY_SUFFIX})</h2>
         <input
           type="number"
           min={0}

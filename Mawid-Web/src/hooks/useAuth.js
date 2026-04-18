@@ -1,6 +1,7 @@
 import { createContext, createElement, useContext, useEffect, useState, useCallback, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import * as authService from '../services/authService'
+import { formatAuthOrNetworkError } from '../utils/authErrorMessage'
 
 const AuthContext = createContext(null)
 
@@ -11,11 +12,18 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let mounted = true
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!mounted) return
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (!mounted) return
+        setUser(session?.user ?? null)
+        setLoading(false)
+      })
+      .catch((e) => {
+        if (!mounted) return
+        setError(formatAuthOrNetworkError(e))
+        setLoading(false)
+      })
 
     const {
       data: { subscription },
@@ -36,7 +44,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.signInWithEmail(email, password)
     } catch (e) {
-      setError(e.message || 'فشل تسجيل الدخول')
+      setError(formatAuthOrNetworkError(e))
       throw e
     } finally {
       setLoading(false)
@@ -48,7 +56,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.signOut()
     } catch (e) {
-      setError(e.message || 'فشل تسجيل الخروج')
+      setError(formatAuthOrNetworkError(e))
       throw e
     }
   }, [])

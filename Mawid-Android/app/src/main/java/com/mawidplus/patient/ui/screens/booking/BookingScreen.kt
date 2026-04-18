@@ -61,11 +61,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.mawidplus.patient.core.notifications.NotificationHelper
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.ui.components.rememberCrossfadeImageRequest
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import com.mawidplus.patient.ui.screens.search.BookingDoctorMeta
 import com.mawidplus.patient.ui.screens.search.toBookingMeta
 import com.mawidplus.patient.ui.theme.Error
@@ -125,19 +125,27 @@ fun BookingScreen(
         }
     }
 
-    LaunchedEffect(submitState, doctorName) {
+    LaunchedEffect(submitState, doctorName, doctorState) {
         when (val s = submitState) {
             is BookingSubmitState.Success -> {
+                val locationHint = when (val d = doctorState) {
+                    is BookingDoctorState.Ready ->
+                        listOfNotNull(d.doctor.clinicName, d.doctor.clinicAddress)
+                            .firstOrNull { it.isNotBlank() }
+                    else -> null
+                }
                 NotificationHelper.scheduleAppointmentReminder(
                     context = context,
                     appointmentId = s.appointment.id,
                     appointmentDateIso = s.appointment.appointmentDate,
+                    timeSlot = s.appointment.timeSlot,
                     doctorName = doctorName.ifEmpty { "الطبيب" },
-                    queueNumber = s.appointment.queueNumber
+                    queueNumber = s.appointment.queueNumber,
+                    locationHint = locationHint,
                 )
                 Toast.makeText(
                     context,
-                    "تم الحجز بنجاح! سنذكرك بالموعد قبل يوم وفي صباح اليوم نفسه",
+                    "تم الحجز بنجاح! سنرسل تذكيرات قبل الموعد بـ 6 ساعات، بساعة، وبنصف ساعة (الوصول للعيادة).",
                     Toast.LENGTH_LONG
                 ).show()
                 onConfirm()
@@ -151,7 +159,7 @@ fun BookingScreen(
     val weekDays = remember(weekDates) { weekDates.map { dayNameAr(it.dayOfWeek) } }
     val dayLabels = remember(weekDates) { weekDates.map { it.dayOfMonth.toString() } }
     val monthTitleFormatter = remember {
-        DateTimeFormatter.ofPattern("MMMM yyyy", Locale("ar", "SA"))
+        DateTimeFormatter.ofPattern("MMMM yyyy", MawidRegion.arabicLocale)
     }
 
     var consultationKind by remember { mutableStateOf(ConsultationKind.Video) }
@@ -322,7 +330,7 @@ fun BookingScreen(
             }
 
             BookingBottomBar(
-                priceSar = meta?.priceSar ?: 0,
+                consultationFeeEgp = meta?.consultationFeeEgp ?: 0,
                 onConfirm = {
                     val dateIso = weekDates.getOrNull(selectedDayIndex)?.toString()
                     if (dateIso != null) viewModel.submitBooking(dateIso)
@@ -707,7 +715,7 @@ private fun ConsultationTypeCard(
 
 @Composable
 private fun BookingBottomBar(
-    priceSar: Int,
+    consultationFeeEgp: Int,
     onConfirm: () -> Unit,
     enabled: Boolean = true,
     modifier: Modifier = Modifier
@@ -735,7 +743,7 @@ private fun BookingBottomBar(
                     fontFamily = PublicSans
                 )
                 Text(
-                    "$priceSar ر.س",
+                    "$consultationFeeEgp ${MawidRegion.currencySuffix}",
                     fontFamily = Manrope,
                     fontWeight = FontWeight.Black,
                     fontSize = 26.sp,
