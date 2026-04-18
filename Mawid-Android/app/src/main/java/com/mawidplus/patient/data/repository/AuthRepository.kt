@@ -207,7 +207,7 @@ class AuthRepository {
             UiSessionPrefs.markHomeAccess(ctx)
             UiSessionPrefs.saveLastAuthUserId(ctx, userId)
         }
-        val profile = loadProfile(userId, localPhone, "—")
+        val profile = loadProfile(userId, localPhone, "")
         if (showDuplicateMessage) {
             Log.d(TAG, "loginExistingPatient: duplicate phone handled as login")
         }

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, Calendar, X } from 'lucide-react'
+import { Bell, Calendar, Star, X } from 'lucide-react'
 import { useNotifications } from '../../hooks/useNotifications'
+import { AR_LOCALE } from '../../constants/region'
 
 function NotificationItem({ notif, timeAgo, onNavigate, onClose }) {
   const isBooking = notif.type === 'new_booking'
+  const isRating = notif.type === 'new_rating'
 
   return (
     <button
@@ -19,11 +21,13 @@ function NotificationItem({ notif, timeAgo, onNavigate, onClose }) {
     >
       <div
         className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center ${
-          isBooking ? 'bg-blue-100' : 'bg-red-100'
+          isBooking ? 'bg-blue-100' : isRating ? 'bg-amber-100' : 'bg-red-100'
         }`}
       >
         {isBooking ? (
           <Calendar className="w-[18px] h-[18px] text-[#1A73E8]" aria-hidden />
+        ) : isRating ? (
+          <Star className="w-[18px] h-[18px] text-amber-600 fill-amber-400/30" aria-hidden />
         ) : (
           <X className="w-[18px] h-[18px] text-red-500" aria-hidden />
         )}
@@ -47,7 +51,7 @@ export default function TopBar({ doctor, isOpen, onToggleOpen, queueLoading }) {
   const [panelOpen, setPanelOpen] = useState(false)
   const panelWrapRef = useRef(null)
 
-  const today = new Intl.DateTimeFormat('ar-SA', {
+  const today = new Intl.DateTimeFormat(AR_LOCALE, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',

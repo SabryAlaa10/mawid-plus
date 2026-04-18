@@ -51,13 +51,18 @@ class AppointmentsViewModel(
     private val _events = MutableSharedFlow<AppointmentsUiEvent>(extraBufferCapacity = 8)
     val events: SharedFlow<AppointmentsUiEvent> = _events.asSharedFlow()
 
+    private val _ratingInFlightId = MutableStateFlow<String?>(null)
+    val ratingInFlightId: StateFlow<String?> = _ratingInFlightId.asStateFlow()
+
     init {
         refresh()
     }
 
-    fun refresh() {
+    fun refresh(showLoading: Boolean = true) {
         viewModelScope.launch {
-            _uiState.value = AppointmentsUiState.Loading
+            if (showLoading) {
+                _uiState.value = AppointmentsUiState.Loading
+            }
             val uid = authRepository.getCurrentUserIdOrNull()
             if (uid == null) {
                 _uiState.value = AppointmentsUiState.NotSignedIn
@@ -140,6 +145,42 @@ class AppointmentsViewModel(
                     )
                 }
             }
+        }
+    }
+
+    fun submitDoctorRating(appointmentId: String, stars: Int) {
+        if (_ratingInFlightId.value != null) return
+        val uid = authRepository.getCurrentUserIdOrNull()
+        if (uid == null) {
+            viewModelScope.launch {
+                _events.emit(
+                    AppointmentsUiEvent.Message("سجّل الدخول لإرسال التقييم", isError = true),
+                )
+            }
+            return
+        }
+        viewModelScope.launch {
+            _ratingInFlightId.value = appointmentId
+            when (val r = appointmentRepository.submitDoctorRating(appointmentId, uid, stars)) {
+                is Result.Success -> {
+                    refresh(showLoading = false)
+                    _events.emit(AppointmentsUiEvent.Message("شكراً لتقييمك", isError = false))
+                }
+                is Result.Error -> {
+                    _events.emit(
+                        AppointmentsUiEvent.Message(
+                            r.message.ifBlank { "تعذّر إرسال التقييم" },
+                            isError = true,
+                        ),
+                    )
+                }
+                else -> {
+                    _events.emit(
+                        AppointmentsUiEvent.Message("تعذّر إرسال التقييم، حاول مرة أخرى", isError = true),
+                    )
+                }
+            }
+            _ratingInFlightId.value = null
         }
     }
 

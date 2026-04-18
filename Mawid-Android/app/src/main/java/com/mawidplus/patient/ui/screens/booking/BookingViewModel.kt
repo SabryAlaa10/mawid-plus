@@ -10,6 +10,7 @@ import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
 import com.mawidplus.patient.data.repository.QueueRepository
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val TAG = "BookingViewModel"
-private val ZONE_RIYADH: ZoneId = ZoneId.of("Asia/Riyadh")
+private val APP_ZONE: ZoneId = MawidRegion.timeZone
 
 sealed class BookingDoctorState {
     data object Loading : BookingDoctorState()
@@ -85,7 +86,7 @@ class BookingViewModel(
     val selectedSlotIndex: StateFlow<Int> = _selectedSlotIndex.asStateFlow()
 
     val weekDates: List<LocalDate> = run {
-        val today = LocalDate.now(ZONE_RIYADH)
+        val today = LocalDate.now(APP_ZONE)
         (0..6).map { today.plusDays(it.toLong()) }
     }
 
@@ -156,14 +157,14 @@ class BookingViewModel(
                 }
                 else -> emptySet()
             }
-            val nowTime = LocalTime.now(ZONE_RIYADH)
+            val nowTime = LocalTime.now(APP_ZONE)
             val slots = generateTimeSlots(
                 startTime = start,
                 endTime = end,
                 slotDuration = slotMinutes,
                 bookedSlots = booked,
                 selectedDate = date,
-                today = LocalDate.now(ZONE_RIYADH),
+                today = LocalDate.now(APP_ZONE),
                 nowTime = nowTime,
             )
             val availableCount = slots.count { it.isAvailable }

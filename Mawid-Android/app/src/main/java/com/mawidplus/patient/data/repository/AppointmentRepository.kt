@@ -1,18 +1,34 @@
 package com.mawidplus.patient.data.repository
 
 import android.util.Log
+import com.mawidplus.patient.BuildConfig
 import com.mawidplus.patient.core.model.Appointment
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.core.network.SupabaseProvider
-import com.mawidplus.patient.data.dto.AppointmentCancelVerifyDto
 import com.mawidplus.patient.data.dto.AppointmentDto
 import com.mawidplus.patient.data.dto.AppointmentInsertDto
 import com.mawidplus.patient.data.dto.AppointmentStatusPatch
 import com.mawidplus.patient.data.dto.AppointmentTimeSlotRowDto
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -22,10 +38,48 @@ class AppointmentRepository(
 
     private companion object {
         private const val TAG = "AppointmentRepository"
-        private val ZONE_RIYADH: ZoneId = ZoneId.of("Asia/Riyadh")
+        private val APP_ZONE: ZoneId = MawidRegion.timeZone
         private val APPOINTMENT_COLUMNS = Columns.raw(
-            "id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes, doctor_notes, time_slot",
+            "id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes, doctor_notes, time_slot, patient_rating",
         )
+    }
+
+    private val rpcJson = Json { ignoreUnknownKeys = true }
+
+    private val rpcHttpClient by lazy {
+        HttpClient(Android) {
+            install(ContentNegotiation) {
+                json(rpcJson)
+            }
+        }
+    }
+
+    @Serializable
+    private data class RpcCancelAppointmentResult(
+        val ok: Boolean,
+        val error: String? = null,
+    )
+
+    @Serializable
+    private data class RpcSubmitDoctorRatingResult(
+        val ok: Boolean,
+        val error: String? = null,
+    )
+
+    /** PostgREST RPC عبر HTTP (نفس أسلوب [AuthRepository]). */
+    private suspend fun postRpcJson(
+        function: String,
+        body: kotlinx.serialization.json.JsonObject,
+    ): String {
+        val bearer =
+            supabase.auth.currentSessionOrNull()?.accessToken ?: BuildConfig.SUPABASE_ANON_KEY
+        val url = "${BuildConfig.SUPABASE_URL.trimEnd('/')}/rest/v1/rpc/$function"
+        return rpcHttpClient.post(url) {
+            header("apikey", BuildConfig.SUPABASE_ANON_KEY)
+            header("Authorization", "Bearer $bearer")
+            contentType(ContentType.Application.Json)
+            setBody(body)
+        }.bodyAsText()
     }
 
     /**
@@ -46,13 +100,13 @@ class AppointmentRepository(
         }
 
     /**
-     * أقرب موعد نشط للمريض (اليوم أو لاحقاً) حسب تقويم آسيا/الرياض.
+     * أقرب موعد نشط للمريض (اليوم أو لاحقاً) حسب تقويم مصر/القاهرة.
      */
     suspend fun getNextAppointment(patientId: String): Result<Appointment?> =
         traceRepositoryCall(TAG, "getNextAppointment") {
             withContext(Dispatchers.IO) {
                 safeCall {
-                    val today = LocalDate.now(ZONE_RIYADH)
+                    val today = LocalDate.now(APP_ZONE)
                     Log.d(TAG, "getNextAppointment: patientId=$patientId today=$today")
                     val rows = supabase.from("appointments").select(columns = APPOINTMENT_COLUMNS) {
                         filter {
@@ -101,7 +155,7 @@ class AppointmentRepository(
         }
 
     /**
-     * Appointments for a patient on a specific calendar day (e.g. today in Asia/Riyadh).
+     * Appointments for a patient on a specific calendar day (e.g. today in Africa/Cairo).
      * For queue / "today only" logic.
      */
     suspend fun getTodayAppointmentsForPatient(
@@ -162,33 +216,96 @@ class AppointmentRepository(
     }
 
     /**
-     * Sets [appointmentId] to cancelled. [patientId] must match the row (and RLS); avoids updating wrong rows.
+     * يلغي الموعد عبر [cancel_my_appointment] في Supabase (SECURITY DEFINER + تحقق patient_id = auth.uid()).
+     * يتفادى فشل تحديث PostgREST عندما لا تُرجع السياسات صفاً بعد PATCH.
      */
     suspend fun cancelAppointment(appointmentId: String, patientId: String): Result<Unit> =
         traceRepositoryCall(TAG, "cancelAppointment") {
             withContext(Dispatchers.IO) {
                 safeCall {
-                    val updated = supabase.from("appointments").update(AppointmentStatusPatch("cancelled")) {
-                        filter {
-                            eq("id", appointmentId)
-                            eq("patient_id", patientId)
-                        }
-                        select(Columns.raw("id, status"))
-                    }.decodeList<AppointmentCancelVerifyDto>()
-                    if (updated.isEmpty()) {
-                        Log.e(TAG, "Cancel: 0 rows updated (id=$appointmentId). Check RLS or session.")
-                        throw IllegalStateException(
-                            "تعذر إلغاء الموعد. سجّل الخروج ثم الدخول مجدداً، أو تحقق من اتصال الإنترنت."
+                    val sessionId = supabase.auth.currentUserOrNull()?.id
+                    if (sessionId == null) {
+                        throw IllegalStateException("سجّل الدخول لإلغاء الموعد.")
+                    }
+                    if (sessionId != patientId) {
+                        Log.w(
+                            TAG,
+                            "cancelAppointment: session uid differs from arg (session=$sessionId patientId=$patientId)",
                         )
                     }
-                    val row = updated.first()
-                    val st = row.status.lowercase()
-                    if (st != "cancelled") {
-                        Log.e(TAG, "Cancel verify failed: id=$appointmentId status=${row.status}")
-                        throw IllegalStateException("لم يُحدَّث حالة الموعد في الخادم")
+                    val raw = postRpcJson(
+                        "cancel_my_appointment",
+                        buildJsonObject { put("p_appointment_id", appointmentId) },
+                    )
+                    val result = rpcJson.decodeFromString(
+                        RpcCancelAppointmentResult.serializer(),
+                        raw,
+                    )
+                    if (result.ok) {
+                        Log.d(TAG, "Cancelled appointment via RPC: $appointmentId")
+                        return@safeCall Unit
                     }
-                    Log.d(TAG, "Cancelled appointment: $appointmentId")
-                    Unit
+                    Log.e(TAG, "cancel_my_appointment failed: ${result.error} (appointmentId=$appointmentId)")
+                    throw IllegalStateException(
+                        when (result.error) {
+                            "not_authenticated" -> "سجّل الدخول لإلغاء الموعد."
+                            "not_found_or_forbidden" ->
+                                "تعذر إلغاء الموعد. إن استمرّت المشكلة، حدّث القائمة أو تواصل مع الدعم."
+                            else -> "تعذر إلغاء الموعد. تحقق من الاتصال وحاول مرة أخرى."
+                        },
+                    )
+                }
+            }
+        }
+
+    /**
+     * تقييم الطبيب بعد اكتمال الموعد عبر [submit_doctor_rating] (SECURITY DEFINER).
+     */
+    suspend fun submitDoctorRating(
+        appointmentId: String,
+        patientId: String,
+        stars: Int,
+    ): Result<Unit> =
+        traceRepositoryCall(TAG, "submitDoctorRating") {
+            withContext(Dispatchers.IO) {
+                safeCall {
+                    val sessionId = supabase.auth.currentUserOrNull()?.id
+                    if (sessionId == null) {
+                        throw IllegalStateException("سجّل الدخول لإرسال التقييم.")
+                    }
+                    if (sessionId != patientId) {
+                        Log.w(
+                            TAG,
+                            "submitDoctorRating: session uid differs from arg (session=$sessionId patientId=$patientId)",
+                        )
+                    }
+                    val raw = postRpcJson(
+                        "submit_doctor_rating",
+                        buildJsonObject {
+                            put("p_appointment_id", appointmentId)
+                            put("p_stars", stars)
+                        },
+                    )
+                    val result = rpcJson.decodeFromString(
+                        RpcSubmitDoctorRatingResult.serializer(),
+                        raw,
+                    )
+                    if (result.ok) {
+                        Log.d(TAG, "submit_doctor_rating ok appointmentId=$appointmentId stars=$stars")
+                        return@safeCall Unit
+                    }
+                    Log.e(TAG, "submit_doctor_rating failed: ${result.error} (appointmentId=$appointmentId)")
+                    throw IllegalStateException(
+                        when (result.error) {
+                            "not_authenticated" -> "سجّل الدخول لإرسال التقييم."
+                            "not_found_or_forbidden" ->
+                                "تعذّر إرسال التقييم. حدّث القائمة أو تواصل مع الدعم."
+                            "invalid_status" -> "يمكنك التقييم بعد اكتمال الموعد فقط."
+                            "already_rated" -> "سبق تقييم هذا الموعد."
+                            "invalid_rating" -> "اختر من نجمة إلى خمس نجمات."
+                            else -> "تعذّر إرسال التقييم. تحقق من الاتصال وحاول مرة أخرى."
+                        },
+                    )
                 }
             }
         }

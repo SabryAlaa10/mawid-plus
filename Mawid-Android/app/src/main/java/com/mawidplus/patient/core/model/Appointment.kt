@@ -12,4 +12,6 @@ data class Appointment(
     val doctorNotes: String? = null,
     /** وقت الحجز بصيغة HH:mm (مثلاً 09:30). */
     val timeSlot: String? = null,
+    /** تقييم المريض للطبيب (1–5) بعد اكتمال الموعد؛ null = لم يُقيَّم بعد. */
+    val patientRating: Int? = null,
 )

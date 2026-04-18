@@ -82,10 +82,11 @@ export async function updateSchedule(doctorId, scheduleData) {
   return data
 }
 
-export async function updateFee(doctorId, feeSar) {
+/** المبلغ بالجنيه المصري؛ عمود قاعدة البيانات ما زال consultation_fee_sar. */
+export async function updateFee(doctorId, feeEgp) {
   const { data, error } = await supabase
     .from('doctors')
-    .update({ consultation_fee_sar: feeSar })
+    .update({ consultation_fee_sar: feeEgp })
     .eq('id', doctorId)
     .select()
     .maybeSingle()

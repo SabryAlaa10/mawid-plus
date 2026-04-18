@@ -16,6 +16,7 @@ data class AppointmentDto(
     val notes: String? = null,
     @SerialName("doctor_notes") val doctorNotes: String? = null,
     @SerialName("time_slot") val timeSlot: String? = null,
+    @SerialName("patient_rating") val patientRating: Int? = null,
 ) {
     fun toDomain(): Appointment = Appointment(
         id = id,
@@ -27,6 +28,7 @@ data class AppointmentDto(
         notes = notes,
         doctorNotes = doctorNotes,
         timeSlot = timeSlot,
+        patientRating = patientRating,
     )
 }
 

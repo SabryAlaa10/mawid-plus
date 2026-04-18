@@ -13,6 +13,7 @@ import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
 import com.mawidplus.patient.data.repository.QueueRepository
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -40,7 +41,7 @@ sealed class MyQueueUiState {
         /** Active appointment row for this doctor (today or nearest future). */
         val appointmentId: String?,
         val appointmentDateIso: String?,
-        /** True when [appointmentDateIso] is today (Asia/Riyadh). */
+        /** True when [appointmentDateIso] is today (Africa/Cairo). */
         val isAppointmentToday: Boolean,
         /** Days from today until appointment; 0 if today. */
         val daysUntilAppointment: Long,
@@ -70,7 +71,7 @@ class MyQueueViewModel(
     private var pollJob: Job? = null
     private var wasVisitCompleteLastPoll: Boolean? = null
 
-    private val zone: ZoneId = ZoneId.of("Asia/Riyadh")
+    private val zone: ZoneId = MawidRegion.timeZone
 
     init {
         viewModelScope.launch { load(showLoading = true) }

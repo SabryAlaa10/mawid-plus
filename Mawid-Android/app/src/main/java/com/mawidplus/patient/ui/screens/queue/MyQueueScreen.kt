@@ -69,7 +69,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import com.mawidplus.patient.core.model.QueueSettings
 import com.mawidplus.patient.ui.components.DoctorPhotoDisplay
 import com.mawidplus.patient.ui.components.BottomNavigationBar
@@ -91,6 +90,7 @@ import com.mawidplus.patient.ui.theme.SecondaryFixed
 import com.mawidplus.patient.ui.theme.Surface
 import com.mawidplus.patient.ui.theme.SurfaceBright
 import com.mawidplus.patient.ui.theme.SurfaceContainer
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.ui.theme.SurfaceContainerHigh
 import com.mawidplus.patient.ui.theme.SurfaceContainerLow
 
@@ -105,7 +105,7 @@ private fun formatArabicAppointmentDate(iso: String): String {
     if (iso.isBlank()) return "—"
     return runCatching {
         val d = LocalDate.parse(iso)
-        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale("ar", "SA"))
+        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", MawidRegion.arabicLocale)
         d.format(formatter)
     }.getOrElse { iso }
 }

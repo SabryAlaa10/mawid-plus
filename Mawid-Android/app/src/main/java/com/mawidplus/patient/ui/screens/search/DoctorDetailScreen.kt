@@ -65,6 +65,7 @@ import com.mawidplus.patient.ui.theme.PublicSans
 import com.mawidplus.patient.ui.theme.Secondary
 import com.mawidplus.patient.ui.theme.Surface
 import com.mawidplus.patient.ui.theme.SurfaceBright
+import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.ui.theme.SurfaceContainerHigh
 import com.mawidplus.patient.ui.theme.SurfaceContainerLow
 import java.time.DayOfWeek
@@ -263,7 +264,7 @@ private fun DoctorDetailReadyContent(
                 )
                 InfoStatCard(
                     title = "رسوم الكشف",
-                    value = "${doctor.consultationFeeSar} ر.س",
+                    value = "${doctor.consultationFeeSar} ${MawidRegion.currencySuffix}",
                 )
                 InfoStatCard(
                     title = "مدة الموعد",
