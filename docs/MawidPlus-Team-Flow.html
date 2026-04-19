@@ -27,7 +27,9 @@
       --radius: 14px;
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
@@ -36,6 +38,7 @@
       line-height: 1.65;
       min-height: 100vh;
     }
+
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -46,6 +49,7 @@
       pointer-events: none;
       z-index: 0;
     }
+
     .glow {
       position: fixed;
       top: -120px;
@@ -56,6 +60,7 @@
       pointer-events: none;
       z-index: 0;
     }
+
     main {
       position: relative;
       z-index: 1;
@@ -63,7 +68,12 @@
       margin: 0 auto;
       padding: 2.5rem 1.25rem 4rem;
     }
-    header.hero { text-align: center; margin-bottom: 2.5rem; }
+
+    header.hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
     header.hero .badge {
       display: inline-block;
       font-size: 0.75rem;
@@ -76,18 +86,21 @@
       border-radius: 999px;
       margin-bottom: 1rem;
     }
+
     header.hero h1 {
       font-size: clamp(1.75rem, 4vw, 2.35rem);
       font-weight: 700;
       margin: 0 0 0.75rem;
       letter-spacing: -0.02em;
     }
+
     header.hero p.lead {
       color: var(--muted);
       max-width: 54ch;
       margin: 0 auto;
       font-size: 1.05rem;
     }
+
     h2 {
       font-size: 1.35rem;
       font-weight: 600;
@@ -96,6 +109,7 @@
       align-items: center;
       gap: 0.5rem;
     }
+
     h2 .num {
       font-size: 0.85rem;
       font-weight: 700;
@@ -108,12 +122,14 @@
       align-items: center;
       justify-content: center;
     }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.25rem;
       margin-top: 1.25rem;
     }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -121,6 +137,7 @@
       padding: 1.25rem 1.35rem;
       box-shadow: var(--shadow);
     }
+
     .card h3 {
       margin: 0 0 0.65rem;
       font-size: 1.05rem;
@@ -128,15 +145,30 @@
       align-items: center;
       gap: 0.5rem;
     }
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
     .card.sabry h3 .dot { background: var(--sabry); box-shadow: 0 0 12px var(--sabry); }
     .card.esraa h3 .dot { background: var(--esraa); box-shadow: 0 0 12px var(--esraa); }
     .card.hanien h3 .dot { background: var(--hanien); box-shadow: 0 0 12px var(--hanien); }
+
     .card.sabry { border-top: 3px solid var(--sabry); background: linear-gradient(180deg, var(--sabry-bg) 0%, var(--surface) 28%); }
     .card.esraa { border-top: 3px solid var(--esraa); background: linear-gradient(180deg, var(--esraa-bg) 0%, var(--surface) 28%); }
     .card.hanien { border-top: 3px solid var(--hanien); background: linear-gradient(180deg, var(--hanien-bg) 0%, var(--surface) 28%); }
-    .card ul { margin: 0; padding: 0 1rem 0 0; color: var(--muted); font-size: 0.88rem; }
+
+    .card ul {
+      margin: 0;
+      padding: 0 1rem 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
     .card ul li { margin-bottom: 0.4rem; }
+
     .card .tag {
       display: inline-block;
       font-size: 0.68rem;
@@ -145,6 +177,8 @@
       color: var(--warn);
       margin-bottom: 0.45rem;
     }
+
+    /* المراحل التفصيلية */
     .phase {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -152,6 +186,7 @@
       margin: 1.35rem 0;
       overflow: hidden;
     }
+
     .phase-head {
       background: var(--surface2);
       padding: 0.85rem 1.15rem;
@@ -160,16 +195,20 @@
       font-size: 1.05rem;
       color: var(--accent);
     }
+
     .phase-body { padding: 0.75rem 1rem 1rem; }
+
     .person {
       margin: 1rem 0 1.15rem;
       padding: 0.85rem 1rem;
       border-radius: 10px;
       border: 1px solid var(--border);
     }
+
     .person.sabry { background: var(--sabry-bg); border-color: rgba(167, 139, 250, 0.35); }
     .person.esraa { background: var(--esraa-bg); border-color: rgba(52, 211, 153, 0.35); }
     .person.hanien { background: var(--hanien-bg); border-color: rgba(251, 146, 60, 0.35); }
+
     .person h4 {
       margin: 0 0 0.35rem;
       font-size: 0.95rem;
@@ -177,11 +216,19 @@
       align-items: center;
       gap: 0.4rem;
     }
+
     .person.sabry h4 { color: #ddd6fe; }
     .person.esraa h4 { color: #a7f3d0; }
     .person.hanien h4 { color: #fed7aa; }
-    .person .work { font-size: 0.82rem; color: var(--muted); margin: 0 0 0.55rem; }
+
+    .person .work {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 0.55rem;
+    }
+
     .person .work strong { color: var(--text); }
+
     .file-list {
       margin: 0;
       padding: 0.5rem 0.75rem 0.5rem 0;
@@ -197,7 +244,12 @@
       max-height: 280px;
       overflow-y: auto;
     }
-    .file-list li::before { content: "· "; color: var(--muted); }
+
+    .file-list li::before {
+      content: "· ";
+      color: var(--muted);
+    }
+
     .diagram {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -206,6 +258,7 @@
       margin: 1.35rem 0;
       overflow-x: auto;
     }
+
     .diagram pre {
       margin: 0;
       font-family: ui-monospace, monospace;
@@ -215,6 +268,7 @@
       direction: ltr;
       text-align: left;
     }
+
     .note {
       background: var(--accent-dim);
       border: 1px solid rgba(34, 211, 238, 0.25);
@@ -224,17 +278,9 @@
       color: var(--muted);
       margin-top: 1.35rem;
     }
+
     .note strong { color: var(--accent); }
-    .phase-banner {
-      margin: 0 0 1rem;
-      padding: 0.65rem 0.85rem;
-      background: rgba(251, 191, 36, 0.08);
-      border-radius: 8px;
-      border: 1px solid rgba(251, 191, 36, 0.25);
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-    .phase-banner strong { color: var(--warn); }
+
     footer {
       text-align: center;
       margin-top: 2.5rem;
@@ -243,6 +289,7 @@
       color: var(--muted);
       font-size: 0.85rem;
     }
+
     @media print {
       .bg-grid, .glow { display: none; }
       body { background: #fff; color: #111; }
@@ -261,86 +308,92 @@
       <p class="lead">
         تم <strong style="color: var(--text);">تخفيف الحمل عن إسراء</strong> بنقل جزء من الواجهات (ويب + أندرويد) إلى <strong style="color: var(--text);">حنين</strong>، مع بقاء صبري كما هو. أدناه: مسؤوليات إجمالية ثم كل مرحلة مع الملفات.
       </p>
-      <div class="note" style="margin-top: 1.5rem; text-align: right;">
-        <strong>آخر تحديث المستودع (أبريل 2026):</strong> التعديلات المدمجة تشمل فرع
-        <code style="direction:ltr; display:inline-block;">rewrite/sabry-web-auth</code> على
-        <a href="https://github.com/SabryAlaa10/mawid-plus" style="color: var(--accent);">github.com/SabryAlaa10/mawid-plus</a>.
-        أبرز ما دخل الكود: هجرات <strong>016–020</strong> (قيود تحديث إعدادات الطابور، إلغاء موعد المريض عبر RPC، بذرة عيادة، تقييم طبيب، نشر Realtime لجدول الأطباء)،
-        <strong>أيقونة التشغيل Adaptive</strong> (خلفية <code>#1A73E8</code> + حقيبة إسعاف بيضاء وعلامة +)،
-        <strong>MawidRegion.kt</strong> و<strong>region.js</strong>، تشديد <strong>supabaseClient</strong> مع <strong>bootstrap.jsx</strong> و<strong>authErrorMessage.js</strong>، وتحديثات واجهات/منطق الحجز والمواعيد والطابور والملف والبحث والإشعارات، وإصدار التطبيق <strong>1.0.6</strong>.
-        <br /><br />
-        <strong>مساعد RAG (المرحلة ٥):</strong> ما زال <em>مخططاً</em> — ملفات مثل <code>RAGRepository.kt</code> غير موجودة بعد؛ الهجرات 016–020 لا تحل محل pgvector/الـ Edge Function للمساعد.
-      </div>
     </header>
 
     <h2><span class="num">١</span> المسؤوليات الإجمالية (مرجع سريع)</h2>
+
     <div class="cards">
       <article class="card sabry">
         <span class="tag">Sabry</span>
         <h3><span class="dot"></span> صبري</h3>
         <ul>
-          <li><strong>Supabase (تشغيل):</strong> تطبيق السكربتات، RLS وRealtime وpublication، Storage لصور الأطباء — بالتنسيق مع إسراء.</li>
-          <li>AI كامل، دخول ويب + إشعارات ويب، واجهات لوحة الطبيب، تنقل أندرويد، Home، Splash، إشعارات محلية، أيقونة التشغيل، <code>MainActivity</code> / <code>PatientApp</code>.</li>
+          <li><strong>Supabase (تشغيل):</strong> تطبيق السكربتات على المشروع (SQL Editor)، التحقق من RLS وRealtime وpublication، ربط Storage لصور الأطباء، اختبار سياسات الطبيب والمريض — بالتنسيق مع إسراء على المخطط.</li>
+          <li>AI كامل، دخول ويب + إشعارات ويب، <strong>واجهات ويب للوحة الطبيب</strong> (ملف، جدول، زخرفة، تحميل، Toast)، تنقل أندرويد، Home، Splash، إشعارات محلية، <code>MainActivity</code> / <code>PatientApp</code>.</li>
         </ul>
       </article>
+
       <article class="card esraa">
         <span class="tag">Esraa</span>
         <h3><span class="dot"></span> إسراء</h3>
         <ul>
-          <li><strong>منطق البيانات:</strong> خدمات الويب، hooks، مستودعات أندرويد وDTOs ونماذج؛ مراجعة <code>migrations</code>؛ التطبيق على Supabase لصبري.</li>
+          <li><strong>منطق البيانات</strong> (مواعيد، طابور، طبيب): خدمات الويب، hooks، جداول ومكوّنات البيانات؛ على الأندرويد: <strong>المستودعات، DTOs، النماذج</strong> و<code>SupabaseProvider</code> — <em>بدون</em> هيكل لوحة الويب والصفحات الأساسية (لحنين)، و<em>بدون</em> شاشات الحجز/مواعيدي/طابور على الأندرويد (لحنين)، و<em>بدون</em> استكشاف بحث/تفصيل/خريطة (لحنين). مراجعة دومين <code>migrations</code>؛ التطبيق على Supabase لصبري.</li>
         </ul>
       </article>
+
       <article class="card hanien">
         <span class="tag">حنين</span>
         <h3><span class="dot"></span> حنين</h3>
         <ul>
-          <li>تسجيل المريض، <code>AuthRepository</code>، ملف المريض، هيكل لوحة الطبيب والصفحات الأساسية على الويب؛ بحث أندرويد، تفاصيل، خريطة، حجز، مواعيدي، طابور.</li>
+          <li>تسجيل دخول/تسجيل المريض، <code>AuthRepository</code>، ملف المريض، الثيم والمكوّنات؛ <strong>هيكل لوحة الطبيب على الويب</strong> (<code>DashboardShell</code>، <code>Sidebar</code>) و<strong>الصفحات الأساسية</strong> (Dashboard، Appointments، Queue)؛ على الأندرويد <strong>البحث، التفاصيل، الخريطة، الحجز، مواعيدي، الطابور</strong> + صورة الطبيب — تستدعي مستودعات/مكوّنات إسراء.</li>
         </ul>
       </article>
     </div>
 
     <h2><span class="num">٢</span> المراحل الخمس — ملفات كل مهندس وعمله</h2>
 
+    <!-- مرحلة 1 -->
     <section class="phase" id="p1">
       <div class="phase-head">المرحلة ١ — أساس Supabase (قاعدة البيانات والسياسات)</div>
       <div class="phase-body">
         <div class="person sabry">
           <h4>صبري</h4>
-          <p class="work"><strong>العمل:</strong> تطبيق السكربتات على المشروع؛ التحقق من RLS وRealtime؛ بذور واختبار.</p>
+          <p class="work"><strong>العمل:</strong> تطبيق السكربتات على مشروع Supabase (SQL Editor)، التحقق من RLS وRealtime وpublication، ربط Storage لصور الأطباء، اختبار سياسات الطبيب والمريض؛ إعداد بيئة الويب بعد جاهزية المشروع.</p>
           <ul class="file-list">
-            <li>Mawid-Android/supabase/migrations/001_initial_schema.sql … 015_performance_indexes.sql</li>
-            <li>Mawid-Android/supabase/migrations/016_restrict_queue_settings_update_rls.sql</li>
-            <li>Mawid-Android/supabase/migrations/017_cancel_my_appointment_rpc.sql</li>
-            <li>Mawid-Android/supabase/migrations/018_egypt_clinic_seed.sql</li>
-            <li>Mawid-Android/supabase/migrations/019_submit_doctor_rating.sql</li>
-            <li>Mawid-Android/supabase/migrations/020_realtime_doctors_publication.sql</li>
+            <li>Mawid-Android/supabase/migrations/001_initial_schema.sql</li>
+            <li>Mawid-Android/supabase/migrations/002_doctors_display_and_seed.sql</li>
+            <li>Mawid-Android/supabase/migrations/003_rls_anon_read_debug.sql</li>
+            <li>Mawid-Android/supabase/migrations/004_profiles_insert_own.sql</li>
+            <li>Mawid-Android/supabase/migrations/005_catalog_anon_read.sql</li>
+            <li>Mawid-Android/supabase/migrations/006_queue_settings_update_authenticated.sql</li>
+            <li>Mawid-Android/supabase/migrations/007_doctor_email_auth.sql</li>
+            <li>Mawid-Android/supabase/migrations/008_seed_doctor_auth.sql</li>
+            <li>Mawid-Android/supabase/migrations/009_doctor_avatars_storage.sql</li>
+            <li>Mawid-Android/supabase/migrations/010_doctor_location_and_display.sql</li>
+            <li>Mawid-Android/supabase/migrations/011_appointments_patient_cancel_update_rls.sql</li>
+            <li>Mawid-Android/supabase/migrations/012_appointments_doctor_notes_time_slot.sql</li>
+            <li>Mawid-Android/supabase/migrations/013_realtime_appointments_publication.sql</li>
+            <li>Mawid-Android/supabase/migrations/014_auth_phone_check_and_claim.sql</li>
+            <li>Mawid-Android/supabase/migrations/015_performance_indexes.sql</li>
             <li>Mawid-Android/supabase/scripts/seed_test_queue_sample.sql</li>
             <li>Mawid-Web/.env — محلي: VITE_SUPABASE_URL، VITE_SUPABASE_ANON_KEY</li>
+            <li>Mawid-Web/CLAUDE.md — اختياري</li>
           </ul>
         </div>
         <div class="person esraa">
           <h4>إسراء</h4>
-          <p class="work"><strong>العمل:</strong> مراجعة الدومين والمساهمة في التعديلات.</p>
+          <p class="work"><strong>العمل:</strong> مراجعة مخطط الدومين (مواعيد، طابور، طبيب) في السكربتات داخل المستودع؛ المساهمة في صياغة/تعديل ملفات <code>migrations</code> عند تغيير المنتج؛ التنسيق مع صبري قبل وبعد التطبيق على السحابة.</p>
           <ul class="file-list">
-            <li>Mawid-Android/supabase/migrations/ — مراجعة Git</li>
+            <li>نفس مجلد Mawid-Android/supabase/migrations/ — مراجعة ومساهمة في التعديلات (Git)</li>
           </ul>
         </div>
         <div class="person hanien">
           <h4>حنين</h4>
-          <p class="work"><strong>العمل:</strong> بيئة أندرويد محلية.</p>
+          <p class="work"><strong>العمل:</strong> إعداد بيئة أندرويد محلية؛ لا تعديلات كود إلزامية — التأكد من إمكانية البناء بعد جاهزية المفاتيح.</p>
           <ul class="file-list">
-            <li>Mawid-Android/local.properties — SUPABASE_URL، SUPABASE_ANON_KEY، MAPS_API_KEY</li>
+            <li>Mawid-Android/local.properties — إنشاء محلي: SUPABASE_URL، SUPABASE_ANON_KEY، MAPS_API_KEY</li>
+            <li>Mawid-Android/CLAUDE.md — قراءة اختيارية</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- مرحلة 2 -->
     <section class="phase" id="p2">
       <div class="phase-head">المرحلة ٢ — مصادقة: طبيب (ويب) + مريض (أندرويد)</div>
       <div class="phase-body">
         <div class="person sabry">
           <h4>صبري</h4>
-          <p class="work"><strong>العمل:</strong> دخول الطبيب، حماية المسارات، إشعارات الويب، أخطاء الواجهة، تهيئة عميل Supabase.</p>
+          <p class="work"><strong>العمل:</strong> تسجيل دخول الطبيب بالبريد، حماية المسارات، تهيئة التطبيق، جرس الإشعارات على الويب، معالجة أخطاء الواجهة.</p>
           <ul class="file-list">
             <li>Mawid-Web/src/pages/LoginPage.jsx</li>
             <li>Mawid-Web/src/components/layout/ProtectedRoute.jsx</li>
@@ -351,17 +404,13 @@
             <li>Mawid-Web/src/App.jsx</li>
             <li>Mawid-Web/src/hooks/useNotifications.js</li>
             <li>Mawid-Web/src/components/layout/TopBar.jsx</li>
-            <li>Mawid-Web/src/lib/supabaseClient.js — تحقق URL/مفاتيح (تطوير وإنتاج)</li>
-            <li>Mawid-Web/src/bootstrap.jsx</li>
-            <li>Mawid-Web/src/utils/authErrorMessage.js</li>
-            <li>Mawid-Web/vite.config.js</li>
-            <li>Mawid-Web/index.html</li>
+            <li>Mawid-Web/src/lib/supabaseClient.js</li>
             <li>Mawid-Web/src/router/index.jsx</li>
           </ul>
         </div>
         <div class="person hanien">
           <h4>حنين</h4>
-          <p class="work"><strong>العمل:</strong> تدفق الهاتف على الأندرويد؛ <code>ic_google_g.xml</code> عند تسجيل Google.</p>
+          <p class="work"><strong>العمل:</strong> واجهات رقم الهاتف، التحقق عبر RPC، التسجيل باسم حقيقي، جلسة المريض محلياً.</p>
           <ul class="file-list">
             <li>Mawid-Android/.../ui/screens/login/LoginScreen.kt</li>
             <li>Mawid-Android/.../ui/screens/login/LoginViewModel.kt</li>
@@ -371,67 +420,115 @@
             <li>Mawid-Android/.../data/repository/AuthRepository.kt</li>
             <li>Mawid-Android/.../core/phone/EgyptPhone.kt</li>
             <li>Mawid-Android/.../core/session/UiSessionPrefs.kt</li>
-            <li>Mawid-Android/.../res/drawable/ic_google_g.xml</li>
           </ul>
         </div>
         <div class="person esraa">
           <h4>إسراء</h4>
-          <p class="work"><strong>العمل:</strong> RPC الهاتف وRLS بعد المرحلة ١.</p>
+          <p class="work"><strong>العمل:</strong> التأكد من أن سياسات الهاتف ودوال <code>check_phone_registered</code> / <code>claim_patient_profile_by_phone</code> تعمل بعد المرحلة ١؛ دعم الفريق عند أخطاء RLS.</p>
           <ul class="file-list">
-            <li>Mawid-Android/supabase/migrations/014_auth_phone_check_and_claim.sql</li>
+            <li>Mawid-Android/supabase/migrations/014_auth_phone_check_and_claim.sql — مراجعة سلوك على Supabase (بدون تغيير إن كان مطبّقاً)</li>
+            <li>Mawid-Android/supabase/migrations/004_profiles_insert_own.sql — مراجعة سياسة insert للمريض</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- مرحلة 3 -->
     <section class="phase" id="p3">
       <div class="phase-head">المرحلة ٣ — لوحة الطبيب + كتالوج المريض (حجز ومواعيد وطابور)</div>
       <div class="phase-body">
         <div class="person esraa">
           <h4>إسراء</h4>
-          <p class="work"><strong>العمل:</strong> خدمات، hooks، مستودعات، DTOs، نماذج؛ منطق إلغاء الموعد وتقييم الطبيب يتبع هجرات 017 و019.</p>
+          <p class="work"><strong>العمل:</strong> <strong>منطق البيانات</strong> فقط: خدمات الويب، hooks، تنسيقات، ومكوّنات عرض البيانات (جداول، طابور، إحصاءات، رسوم)؛ على الأندرويد <strong>المستودعات، DTOs، النماذج، SupabaseProvider</strong> — دون هيكل لوحة الويب ولا صفحات Dashboard/Appointments/Queue (لحنين)، ودون شاشات الحجز/مواعيدي/طابور على الأندرويد (لحنين)، ودون استكشاف بحث/تفصيل/خريطة (لحنين).</p>
           <ul class="file-list">
-            <li>Mawid-Web/src/services/appointmentService.js، queueService.js، doctorService.js</li>
-            <li>Mawid-Web/src/hooks/useAppointments.js، useQueue.js، useDoctor.js</li>
+            <li>Mawid-Web/src/services/appointmentService.js</li>
+            <li>Mawid-Web/src/services/appointmentService.test.js</li>
+            <li>Mawid-Web/src/services/queueService.js</li>
+            <li>Mawid-Web/src/services/doctorService.js</li>
+            <li>Mawid-Web/src/hooks/useAppointments.js</li>
+            <li>Mawid-Web/src/hooks/useQueue.js</li>
+            <li>Mawid-Web/src/hooks/useDoctor.js</li>
+            <li>Mawid-Web/src/hooks/useCountUp.js</li>
             <li>Mawid-Web/src/utils/appointmentFormat.js</li>
-            <li>Mawid-Web/src/components/dashboard/*، appointments/*، queue/*</li>
-            <li>Mawid-Android/.../data/repository/DoctorRepository.kt، AppointmentRepository.kt، QueueRepository.kt</li>
-            <li>Mawid-Android/.../data/dto/*.kt</li>
-            <li>Mawid-Android/.../core/model/Doctor.kt، Appointment.kt، QueueSettings.kt</li>
-            <li>Mawid-Android/.../core/region/MawidRegion.kt</li>
-            <li>Mawid-Web/src/constants/region.js</li>
+            <li>Mawid-Web/src/components/dashboard/StatCard.jsx</li>
+            <li>Mawid-Web/src/components/dashboard/LiveQueueWidget.jsx</li>
+            <li>Mawid-Web/src/components/dashboard/AppointmentsChart.jsx</li>
+            <li>Mawid-Web/src/components/appointments/AppointmentsTable.jsx</li>
+            <li>Mawid-Web/src/components/appointments/AppointmentModal.jsx</li>
+            <li>Mawid-Web/src/components/appointments/StatusBadge.jsx</li>
+            <li>Mawid-Web/src/components/queue/CallNextButton.jsx</li>
+            <li>Mawid-Web/src/components/queue/CurrentNumberDisplay.jsx</li>
+            <li>Mawid-Web/src/components/queue/WaitingList.jsx</li>
+            <li>Mawid-Android/.../core/network/SupabaseProvider.kt</li>
+            <li>Mawid-Android/.../data/repository/DoctorRepository.kt</li>
+            <li>Mawid-Android/.../data/repository/AppointmentRepository.kt</li>
+            <li>Mawid-Android/.../data/repository/QueueRepository.kt</li>
+            <li>Mawid-Android/.../data/repository/Result.kt</li>
+            <li>Mawid-Android/.../data/SeedDoctorIds.kt</li>
+            <li>Mawid-Android/.../data/dto/DoctorDto.kt</li>
+            <li>Mawid-Android/.../data/dto/AppointmentDto.kt</li>
+            <li>Mawid-Android/.../data/dto/QueueSettingsDto.kt</li>
+            <li>Mawid-Android/.../data/dto/QueueNumberRowDto.kt</li>
+            <li>Mawid-Android/.../core/model/Doctor.kt</li>
+            <li>Mawid-Android/.../core/model/Appointment.kt</li>
+            <li>Mawid-Android/.../core/model/QueueSettings.kt</li>
           </ul>
         </div>
         <div class="person hanien">
           <h4>حنين</h4>
-          <p class="work"><strong>العمل:</strong> هيكل Dashboard والصفحات؛ شاشات الحجز والبحث والطابور على الأندرويد.</p>
+          <p class="work"><strong>العمل:</strong> <strong>هيكل لوحة الطبيب</strong> و<strong>الصفحات الأساسية</strong> على الويب؛ تجميع الصفحات مع استيراد hooks/مكوّنات إسراء؛ على الأندرويد شاشات <strong>الحجز، مواعيدي، الطابور</strong> + مسار الاستكشاف (بحث، تفصيل، خريطة، صورة طبيب) — عبر المستودعات التي توفرها إسراء.</p>
           <ul class="file-list">
-            <li>Mawid-Web/src/components/layout/DashboardShell.jsx، Sidebar.jsx</li>
-            <li>Mawid-Web/src/pages/DashboardPage.jsx، AppointmentsPage.jsx، QueuePage.jsx</li>
-            <li>Mawid-Android/.../ui/screens/booking/*، appointments/*، queue/*، search/*</li>
-            <li>Mawid-Android/.../ui/theme/Theme.kt، Color.kt، Type.kt، Fonts.kt</li>
+            <li>Mawid-Web/src/components/layout/DashboardShell.jsx</li>
+            <li>Mawid-Web/src/components/layout/Sidebar.jsx</li>
+            <li>Mawid-Web/src/pages/DashboardPage.jsx</li>
+            <li>Mawid-Web/src/pages/AppointmentsPage.jsx</li>
+            <li>Mawid-Web/src/pages/QueuePage.jsx</li>
+            <li>Mawid-Android/.../ui/screens/booking/BookingScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/booking/BookingViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/appointments/AppointmentsScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/appointments/AppointmentsViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/queue/MyQueueScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/queue/MyQueueViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/SearchScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/SearchViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/SearchModels.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/SearchFlowScreens.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/DoctorDetailScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/DoctorDetailViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/search/DoctorMapScreen.kt</li>
+            <li>Mawid-Android/.../ui/components/DoctorPhotoDisplay.kt</li>
+            <li>Mawid-Android/app/src/main/res/values/strings.xml</li>
+            <li>Mawid-Android/.../ui/theme/Theme.kt</li>
+            <li>Mawid-Android/.../ui/theme/Color.kt</li>
+            <li>Mawid-Android/.../ui/theme/Type.kt</li>
+            <li>Mawid-Android/.../ui/theme/Fonts.kt</li>
           </ul>
         </div>
         <div class="person sabry">
           <h4>صبري</h4>
-          <p class="work"><strong>العمل:</strong> ملف الطبيب، الجدول، PDF، Toast، هيكل التحميل.</p>
+          <p class="work"><strong>العمل:</strong> واجهات ويب للوحة الطبيب: ملف الطبيب، الجدول، تصدير PDF، زخرفة اللوحة، هياكل التحميل، Toast؛ تنسيق سلوك <code>useNotifications</code> مع بيانات المواعيد؛ تنسيق مع إسراء على الخدمات (<code>doctorService</code> وغيره) ومع حنين على تضمين الصفحات (<code>DashboardShell</code> / الصفحات الأساسية).</p>
           <ul class="file-list">
             <li>Mawid-Web/src/pages/ProfilePage.jsx</li>
             <li>Mawid-Web/src/pages/SchedulePage.jsx</li>
-            <li>Mawid-Web/src/utils/scheduleFilename.js، schedulePdfExport.js</li>
+            <li>Mawid-Web/src/utils/scheduleFilename.js</li>
+            <li>Mawid-Web/src/utils/schedulePdfExport.js</li>
             <li>Mawid-Web/src/components/layout/DashboardDecor.jsx</li>
+            <li>Mawid-Web/src/components/dashboard/DashboardSkeleton.jsx</li>
+            <li>Mawid-Web/src/components/appointments/AppointmentsPageSkeleton.jsx</li>
+            <li>Mawid-Web/src/components/ui/PageHeader.jsx</li>
             <li>Mawid-Web/src/context/ToastContext.jsx</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- مرحلة 4 -->
     <section class="phase" id="p4">
-      <div class="phase-head">المرحلة ٤ — غلاف التطبيق، إشعارات، تنقل، أيقونة</div>
+      <div class="phase-head">المرحلة ٤ — غلاف التطبيق، إشعارات محلية، تنقل وتبويبات</div>
       <div class="phase-body">
         <div class="person sabry">
           <h4>صبري</h4>
-          <p class="work"><strong>العمل:</strong> Splash، إشعارات، WorkManager، MainActivity، AppNavGraph؛ موارد الأيقونة Adaptive.</p>
+          <p class="work"><strong>العمل:</strong> شاشة البداية، إشعارات الجهاز، جدولة التذكيرات بـ WorkManager، نقطة دخول التطبيق، ربط المسارات العامة؛ تنسيق مع حنين على الشريط السفلي والثيم.</p>
           <ul class="file-list">
             <li>Mawid-Android/.../ui/screens/splash/SplashScreen.kt</li>
             <li>Mawid-Android/.../ui/screens/notifications/NotificationsScreen.kt</li>
@@ -441,67 +538,84 @@
             <li>Mawid-Android/.../MainActivity.kt</li>
             <li>Mawid-Android/.../ui/navigation/AppNavGraph.kt</li>
             <li>Mawid-Android/.../ui/navigation/Routes.kt</li>
-            <li>Mawid-Android/app/build.gradle.kts — versionCode 6، versionName 1.0.6</li>
-            <li>Mawid-Android/app/src/main/res/values/colors.xml</li>
-            <li>Mawid-Android/app/src/main/res/drawable/ic_launcher_background.xml</li>
-            <li>Mawid-Android/app/src/main/res/drawable/ic_launcher_foreground.xml</li>
-            <li>Mawid-Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml</li>
-            <li>Mawid-Android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml</li>
           </ul>
         </div>
         <div class="person hanien">
           <h4>حنين</h4>
-          <p class="work"><strong>العمل:</strong> ملف المريض، الثيم، الشريط السفلي، مكوّنات مشتركة.</p>
+          <p class="work"><strong>العمل:</strong> الملف الشخصي للمريض، الثيم الداكن/الفاتح، الشريط السفلي، المكوّنات المشتركة، موارد الثيم.</p>
           <ul class="file-list">
-            <li>Mawid-Android/.../ui/screens/profile/ProfileScreen.kt، ProfileViewModel.kt</li>
+            <li>Mawid-Android/.../ui/screens/profile/ProfileScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/profile/ProfileViewModel.kt</li>
+            <li>Mawid-Android/.../data/dto/ProfileDto.kt</li>
+            <li>Mawid-Android/.../data/dto/ProfileWriteDto.kt</li>
+            <li>Mawid-Android/.../data/dto/ProfileFullNameDto.kt</li>
+            <li>Mawid-Android/.../core/model/Profile.kt</li>
+            <li>Mawid-Android/.../core/preferences/ThemePrefs.kt</li>
             <li>Mawid-Android/.../ui/components/BottomNavigationBar.kt</li>
+            <li>Mawid-Android/.../ui/components/CoilCrossfade.kt</li>
+            <li>Mawid-Android/.../ui/components/EditorialCard.kt</li>
+            <li>Mawid-Android/.../ui/components/EmptyStateCard.kt</li>
+            <li>Mawid-Android/.../ui/components/ConfirmDialog.kt</li>
+            <li>Mawid-Android/.../ui/components/ErrorCard.kt</li>
+            <li>Mawid-Android/.../ui/components/LoadingSpinner.kt</li>
+            <li>Mawid-Android/.../util/DispatcherProvider.kt</li>
+            <li>Mawid-Android/app/src/main/res/values/themes.xml</li>
+            <li>Mawid-Android/app/src/main/res/xml/backup_rules.xml</li>
+            <li>Mawid-Android/app/src/main/res/xml/data_extraction_rules.xml</li>
           </ul>
         </div>
         <div class="person esraa">
           <h4>إسراء</h4>
-          <p class="work"><strong>العمل:</strong> تعارض إلغاء الموعد مع التذكيرات عبر <code>AppointmentRepository</code>.</p>
+          <p class="work"><strong>العمل:</strong> التأكد من أن إلغاء/تعديل الموعد يعكس إلغاء التذكيرات (عقد البيانات مع <code>AppointmentRepository</code>)؛ اختبار طرف الويب عند تغيير حالة الموعد.</p>
           <ul class="file-list">
-            <li>Mawid-Android/.../data/repository/AppointmentRepository.kt</li>
+            <li>Mawid-Android/.../data/repository/AppointmentRepository.kt — مراجعة/triage مع صبري عند ربط الإلغاء بالـ Worker</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- مرحلة 5 -->
     <section class="phase" id="p5">
       <div class="phase-head">المرحلة ٥ — المساعد الذكي (RAG) والتكامل النهائي</div>
       <div class="phase-body">
-        <p class="phase-banner">
-          <strong>تم في الكود الحالي:</strong> ليس مساعد RAG — بل هجرات 016–020 (انظر المرحلة ١). <strong>التالي:</strong> هجرات <code>021+</code> لـ pgvector، محتوى عربي، وEdge Function يستدعي LLM بمفتاح خادم فقط.
-        </p>
         <div class="person sabry">
           <h4>صبري</h4>
-          <p class="work"><strong>العمل (مخطط):</strong> شاشة مساعد عربية، ViewModel، استدعاء API؛ مرجع UI: <code>Mawid-Android/design Android/stitch_mawid_notifications/mawid_ai_chat/</code>.</p>
+          <p class="work"><strong>العمل:</strong> شاشة المحادثة، ViewModel، استدعاء AI، بحث متجهي، ربط Home بمسار المساعد، انتقاء طبيب والانتقال للحجز؛ ملفات Kotlin جديدة حسب التصميم.</p>
           <ul class="file-list">
-            <li>Mawid-Android/.../ui/screens/assistant/SmartAssistantScreen.kt — جديد</li>
-            <li>Mawid-Android/.../ui/screens/assistant/SmartAssistantViewModel.kt — جديد</li>
+            <li>Mawid-Android/.../ui/screens/home/HomeScreen.kt</li>
+            <li>Mawid-Android/.../ui/screens/home/HomeViewModel.kt</li>
             <li>Mawid-Android/.../data/repository/RAGRepository.kt — جديد</li>
-            <li>Mawid-Android/.../ui/navigation/Routes.kt + AppNavGraph.kt</li>
-            <li>supabase/functions/patient-assistant/ — جديد (مقترح)</li>
+            <li>Mawid-Android/.../data/repository/AIRepository.kt — جديد</li>
+            <li>Mawid-Android/.../ui/screens/assistant/SmartAssistantScreen.kt — جديد (مسار مجلد مقترح)</li>
+            <li>Mawid-Android/.../ui/screens/assistant/SmartAssistantViewModel.kt — جديد</li>
+            <li>Mawid-Android/.../ui/navigation/Routes.kt — إضافة مسارات المساعد والحجز</li>
+            <li>Mawid-Android/.../ui/navigation/AppNavGraph.kt — composable المساعد</li>
+            <li>Mawid-Android/supabase/migrations/016_*.sql / 017_*.sql — تطبيق على Supabase بعد الاتفاق مع إسراء</li>
           </ul>
         </div>
         <div class="person esraa">
           <h4>إسراء</h4>
-          <p class="work"><strong>العمل (مخطط):</strong> جداول KB + embeddings + RLS.</p>
+          <p class="work"><strong>العمل:</strong> المساهمة في تصميم سكربتات pgvector وجدول المعرفة وRLS في المستودع؛ تنسيق مع صبري على حقول الدومين — <strong>التطبيق على Supabase لصبري</strong> (كالمرحلة ١).</p>
           <ul class="file-list">
-            <li>Mawid-Android/supabase/migrations/021+_*.sql — أسماء عند التنفيذ</li>
+            <li>Mawid-Android/supabase/migrations/016_pgvector_medical_knowledge.sql — جديد (اسم مقترح) — مراجعة/مساهمة</li>
+            <li>Mawid-Android/supabase/migrations/017_seed_medical_knowledge.sql — جديد (اسم مقترح) — مراجعة/مساهمة</li>
           </ul>
         </div>
         <div class="person hanien">
           <h4>حنين</h4>
-          <p class="work"><strong>العمل (مخطط):</strong> نصوص عربية وثيم بطاقات المحادثة.</p>
+          <p class="work"><strong>العمل:</strong> نصوص وثيم شاشة المساعد (ألوان، خطوط)، إضافة سترنجات عربية؛ مراجعة UX للتبويبات بعد إضافة مسار جديد.</p>
           <ul class="file-list">
             <li>Mawid-Android/app/src/main/res/values/strings.xml</li>
+            <li>Mawid-Android/.../ui/theme/Theme.kt</li>
+            <li>Mawid-Android/.../ui/theme/Color.kt</li>
+            <li>Mawid-Android/.../ui/components/BottomNavigationBar.kt</li>
           </ul>
         </div>
       </div>
     </section>
 
     <h2><span class="num">٣</span> ربط الأجزاء (ملخص)</h2>
+
     <div class="diagram">
 <pre>
                     ┌─────────────────────────────────────┐
@@ -515,26 +629,29 @@
    ┌───────────────┐         ┌───────────────┐         ┌───────────────┐
    │ Web Dashboard │         │ Android App   │         │ AI / RAG      │
    │ إسراء: خدمات │         │ إسراء: مستودعات│         │ صبري: شات     │
-   │ صبري: دخول    │         │ حنين: صفحات    │         │ (مخطط)        │
-   │ + region.js   │         │ + MawidRegion  │         │ إسراء: pgvector│
+   │ + جداول/طابور│         │ + نماذج بيانات │         │ + embeddings  │
+   │ صبري: دخول    │         │ حنين: صفحات    │         │ إسراء: مساهمة │
+   │ + تطبيق SQL   │         │ لوحة+حجز+بحث  │         │ بجداول AI     │
+   │ + ملف/جدول/   │         │ + تسجيل مريض   │         │               │
+   │ Toast         │         │ (أندرويد)      │         │               │
    └───────┬───────┘         └───────┬───────┘         └───────┬───────┘
            │                       │                          │
            └──────────────────────┴──────────────────────────┘
                               Realtime
-              appointments · queue_settings · doctors (بعد 020)
+                    (appointments · queue_settings)
 </pre>
     </div>
 
     <p style="color: var(--muted); font-size: 0.9rem;">
-      <strong style="color: var(--text);">تنسيق:</strong> تطبيق SQL لصبري؛ إسراء تمسك منطق البيانات؛ حنين تمسك هيكل الويب وشاشات أندرويد الرئيسية. المسارات <code>Mawid-Android/.../</code> = <code>app/src/main/java/com/mawidplus/patient/</code>
+      <strong style="color: var(--text);">تنسيق:</strong> تطبيق سكربتات Supabase لصبري؛ إسراء تمسك <strong>منطق البيانات</strong> (خدمات، hooks، مستودعات). حنين تمسك <strong>هيكل لوحة الويب والصفحات</strong> و<strong>شاشات</strong> الحجز/مواعيدي/طابور/بحث على الأندرويد وتستورد من إسراء. صبري (ملف طبيب، جدول، Toast) ينسّق مع حنين على <code>DashboardShell</code> ومع إسراء على الخدمات. مسارات التنقل → صبري مع حنين للثيم.
     </p>
 
     <div class="note">
-      <strong>الملف:</strong> <code>docs/MawidPlus-Team-Flow.html</code> — افتحه في المتصفح (file:// أو خادم ثابت).
+      <strong>الملف:</strong> <code>docs/MawidPlus-Team-Flow.html</code> — افتحه في المتصفح مباشرة. المسارات التي تبدأ بـ <code>Mawid-Android/.../</code> تعني الجذر: <code>app/src/main/java/com/mawidplus/patient/</code>
     </div>
 
     <footer>
-      موعد+ · Sabry · حنين · Esraa · محدّث أبريل 2026
+      موعد+ · Sabry · حنين · Esraa
     </footer>
   </main>
 </body>
