@@ -368,8 +368,7 @@ fun MainTabContainer(
                             popUpTo(Routes.HOME) { inclusive = false }
                         }
                     },
-                    // زر «مساعد موعد+» — اربط التنقل أو المنطق هنا عند إعادة بناء الميزة
-                    onSmartAssistant = {},
+                    onSmartAssistant = { },
                     onHealthTipClick = {
                         navController.navigate(Routes.searchRoute()) {
                             launchSingleTop = true

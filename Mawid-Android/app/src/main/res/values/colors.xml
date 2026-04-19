@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- خلفية Adaptive Icon: أزرق موحد (يظهر في دائرة المشغّل + يملأ ثقب علامة +) -->
-    <color name="ic_launcher_background">#1A73E8</color>
+    <!-- خلفية Adaptive Icon: أبيض ليطابق screen.png من stitch_mawid_notifications (1) -->
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
