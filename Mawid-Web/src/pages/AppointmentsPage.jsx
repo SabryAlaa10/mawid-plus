@@ -12,13 +12,17 @@ export default function AppointmentsPage() {
   const { doctor, doctorLoading, doctorError, refreshDoctor } = useOutletContext() ?? {}
   const [searchParams] = useSearchParams()
 
+  useEffect(() => {
+    console.log('AppointmentsPage doctor id:', doctor?.id)
+  }, [doctor])
+
   const [viewMode, setViewMode] = useState('today')
   const [date, setDate] = useState(() => format(new Date(), 'yyyy-MM-dd'))
   const [status, setStatus] = useState('all')
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState(null)
 
-  const { rows, loading, error: fetchError, refresh } = useAppointments(doctor?.id, date, status, search, viewMode)
+  const { rows, loading, refresh } = useAppointments(doctor?.id, date, status, search, viewMode)
 
   useEffect(() => {
     const dateParam = searchParams.get('date')
@@ -27,6 +31,10 @@ export default function AppointmentsPage() {
       setViewMode('custom')
     }
   }, [searchParams])
+
+  useEffect(() => {
+    console.log('appointments rows count:', rows?.length ?? 0)
+  }, [rows])
 
   if (doctorLoading && !doctor) {
     return <AppointmentsPageSkeleton />
@@ -144,15 +152,6 @@ export default function AppointmentsPage() {
           </div>
         </div>
       </div>
-
-      {fetchError && (
-        <div className="dashboard-card p-4 border-red-200 bg-red-50 text-red-800 text-sm font-bold flex items-center justify-between rounded-xl">
-          <span>تعذر تحميل المواعيد: {fetchError}</span>
-          <button type="button" onClick={refresh} className="text-xs bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-lg transition-colors">
-            إعادة المحاولة
-          </button>
-        </div>
-      )}
 
       <div className="opacity-0 animate-fade-in-up [animation-fill-mode:forwards] [animation-delay:0.14s]">
         <AppointmentsTable

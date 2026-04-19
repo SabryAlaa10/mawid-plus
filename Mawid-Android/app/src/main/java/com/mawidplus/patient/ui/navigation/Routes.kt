@@ -33,7 +33,6 @@ object Routes {
     const val SEARCH_FILTERS = "search_filters"
 
     const val DOCTOR_DETAIL_PATTERN = "doctor_detail/{doctorId}"
-
     const val BOOKING_PATTERN = "booking/{doctorId}"
 
     fun doctorDetailRoute(id: String) = "doctor_detail/$id"

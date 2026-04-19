@@ -85,9 +85,6 @@ class BookingViewModel(
     private val _selectedSlotIndex = MutableStateFlow(-1)
     val selectedSlotIndex: StateFlow<Int> = _selectedSlotIndex.asStateFlow()
 
-    private val _queueClosed = MutableStateFlow(false)
-    val queueClosed: StateFlow<Boolean> = _queueClosed.asStateFlow()
-
     val weekDates: List<LocalDate> = run {
         val today = LocalDate.now(APP_ZONE)
         (0..6).map { today.plusDays(it.toLong()) }
@@ -107,20 +104,9 @@ class BookingViewModel(
                 is Result.Success -> {
                     cachedDoctor = r.data
                     _doctorState.value = BookingDoctorState.Ready(r.data)
-                    checkQueueOpen()
                     refreshSlotsForSelectedDay()
                 }
                 is Result.Error -> _doctorState.value = BookingDoctorState.Error(r.message)
-                else -> {}
-            }
-        }
-    }
-
-    private fun checkQueueOpen() {
-        viewModelScope.launch {
-            when (val qs = queueRepository.getQueueSettings(doctorId)) {
-                is Result.Success -> _queueClosed.value = !qs.data.isOpen
-                is Result.Error -> _queueClosed.value = false
                 else -> {}
             }
         }
@@ -218,26 +204,26 @@ class BookingViewModel(
                 return@launch
             }
             val timeSlot = slot.time
-
-            // تحقق من حالة الطابور قبل الحجز
-            when (val qs = queueRepository.getQueueSettings(doctorId)) {
-                is Result.Success -> {
-                    if (!qs.data.isOpen) {
-                        _queueClosed.value = true
-                        _submitState.value = BookingSubmitState.Failed(
-                            "الطابور مغلق حالياً. الطبيب لا يستقبل حجوزات جديدة."
-                        )
-                        return@launch
-                    }
-                }
-                is Result.Error -> { /* نتجاهل الخطأ ونكمل الحجز */ }
-                else -> {}
-            }
-
             _submitState.value = BookingSubmitState.Submitting
-
-            // رقم الطابور = ترتيب الموعد الزمني في اليوم (1-based)
-            val queueNum = idx + 1
+            val queueNum = when (val m = queueRepository.maxQueueNumberForDoctorAndDate(doctorId, appointmentDateIso)) {
+                is Result.Success -> m.data + 1
+                is Result.Error -> {
+                    _submitState.value = BookingSubmitState.Failed(
+                        m.message.ifBlank { "تعذر حساب رقم الطابور لهذا اليوم. تحقق من الاتصال." }
+                    )
+                    return@launch
+                }
+                Result.Loading -> {
+                    _submitState.value = BookingSubmitState.Failed("تعذر حساب رقم الطابور.")
+                    return@launch
+                }
+            }
+            if (queueNum <= 0) {
+                _submitState.value = BookingSubmitState.Failed(
+                    "تعذر حساب رقم الطابور لهذا اليوم. تحقق من الاتصال."
+                )
+                return@launch
+            }
             when (
                 val r = appointmentRepository.createAppointment(
                     patientId = uid,
