@@ -356,6 +356,8 @@ class AuthRepository {
                 filter { eq("id", userId) }
             }.decodeSingle<ProfileDto>()
             false
+        } catch (e: kotlin.coroutines.cancellation.CancellationException) {
+            throw e
         } catch (e: Exception) {
             Log.d(TAG, "profileRowMissing: true userId=$userId (${e.message})")
             true
@@ -367,6 +369,8 @@ class AuthRepository {
             supabase.from("profiles").select(columns = PROFILE_COLUMNS) {
                 filter { eq("id", userId) }
             }.decodeSingle<ProfileDto>().toDomain()
+        } catch (e: kotlin.coroutines.cancellation.CancellationException) {
+            throw e
         } catch (e: Exception) {
             Log.w(TAG, "loadProfile: using fallback (select failed) userId=$userId", e)
             Profile(
@@ -391,6 +395,8 @@ class AuthRepository {
             }
             Log.d(TAG, "signOut success")
             emit(Result.Success(Unit))
+        } catch (e: kotlin.coroutines.cancellation.CancellationException) {
+            throw e
         } catch (e: Exception) {
             Log.e(TAG, "signOut error", e)
             PatientApp.appContextOrNull()?.let { UiSessionPrefs.clear(it) }

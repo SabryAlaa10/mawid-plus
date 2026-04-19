@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  طبقة المقدّمة فقط: حقيبة إسعاف بيضاء + ثقب على شكل + (evenOdd).
-  اللون الأزرق كله من ic_launcher_background — عند قصّ المشغّل دائرة يظهر زرقاء موحّدة مثل التصميم.
--->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <group android:translateY="3">
-        <path
-            android:fillColor="#FFFFFF"
-            android:fillType="evenOdd"
-            android:pathData="M44,38C44,30 48,26 54,26C60,26 64,30 64,38L64,44L70,44C73,44 76,47 76,51L76,79C76,83 73,86 69,86L39,86C35,86 32,83 32,79L32,51C32,47 35,44 39,44L44,44L44,38ZM50.25,52.5H57.75V56.25H61.25V61.75H57.75V69.25H50.25V61.75H46.75V56.25H50.25V52.5Z" />
-    </group>
-</vector>
+<!-- أصل الأيقونة بالكامل من: design Android/stitch_mawid_notifications (1)/screen.png -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_launcher_stitch_logo"
+    android:insetLeft="18dp"
+    android:insetTop="18dp"
+    android:insetRight="18dp"
+    android:insetBottom="18dp" />

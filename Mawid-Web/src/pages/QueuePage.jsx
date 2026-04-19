@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { RefreshCw, ListOrdered } from 'lucide-react'
 import CurrentNumberDisplay from '../components/queue/CurrentNumberDisplay'
@@ -48,10 +49,18 @@ export default function QueuePage() {
     )
   }
 
+  const [callError, setCallError] = useState(null)
   const handleCallPatient = async (w) => {
-    await queueService.updateCurrentNumber(doctor.id, w.queue_number)
-    await appointmentService.updateAppointment(w.id, { status: 'in_progress' })
-    await queue.refresh()
+    try {
+      setCallError(null)
+      await queueService.updateCurrentNumber(doctor.id, w.queue_number)
+      await appointmentService.updateAppointment(w.id, { status: 'in_progress' })
+      await queue.refresh()
+    } catch (err) {
+      console.error('handleCallPatient error:', err)
+      setCallError('تعذر استدعاء المريض. حاول مرة أخرى.')
+      setTimeout(() => setCallError(null), 4000)
+    }
   }
 
   return (

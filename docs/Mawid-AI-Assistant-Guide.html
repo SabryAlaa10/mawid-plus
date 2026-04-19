@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل بناء المساعد الذكي — موعد+</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#005bbf;
+  --primary-light:#1a73e8;
+  --primary-bg:#e8f0fe;
+  --surface:#F8F9FA;
+  --surface-low:#F3F4F5;
+  --surface-card:#FFFFFF;
+  --on-surface:#191c1d;
+  --on-surface-dim:#414754;
+  --secondary:#006b5f;
+  --secondary-bg:#e0f2f0;
+  --danger:#c62828;
+  --danger-bg:#fdecea;
+  --accent:#ff6f00;
+  --accent-bg:#fff3e0;
+  --code-bg:#1e1e2e;
+  --code-fg:#cdd6f4;
+  --radius:1rem;
+  --radius-lg:1.5rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--surface);
+  color:var(--on-surface);
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrapper{max-width:960px;margin:0 auto;padding:2rem 1.5rem 6rem}
+
+/* ── Header ── */
+.hero{
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:#fff;
+  padding:3rem 2.5rem;
+  border-radius:var(--radius-lg);
+  margin-bottom:2.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;top:-40%;left:-20%;
+  width:300px;height:300px;
+  background:rgba(255,255,255,.06);
+  border-radius:50%;
+}
+.hero h1{font-size:2.2rem;font-weight:900;margin-bottom:.5rem}
+.hero p{font-size:1.1rem;opacity:.92;max-width:640px}
+
+/* ── TOC ── */
+.toc{
+  background:var(--surface-card);
+  border-radius:var(--radius-lg);
+  padding:2rem 2.5rem;
+  margin-bottom:2.5rem;
+}
+.toc h2{font-size:1.3rem;font-weight:800;margin-bottom:1rem;color:var(--primary)}
+.toc ol{padding-right:1.2rem}
+.toc li{margin-bottom:.5rem}
+.toc a{
+  color:var(--primary);
+  text-decoration:none;
+  font-weight:600;
+  transition:color .2s;
+}
+.toc a:hover{color:var(--primary-light);text-decoration:underline}
+
+/* ── Sections ── */
+.section{
+  background:var(--surface-card);
+  border-radius:var(--radius-lg);
+  padding:2.5rem;
+  margin-bottom:2rem;
+}
+.section h2{
+  font-size:1.6rem;
+  font-weight:800;
+  color:var(--primary);
+  margin-bottom:1.2rem;
+  padding-bottom:.6rem;
+  border-bottom:3px solid var(--primary-bg);
+}
+.section h3{
+  font-size:1.15rem;
+  font-weight:700;
+  color:var(--on-surface);
+  margin:1.5rem 0 .6rem;
+}
+.section h4{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--on-surface-dim);
+  margin:1.2rem 0 .4rem;
+}
+.section p,.section li{font-size:.97rem;color:var(--on-surface)}
+.section ul,.section ol{padding-right:1.4rem;margin:.6rem 0}
+.section li{margin-bottom:.35rem}
+
+/* ── Info / Warn / Tip Boxes ── */
+.box{
+  border-radius:var(--radius);
+  padding:1rem 1.3rem;
+  margin:1rem 0;
+  font-size:.93rem;
+}
+.box-info{background:var(--primary-bg);color:var(--primary)}
+.box-success{background:var(--secondary-bg);color:var(--secondary)}
+.box-warn{background:var(--accent-bg);color:var(--accent)}
+.box-danger{background:var(--danger-bg);color:var(--danger)}
+.box strong{display:block;margin-bottom:.25rem}
+
+/* ── Code Blocks ── */
+.code-wrap{position:relative;margin:1rem 0}
+.code-wrap .lang-label{
+  position:absolute;top:0;left:0;
+  background:var(--primary);color:#fff;
+  font-size:.72rem;font-weight:600;
+  padding:.2rem .7rem;
+  border-radius:0 0 var(--radius) 0;
+  z-index:2;font-family:'Fira Code',monospace;
+}
+.code-wrap .copy-btn{
+  position:absolute;top:.5rem;right:.7rem;
+  background:rgba(255,255,255,.12);
+  color:var(--code-fg);border:none;
+  padding:.3rem .7rem;border-radius:.5rem;
+  cursor:pointer;font-size:.75rem;
+  font-family:'Cairo',sans-serif;
+  transition:background .2s;
+  z-index:2;
+}
+.code-wrap .copy-btn:hover{background:rgba(255,255,255,.22)}
+pre{
+  background:var(--code-bg);
+  color:var(--code-fg);
+  padding:1.6rem 1.2rem 1.2rem;
+  border-radius:var(--radius);
+  overflow-x:auto;
+  font-family:'Fira Code',monospace;
+  font-size:.84rem;
+  line-height:1.7;
+  direction:ltr;
+  text-align:left;
+}
+code.inline{
+  background:var(--surface-low);
+  color:var(--primary);
+  padding:.15rem .45rem;
+  border-radius:.35rem;
+  font-family:'Fira Code',monospace;
+  font-size:.88rem;
+  direction:ltr;
+  display:inline-block;
+}
+
+/* ── Diagram ── */
+.diagram{
+  background:var(--surface-low);
+  border-radius:var(--radius);
+  padding:1.5rem;
+  margin:1.2rem 0;
+  text-align:center;
+  direction:ltr;
+  font-family:'Fira Code',monospace;
+  font-size:.82rem;
+  line-height:2;
+  overflow-x:auto;
+  white-space:pre;
+}
+
+/* ── Tables ── */
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin:1rem 0;
+  font-size:.9rem;
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+th{
+  background:var(--primary);
+  color:#fff;
+  padding:.75rem 1rem;
+  text-align:right;
+  font-weight:700;
+}
+td{
+  padding:.65rem 1rem;
+  border-bottom:1px solid var(--surface-low);
+  background:var(--surface-card);
+}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:var(--surface)}
+
+/* ── Step Numbers ── */
+.step-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:2rem;height:2rem;
+  background:var(--primary);color:#fff;
+  border-radius:50%;font-weight:800;font-size:.9rem;
+  margin-left:.6rem;flex-shrink:0;
+}
+
+/* ── Dataset Cards ── */
+.dataset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:1rem 0}
+.dataset-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  padding:1.2rem 1.4rem;
+}
+.dataset-card h4{margin:0 0 .3rem;color:var(--primary);font-size:1rem}
+.dataset-card .meta{font-size:.82rem;color:var(--on-surface-dim);margin-bottom:.4rem}
+.dataset-card p{font-size:.88rem;margin:0}
+
+/* ── Footer ── */
+.footer{
+  text-align:center;
+  padding:2rem;
+  color:var(--on-surface-dim);
+  font-size:.85rem;
+}
+
+@media(max-width:640px){
+  .wrapper{padding:1rem}
+  .hero{padding:2rem 1.5rem}
+  .hero h1{font-size:1.6rem}
+  .section{padding:1.5rem}
+  .dataset-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <h1>دليل بناء المساعد الذكي — موعد+</h1>
+  <p>دليل شامل خطوة بخطوة لبناء مساعد طبي ذكي بـ Python يستخدم RAG، يتصل بقاعدة البيانات، ويتكامل مع تطبيق Android.</p>
+</div>
+
+<!-- ═══════════════ TOC ═══════════════ -->
+<div class="toc">
+  <h2>فهرس المحتويات</h2>
+  <ol>
+    <li><a href="#sec1">نظرة عامة على البنية (Architecture)</a></li>
+    <li><a href="#sec2">تجهيز بيئة Python</a></li>
+    <li><a href="#sec3">الاتصال بقاعدة بيانات Supabase</a></li>
+    <li><a href="#sec4">مصادر البيانات الطبية الموثوقة</a></li>
+    <li><a href="#sec5">بناء خط أنابيب RAG</a></li>
+    <li><a href="#sec6">بناء سيرفر FastAPI</a></li>
+    <li><a href="#sec7">دمج نموذج اللغة (LLM)</a></li>
+    <li><a href="#sec8">ربط تطبيق Android بالـ API</a></li>
+    <li><a href="#sec9">النشر (Deployment)</a></li>
+    <li><a href="#sec10">الاختبار</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════ SECTION 1 ═══════════════ -->
+<div class="section" id="sec1">
+<h2><span class="step-num">1</span> نظرة عامة على البنية (Architecture)</h2>
+
+<h3>المخطط العام</h3>
+<div class="diagram">
+┌──────────────────┐         HTTPS/JSON          ┌──────────────────────┐
+│   Android App    │ ◄──────────────────────────► │   Python FastAPI     │
+│   (Kotlin/       │                              │   Server             │
+│    Compose)      │                              │                      │
+└──────────────────┘                              └──────┬──────┬────────┘
+                                                         │      │
+                                              ┌──────────┘      └──────────┐
+                                              ▼                            ▼
+                                   ┌────────────────┐          ┌────────────────┐
+                                   │  Supabase DB   │          │   LLM API      │
+                                   │  (PostgreSQL)  │          │  (OpenRouter/  │
+                                   │                │          │   Groq/Ollama) │
+                                   │  - doctors     │          └───────┬────────┘
+                                   │  - appointments│                  │
+                                   │  - profiles    │          ┌───────┴────────┐
+                                   │  - kb_chunks   │          │   RAG Context  │
+                                   │    (pgvector)  │          │  (من pgvector) │
+                                   └────────────────┘          └────────────────┘
+</div>
+
+<h3>خياران للنشر</h3>
+
+<h4>الخيار A — Python FastAPI على Railway/Render (موصى به)</h4>
+<ul>
+  <li>تحكم كامل في الكود والأداء</li>
+  <li>تشغيل نماذج embedding محلياً (أسرع)</li>
+  <li>إمكانية استخدام Ollama للتشغيل المحلي بدون تكلفة</li>
+  <li>سهولة الصيانة والتطوير</li>
+</ul>
+
+<h4>الخيار B — Supabase Edge Function تنادي Python API</h4>
+<ul>
+  <li>الـ Edge Function كـ proxy يمرر الطلبات لـ Python</li>
+  <li>أكثر تعقيداً بدون فائدة حقيقية</li>
+  <li>غير موصى به — استخدم Python مباشرة</li>
+</ul>
+
+<div class="box box-info">
+  <strong>التوصية:</strong>
+  استخدم الخيار A (FastAPI مباشرة). التطبيق يتصل بالـ API عبر HTTPS، والـ API يتصل بـ Supabase وبنموذج اللغة. أبسط وأقوى.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 2 ═══════════════ -->
+<div class="section" id="sec2">
+<h2><span class="step-num">2</span> تجهيز بيئة Python</h2>
+
+<h3>المتطلبات</h3>
+<ul>
+  <li>Python 3.11 أو أحدث</li>
+  <li>pip (مدير الحزم)</li>
+  <li>Git</li>
+</ul>
+
+<h3>إنشاء المشروع</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# إنشاء مجلد المشروع
+mkdir mawid-assistant
+cd mawid-assistant
+
+# إنشاء بيئة افتراضية
+python -m venv venv
+
+# تفعيل البيئة (Windows)
+venv\Scripts\activate
+
+# تفعيل البيئة (Mac/Linux)
+source venv/bin/activate
+</pre>
+</div>
+
+<h3>ملف requirements.txt</h3>
+<div class="code-wrap">
+  <span class="lang-label">requirements.txt</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# === Web Framework ===
+fastapi
+uvicorn[standard]
+
+# === Supabase ===
+supabase
+
+# === LLM & RAG ===
+langchain
+langchain-community
+sentence-transformers
+openai                  # للتوافق مع OpenRouter API
+
+# === Vector Store ===
+pgvector                # لتخزين embeddings في Supabase/PostgreSQL
+# أو: chromadb          # لتخزين محلي أبسط
+
+# === Utilities ===
+python-dotenv           # لقراءة ملف .env
+pydantic                # للتحقق من البيانات (مدمج مع FastAPI)
+httpx                   # HTTP client غير متزامن
+python-jose[cryptography]  # للتحقق من JWT tokens
+</pre>
+</div>
+
+<h3>تثبيت الحزم</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+pip install -r requirements.txt
+</pre>
+</div>
+
+<h3>هيكل المشروع المقترح</h3>
+<div class="code-wrap">
+  <span class="lang-label">text</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+mawid-assistant/
+├── app/
+│   ├── __init__.py
+│   ├── main.py              # نقطة الدخول FastAPI
+│   ├── config.py             # إعدادات البيئة
+│   ├── auth.py               # التحقق من JWT
+│   ├── database.py           # اتصال Supabase
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   ├── chat.py           # endpoint المحادثة
+│   │   ├── doctors.py        # endpoint الأطباء
+│   │   └── appointments.py   # endpoint المواعيد
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── rag.py            # خط أنابيب RAG
+│   │   ├── llm.py            # استدعاء نموذج اللغة
+│   │   ├── specialty.py      # كشف التخصص من الأعراض
+│   │   └── booking.py        # منطق الحجز
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── schemas.py        # Pydantic models
+│   └── data/
+│       └── medical_kb/       # ملفات قاعدة المعرفة الطبية
+├── scripts/
+│   ├── seed_embeddings.py    # سكربت تحويل البيانات لـ embeddings
+│   └── load_dataset.py       # سكربت تحميل البيانات الطبية
+├── .env                      # متغيرات البيئة (لا ترفعه على GitHub!)
+├── .gitignore
+├── requirements.txt
+└── README.md
+</pre>
+</div>
+
+<h3>ملف .env</h3>
+<div class="code-wrap">
+  <span class="lang-label">.env</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+SUPABASE_URL=https://xxxxx.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOi...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...
+
+# اختر واحد من مزودي LLM:
+OPENROUTER_API_KEY=sk-or-v1-xxxx
+# أو
+GROQ_API_KEY=gsk_xxxx
+
+# Embedding model (اختياري — يمكن تشغيله محلياً)
+HF_API_KEY=hf_xxxx
+</pre>
+</div>
+
+<div class="box box-danger">
+  <strong>تحذير أمني:</strong>
+  لا ترفع ملف <code class="inline">.env</code> على GitHub أبداً. أضفه إلى <code class="inline">.gitignore</code>.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 3 ═══════════════ -->
+<div class="section" id="sec3">
+<h2><span class="step-num">3</span> الاتصال بقاعدة بيانات Supabase</h2>
+
+<h3>جداول مشروعك الحالية</h3>
+<p>قاعدة البيانات بتاعتك فيها الجداول دي اللي هتشتغل عليها:</p>
+
+<h4>جدول doctors</h4>
+<table>
+  <tr><th>العمود</th><th>النوع</th><th>الوصف</th></tr>
+  <tr><td><code class="inline">id</code></td><td>uuid PK</td><td>معرف الطبيب</td></tr>
+  <tr><td><code class="inline">full_name</code></td><td>text</td><td>الاسم الكامل</td></tr>
+  <tr><td><code class="inline">specialty</code></td><td>text</td><td>التخصص (مثال: "أمراض القلب")</td></tr>
+  <tr><td><code class="inline">rating</code></td><td>numeric(3,1)</td><td>التقييم (مثال: 4.8)</td></tr>
+  <tr><td><code class="inline">review_count</code></td><td>int</td><td>عدد التقييمات</td></tr>
+  <tr><td><code class="inline">consultation_fee_sar</code></td><td>int</td><td>رسوم الكشف بالريال</td></tr>
+  <tr><td><code class="inline">available_days</code></td><td>jsonb</td><td>الأيام المتاحة ["السبت","الأحد"]</td></tr>
+  <tr><td><code class="inline">start_time</code></td><td>time</td><td>بداية الدوام (مثال: 09:00)</td></tr>
+  <tr><td><code class="inline">end_time</code></td><td>time</td><td>نهاية الدوام (مثال: 17:00)</td></tr>
+  <tr><td><code class="inline">slot_duration_minutes</code></td><td>int</td><td>مدة الموعد بالدقائق (مثال: 15)</td></tr>
+  <tr><td><code class="inline">clinic_address</code></td><td>text</td><td>عنوان العيادة</td></tr>
+  <tr><td><code class="inline">avatar_url</code></td><td>text</td><td>صورة الطبيب</td></tr>
+  <tr><td><code class="inline">image_url</code></td><td>text</td><td>صورة بديلة</td></tr>
+  <tr><td><code class="inline">latitude</code></td><td>double</td><td>خط العرض</td></tr>
+  <tr><td><code class="inline">longitude</code></td><td>double</td><td>خط الطول</td></tr>
+</table>
+
+<h4>جدول appointments</h4>
+<table>
+  <tr><th>العمود</th><th>النوع</th><th>الوصف</th></tr>
+  <tr><td><code class="inline">id</code></td><td>uuid PK</td><td>معرف الموعد</td></tr>
+  <tr><td><code class="inline">patient_id</code></td><td>uuid FK → profiles</td><td>المريض</td></tr>
+  <tr><td><code class="inline">doctor_id</code></td><td>uuid FK → doctors</td><td>الطبيب</td></tr>
+  <tr><td><code class="inline">appointment_date</code></td><td>date</td><td>تاريخ الموعد</td></tr>
+  <tr><td><code class="inline">time_slot</code></td><td>text</td><td>الوقت (مثال: "09:30")</td></tr>
+  <tr><td><code class="inline">queue_number</code></td><td>int</td><td>رقم الطابور</td></tr>
+  <tr><td><code class="inline">status</code></td><td>text</td><td>الحالة: scheduled / cancelled / completed</td></tr>
+  <tr><td><code class="inline">notes</code></td><td>text</td><td>ملاحظات المريض</td></tr>
+  <tr><td><code class="inline">created_at</code></td><td>timestamptz</td><td>تاريخ الإنشاء</td></tr>
+</table>
+
+<h4>جدول profiles (المرضى)</h4>
+<table>
+  <tr><th>العمود</th><th>النوع</th><th>الوصف</th></tr>
+  <tr><td><code class="inline">id</code></td><td>uuid PK → auth.users</td><td>معرف المستخدم</td></tr>
+  <tr><td><code class="inline">full_name</code></td><td>text</td><td>الاسم</td></tr>
+  <tr><td><code class="inline">phone</code></td><td>text</td><td>رقم الجوال</td></tr>
+  <tr><td><code class="inline">role</code></td><td>text</td><td>'patient' أو 'doctor'</td></tr>
+</table>
+
+<h3>ملف الاتصال: app/database.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+import os
+from supabase import create_client, Client
+from dotenv import load_dotenv
+
+load_dotenv()
+
+supabase: Client = create_client(
+    os.getenv("SUPABASE_URL"),
+    os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # service role للعمليات الخلفية
+)
+
+
+# ──────── استعلام الأطباء حسب التخصص ────────
+def get_doctors_by_specialty(specialty: str, limit: int = 3):
+    """جلب أفضل الأطباء حسب التخصص مرتبين بالتقييم"""
+    result = supabase.table("doctors") \
+        .select("id, full_name, specialty, rating, review_count, "
+                "clinic_address, avatar_url, available_days, "
+                "start_time, end_time, slot_duration_minutes, "
+                "consultation_fee_sar") \
+        .ilike("specialty", f"%{specialty}%") \
+        .order("rating", desc=True) \
+        .limit(limit) \
+        .execute()
+
+    if not result.data:
+        # fallback: جلب أفضل الأطباء عموماً
+        result = supabase.table("doctors") \
+            .select("*") \
+            .order("rating", desc=True) \
+            .limit(limit) \
+            .execute()
+
+    return result.data
+
+
+# ──────── جلب الأوقات المتاحة ────────
+def get_available_slots(doctor_id: str, date: str):
+    """حساب الأوقات المتاحة لطبيب في يوم معين"""
+    # 1. جلب مواعيد عمل الطبيب
+    doc = supabase.table("doctors") \
+        .select("start_time, end_time, slot_duration_minutes") \
+        .eq("id", doctor_id) \
+        .single() \
+        .execute()
+
+    if not doc.data:
+        return []
+
+    # 2. جلب المواعيد المحجوزة
+    booked = supabase.table("appointments") \
+        .select("time_slot") \
+        .eq("doctor_id", doctor_id) \
+        .eq("appointment_date", date) \
+        .neq("status", "cancelled") \
+        .execute()
+
+    booked_slots = {b["time_slot"] for b in (booked.data or [])}
+
+    # 3. حساب كل الأوقات الممكنة
+    start_h, start_m = map(int, doc.data["start_time"].split(":")[:2])
+    end_h, end_m = map(int, doc.data["end_time"].split(":")[:2])
+    duration = doc.data.get("slot_duration_minutes", 30)
+
+    slots = []
+    h, m = start_h, start_m
+    while h < end_h or (h == end_h and m < end_m):
+        time_str = f"{h:02d}:{m:02d}"
+        slots.append({
+            "time": time_str,
+            "available": time_str not in booked_slots
+        })
+        m += duration
+        if m >= 60:
+            h += m // 60
+            m = m % 60
+
+    return slots
+
+
+# ──────── حجز موعد ────────
+def book_appointment(patient_id: str, doctor_id: str,
+                     date: str, time_slot: str):
+    """حجز موعد جديد"""
+    # التأكد إن الوقت مش محجوز
+    existing = supabase.table("appointments") \
+        .select("id") \
+        .eq("doctor_id", doctor_id) \
+        .eq("appointment_date", date) \
+        .eq("time_slot", time_slot) \
+        .neq("status", "cancelled") \
+        .limit(1) \
+        .execute()
+
+    if existing.data:
+        return {"error": "هذا الموعد محجوز بالفعل"}
+
+    # حساب رقم الطابور
+    day_appts = supabase.table("appointments") \
+        .select("id", count="exact") \
+        .eq("doctor_id", doctor_id) \
+        .eq("appointment_date", date) \
+        .neq("status", "cancelled") \
+        .execute()
+
+    queue_number = (day_appts.count or 0) + 1
+
+    # إنشاء الموعد
+    result = supabase.table("appointments").insert({
+        "patient_id": patient_id,
+        "doctor_id": doctor_id,
+        "appointment_date": date,
+        "time_slot": time_slot,
+        "queue_number": queue_number,
+        "status": "scheduled"
+    }).execute()
+
+    return {
+        "success": True,
+        "appointment": result.data[0] if result.data else None,
+        "queue_number": queue_number
+    }
+</pre>
+</div>
+
+<div class="box box-success">
+  <strong>ملاحظة:</strong>
+  نستخدم <code class="inline">SUPABASE_SERVICE_ROLE_KEY</code> في الـ backend لأنه يتجاوز RLS. الـ <code class="inline">ANON_KEY</code> يُستخدم فقط في الـ Android app.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 4 ═══════════════ -->
+<div class="section" id="sec4">
+<h2><span class="step-num">4</span> مصادر البيانات الطبية الموثوقة</h2>
+
+<p>هتحتاج بيانات طبية موثوقة عشان تدرّب الـ RAG عليها. دي أفضل المصادر المجانية:</p>
+
+<h3>داتاسيتات إنجليزية (للترجمة أو الاستخدام المباشر)</h3>
+<div class="dataset-grid">
+  <div class="dataset-card">
+    <h4>MedQuAD</h4>
+    <div class="meta">NIH — 47,000+ سؤال وجواب</div>
+    <p>أسئلة وأجوبة طبية من المعاهد الصحية الأمريكية. يغطي أمراض، أعراض، علاجات.</p>
+    <div class="meta" style="margin-top:.5rem">
+      الرابط: <a href="https://github.com/abachaa/MedQuAD" target="_blank" style="color:var(--primary)">github.com/abachaa/MedQuAD</a>
+    </div>
+  </div>
+  <div class="dataset-card">
+    <h4>PubMedQA</h4>
+    <div class="meta">بحث علمي — 1,000+ سؤال مراجع</div>
+    <p>أسئلة مبنية على أبحاث PubMed. مناسبة للأسئلة الطبية العميقة.</p>
+    <div class="meta" style="margin-top:.5rem">
+      الرابط: <a href="https://pubmedqa.github.io" target="_blank" style="color:var(--primary)">pubmedqa.github.io</a>
+    </div>
+  </div>
+  <div class="dataset-card">
+    <h4>HealthSearchQA</h4>
+    <div class="meta">Google — 3,375 سؤال صحي</div>
+    <p>أسئلة يبحث عنها الناس فعلاً على Google. مناسبة لفهم استفسارات المرضى.</p>
+    <div class="meta" style="margin-top:.5rem">
+      الرابط: <a href="https://huggingface.co/datasets/katielink/healthsearchqa" target="_blank" style="color:var(--primary)">HuggingFace: healthsearchqa</a>
+    </div>
+  </div>
+  <div class="dataset-card">
+    <h4>Medical Meadow</h4>
+    <div class="meta">مجتمعي — مجموعة شاملة</div>
+    <p>مجموعة داتاسيتات طبية متنوعة (WikiDoc, USMLE, إلخ) مدمجة في مكان واحد.</p>
+    <div class="meta" style="margin-top:.5rem">
+      الرابط: <a href="https://huggingface.co/datasets/medalpaca/medical_meadow_mediqa" target="_blank" style="color:var(--primary)">HuggingFace: medical_meadow</a>
+    </div>
+  </div>
+</div>
+
+<h3>داتاسيتات عربية</h3>
+<div class="dataset-grid">
+  <div class="dataset-card">
+    <h4>Arabic Medical NER</h4>
+    <div class="meta">بيانات طبية عربية</div>
+    <p>بيانات تعريف الكيانات الطبية بالعربي (أمراض، أعضاء، أدوية).</p>
+    <div class="meta" style="margin-top:.5rem">
+      الرابط: <a href="https://huggingface.co/datasets" target="_blank" style="color:var(--primary)">ابحث في HuggingFace: "arabic medical"</a>
+    </div>
+  </div>
+  <div class="dataset-card">
+    <h4>ترجمة تلقائية</h4>
+    <div class="meta">الحل العملي الأفضل</div>
+    <p>ترجم MedQuAD أو HealthSearchQA للعربية باستخدام نموذج Helsinki-NLP أو Google Translate API.</p>
+  </div>
+  <div class="dataset-card">
+    <h4>محتوى يدوي مخصص</h4>
+    <div class="meta">الأكثر دقة لمشروعك</div>
+    <p>اكتب 50-100 سؤال وجواب عربي يغطي التخصصات الموجودة في تطبيقك (قلب، عظام، هضمي، إلخ). هذا الأفضل للبداية.</p>
+  </div>
+</div>
+
+<h3>الطريقة المقترحة: ابدأ بمحتوى مخصص ثم وسّع</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# scripts/load_dataset.py
+# الخطوة 1: ابدأ بمحتوى عربي مخصص (الأسرع والأدق)
+
+medical_knowledge = [
+    {
+        "category": "أمراض القلب",
+        "content": "ألم الصدر: إذا شعرت بألم ضاغط أو حارق في "
+                   "منتصف الصدر يمتد للذراع الأيسر أو الفك، مع "
+                   "ضيق تنفس أو تعرق بارد، توجه للطوارئ فوراً.",
+        "specialty": "طبيب قلب",
+        "severity": "عالي"
+    },
+    {
+        "category": "العظام",
+        "content": "آلام الركبة: ألم مستمر في الركبة مع تورم أو "
+                   "صعوبة في المشي قد يشير إلى التهاب المفاصل أو "
+                   "إصابة في الأربطة. يُنصح بمراجعة طبيب عظام.",
+        "specialty": "طبيب عظام",
+        "severity": "متوسط"
+    },
+    # ... أضف 50-100 عنصر يغطي كل التخصصات
+]
+
+# الخطوة 2: لاحقاً أضف ترجمة MedQuAD
+# pip install datasets transformers
+from datasets import load_dataset
+
+dataset = load_dataset("medalpaca/medical_meadow_mediqa")
+# ثم ترجمه للعربية باستخدام:
+# from transformers import MarianMTModel, MarianTokenizer
+# model_name = "Helsinki-NLP/opus-mt-en-ar"
+</pre>
+</div>
+
+<div class="box box-warn">
+  <strong>نصيحة مهمة:</strong>
+  ابدأ بـ 50-100 سؤال مخصص بالعربي يغطي التخصصات الموجودة في تطبيقك. هذا أفضل بكتير من 10,000 سؤال إنجليزي مترجم آلياً. التوسع يكون تدريجي.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 5 ═══════════════ -->
+<div class="section" id="sec5">
+<h2><span class="step-num">5</span> بناء خط أنابيب RAG</h2>
+
+<h3>ما هو RAG؟</h3>
+<p><strong>Retrieval-Augmented Generation</strong> = بدل ما الـ LLM يخترع إجابات من دماغه، بيدوّر الأول في قاعدة المعرفة الطبية على معلومات مشابهة لسؤال المريض، وبعدين يستخدمها عشان يرد رد دقيق.</p>
+
+<div class="diagram">
+سؤال المريض ──► تحويل لـ Embedding ──► بحث في pgvector ──► أقرب 3 نتائج
+                                                                    │
+                                                                    ▼
+                                              ┌─────────────────────────────┐
+                                              │  System Prompt + نتائج RAG  │
+                                              │  + سؤال المريض              │
+                                              │         ▼                   │
+                                              │     LLM يولد الرد           │
+                                              └─────────────────────────────┘
+</div>
+
+<h3>الخطوة 1: إنشاء جدول kb_chunks في Supabase</h3>
+<p>شغّل SQL ده في Supabase SQL Editor:</p>
+<div class="code-wrap">
+  <span class="lang-label">sql</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+-- تفعيل pgvector
+create extension if not exists vector with schema extensions;
+
+-- جدول أجزاء المعرفة الطبية
+create table if not exists public.kb_chunks (
+    id uuid primary key default gen_random_uuid(),
+    content text not null,
+    category text not null default '',
+    specialty text,
+    severity text default 'متوسط',
+    metadata jsonb default '{}',
+    embedding vector(384),          -- لـ all-MiniLM-L6-v2
+    created_at timestamptz default now()
+);
+
+-- فهرس للبحث السريع
+create index if not exists idx_kb_embedding
+    on public.kb_chunks
+    using ivfflat (embedding vector_cosine_ops)
+    with (lists = 10);
+
+-- دالة البحث بالتشابه
+create or replace function match_kb_chunks(
+    query_embedding vector(384),
+    match_threshold float default 0.5,
+    match_count int default 3
+)
+returns table (
+    id uuid, content text, category text,
+    specialty text, metadata jsonb, similarity float
+)
+language sql stable as $$
+    select
+        id, content, category, specialty, metadata,
+        1 - (embedding &lt;=&gt; query_embedding) as similarity
+    from public.kb_chunks
+    where 1 - (embedding &lt;=&gt; query_embedding) > match_threshold
+    order by embedding &lt;=&gt; query_embedding
+    limit match_count;
+$$;
+</pre>
+</div>
+
+<h3>الخطوة 2: تحويل البيانات الطبية لـ Embeddings</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# scripts/seed_embeddings.py
+from sentence_transformers import SentenceTransformer
+from app.database import supabase
+
+# تحميل نموذج الـ embedding (يعمل محلياً — بدون API!)
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+# البيانات الطبية
+medical_data = [
+    {
+        "content": "ألم الصدر: إذا شعرت بألم ضاغط في منتصف الصدر "
+                   "يمتد للذراع الأيسر، توجه للطوارئ فوراً.",
+        "category": "أمراض القلب",
+        "specialty": "طبيب قلب",
+        "severity": "عالي"
+    },
+    {
+        "content": "الصداع المستمر: صداع يومي مع دوخة أو غثيان "
+                   "يستدعي مراجعة طبيب أعصاب.",
+        "category": "الأمراض العصبية",
+        "specialty": "طبيب أعصاب",
+        "severity": "متوسط"
+    },
+    # أضف باقي البيانات هنا...
+]
+
+for item in medical_data:
+    # تحويل النص لـ embedding vector
+    embedding = model.encode(item["content"]).tolist()
+
+    # حفظ في Supabase
+    supabase.table("kb_chunks").insert({
+        "content": item["content"],
+        "category": item["category"],
+        "specialty": item.get("specialty"),
+        "severity": item.get("severity", "متوسط"),
+        "embedding": embedding,
+        "metadata": {
+            "category": item["category"],
+            "specialty": item.get("specialty"),
+        }
+    }).execute()
+
+    print(f"✓ {item['category']}: {item['content'][:40]}...")
+
+print("تم تحميل كل البيانات بنجاح!")
+</pre>
+</div>
+
+<h3>الخطوة 3: خدمة RAG — app/services/rag.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/services/rag.py
+from sentence_transformers import SentenceTransformer
+from app.database import supabase
+
+# تحميل النموذج مرة واحدة عند بدء التطبيق
+_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+
+def search_medical_knowledge(query: str, top_k: int = 3):
+    """البحث في قاعدة المعرفة الطبية بالتشابه الدلالي"""
+    # 1. تحويل سؤال المريض لـ embedding
+    query_embedding = _model.encode(query).tolist()
+
+    # 2. البحث في pgvector
+    result = supabase.rpc("match_kb_chunks", {
+        "query_embedding": query_embedding,
+        "match_threshold": 0.4,
+        "match_count": top_k
+    }).execute()
+
+    return result.data or []
+
+
+def build_rag_context(query: str) -> str:
+    """بناء سياق RAG لإضافته للـ prompt"""
+    chunks = search_medical_knowledge(query)
+
+    if not chunks:
+        return ""
+
+    context_parts = []
+    for chunk in chunks:
+        context_parts.append(
+            f"[{chunk['category']}] {chunk['content']}"
+        )
+
+    return "\n\n".join(context_parts)
+</pre>
+</div>
+
+<div class="box box-info">
+  <strong>لماذا all-MiniLM-L6-v2؟</strong>
+  نموذج خفيف (80MB)، يعمل محلياً بدون API، سريع جداً، ويدعم النصوص العربية بشكل مقبول. لو عايز دقة أعلى للعربي استخدم <code class="inline">aubmindlab/bert-base-arabertv2</code> لكنه أبطأ.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 6 ═══════════════ -->
+<div class="section" id="sec6">
+<h2><span class="step-num">6</span> بناء سيرفر FastAPI</h2>
+
+<h3>نقطة الدخول: app/main.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import chat, doctors, appointments
+
+app = FastAPI(title="Mawid+ AI Assistant", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(chat.router, prefix="/api", tags=["Chat"])
+app.include_router(doctors.router, prefix="/api", tags=["Doctors"])
+app.include_router(appointments.router, prefix="/api", tags=["Appointments"])
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "service": "mawid-assistant"}
+</pre>
+</div>
+
+<h3>نماذج البيانات: app/models/schemas.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/models/schemas.py
+from pydantic import BaseModel
+from typing import Optional
+
+
+class ChatRequest(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+
+
+class ChatResponse(BaseModel):
+    session_id: Optional[str] = None
+    assistant_message: str
+    quick_replies: list[str] = []
+    detected_specialty: Optional[str] = None
+    recommended_doctors: Optional[list] = None
+
+
+class DoctorsRequest(BaseModel):
+    specialty: str
+
+
+class SlotsRequest(BaseModel):
+    doctor_id: str
+    date: str  # "2026-04-20"
+
+
+class BookRequest(BaseModel):
+    doctor_id: str
+    date: str
+    time_slot: str  # "09:30"
+</pre>
+</div>
+
+<h3>راوتر المحادثة: app/routers/chat.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/routers/chat.py
+from fastapi import APIRouter, Depends, HTTPException
+from app.models.schemas import ChatRequest, ChatResponse
+from app.services.rag import build_rag_context
+from app.services.llm import call_llm
+from app.services.specialty import detect_specialty
+from app.database import get_doctors_by_specialty
+from app.auth import get_current_user
+
+router = APIRouter()
+
+
+@router.post("/chat", response_model=ChatResponse)
+async def chat(req: ChatRequest, user=Depends(get_current_user)):
+    if not req.message or not req.message.strip():
+        raise HTTPException(400, "الرسالة فارغة")
+
+    # 1. بحث RAG
+    rag_context = build_rag_context(req.message)
+
+    # 2. استدعاء LLM
+    assistant_message = await call_llm(
+        user_message=req.message,
+        rag_context=rag_context,
+        session_id=req.session_id
+    )
+
+    # 3. كشف التخصص تلقائياً
+    specialty = detect_specialty(assistant_message)
+
+    # 4. جلب أطباء لو تم كشف تخصص
+    doctors = None
+    if specialty:
+        doctors = get_doctors_by_specialty(specialty)
+
+    # 5. ردود سريعة مقترحة
+    quick_replies = generate_quick_replies(
+        req.message, assistant_message
+    )
+
+    return ChatResponse(
+        session_id=req.session_id,
+        assistant_message=assistant_message,
+        quick_replies=quick_replies,
+        detected_specialty=specialty,
+        recommended_doctors=doctors,
+    )
+
+
+def generate_quick_replies(user_msg: str, bot_msg: str) -> list[str]:
+    """توليد ردود سريعة بناءً على السياق"""
+    if "طوارئ" in bot_msg or "فوراً" in bot_msg:
+        return ["اتصل بالإسعاف", "اذهب للطوارئ"]
+    if "أنصحك" in bot_msg or "مراجعة" in bot_msg:
+        return ["اعرض الأطباء", "معلومات أكثر", "سؤال آخر"]
+    if "؟" in bot_msg:
+        return ["نعم", "لا", "أحياناً"]
+    return ["حجز موعد", "معلومات أكثر", "سؤال آخر"]
+</pre>
+</div>
+
+<h3>راوتر الأطباء: app/routers/doctors.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/routers/doctors.py
+from fastapi import APIRouter, Depends
+from app.models.schemas import DoctorsRequest, SlotsRequest
+from app.database import get_doctors_by_specialty, get_available_slots
+from app.auth import get_current_user
+
+router = APIRouter()
+
+
+@router.post("/get-doctors")
+async def get_doctors(req: DoctorsRequest, user=Depends(get_current_user)):
+    doctors = get_doctors_by_specialty(req.specialty)
+    return {
+        "doctors": doctors,
+        "message": f"إليك أفضل الأطباء في تخصص {req.specialty}"
+    }
+
+
+@router.post("/get-slots")
+async def get_slots(req: SlotsRequest, user=Depends(get_current_user)):
+    slots = get_available_slots(req.doctor_id, req.date)
+    return {
+        "slots": slots,
+        "date": req.date,
+        "doctor_id": req.doctor_id
+    }
+</pre>
+</div>
+
+<h3>راوتر الحجز: app/routers/appointments.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/routers/appointments.py
+from fastapi import APIRouter, Depends, HTTPException
+from app.models.schemas import BookRequest
+from app.database import book_appointment, supabase
+from app.auth import get_current_user
+
+router = APIRouter()
+
+
+@router.post("/book")
+async def book(req: BookRequest, user=Depends(get_current_user)):
+    result = book_appointment(
+        patient_id=user["id"],
+        doctor_id=req.doctor_id,
+        date=req.date,
+        time_slot=req.time_slot
+    )
+
+    if "error" in result:
+        raise HTTPException(409, result["error"])
+
+    # جلب اسم الطبيب للرد
+    doc = supabase.table("doctors") \
+        .select("full_name, specialty") \
+        .eq("id", req.doctor_id) \
+        .single() \
+        .execute()
+
+    return {
+        "success": True,
+        "appointment": result["appointment"],
+        "queue_number": result["queue_number"],
+        "message": (
+            f"تم حجز موعدك بنجاح!\n"
+            f"الطبيب: {doc.data['full_name']}\n"
+            f"التاريخ: {req.date}\n"
+            f"الوقت: {req.time_slot}\n"
+            f"رقم الطابور: {result['queue_number']}"
+        )
+    }
+</pre>
+</div>
+
+<h3>التحقق من المستخدم: app/auth.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/auth.py
+import os
+from fastapi import HTTPException, Header
+from jose import jwt, JWTError
+
+SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
+# تجده في: Supabase Dashboard > Settings > API > JWT Secret
+
+
+async def get_current_user(
+    authorization: str = Header(...)
+) -> dict:
+    """التحقق من JWT token المرسل من Android"""
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(401, "غير مصرح")
+
+    token = authorization.replace("Bearer ", "")
+
+    try:
+        payload = jwt.decode(
+            token,
+            SUPABASE_JWT_SECRET,
+            algorithms=["HS256"],
+            audience="authenticated"
+        )
+        return {
+            "id": payload.get("sub"),
+            "email": payload.get("email"),
+            "role": payload.get("role"),
+        }
+    except JWTError:
+        raise HTTPException(401, "جلسة منتهية، سجل دخول مجدداً")
+</pre>
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 7 ═══════════════ -->
+<div class="section" id="sec7">
+<h2><span class="step-num">7</span> دمج نموذج اللغة (LLM)</h2>
+
+<h3>خيارات مزودي LLM</h3>
+<table>
+  <tr><th>المزود</th><th>المميزات</th><th>التكلفة</th><th>ملاحظات</th></tr>
+  <tr>
+    <td><strong>OpenRouter</strong></td>
+    <td>نماذج متعددة، API موحد</td>
+    <td>مجاني (نماذج :free)</td>
+    <td>قد يحدث rate limit على المجاني</td>
+  </tr>
+  <tr>
+    <td><strong>Groq</strong></td>
+    <td>سريع جداً (LPU)</td>
+    <td>مجاني (حد يومي)</td>
+    <td>الأسرع — مناسب للتطوير</td>
+  </tr>
+  <tr>
+    <td><strong>Ollama</strong></td>
+    <td>محلي 100% — بدون إنترنت</td>
+    <td>مجاني تماماً</td>
+    <td>يحتاج GPU قوي للأداء الجيد</td>
+  </tr>
+  <tr>
+    <td><strong>Google Gemini</strong></td>
+    <td>يدعم العربي جيداً</td>
+    <td>مجاني (15 req/min)</td>
+    <td>أفضل خيار للعربي</td>
+  </tr>
+</table>
+
+<h3>خدمة LLM: app/services/llm.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/services/llm.py
+import os
+import httpx
+
+SYSTEM_PROMPT = """أنت مساعد طبي ذكي لتطبيق موعد+.
+مهمتك: مساعدة المريض في فهم أعراضه وتوجيهه للتخصص الطبي المناسب.
+
+قواعد صارمة:
+1. لا تشخّص أمراضاً أبداً — أنت لست طبيباً
+2. لا تقترح أدوية أبداً
+3. وجّه للتخصص المناسب فقط
+4. طوارئ (ألم صدر حاد، صعوبة تنفس، نزيف) → اطلب الذهاب فوراً
+5. كن ودوداً ومطمئناً
+6. اطرح سؤالاً واحداً فقط للمتابعة
+7. عندما تكون مستعداً، قل "أنصحك بمراجعة [التخصص]"
+8. رد بالعربي دائماً
+9. كن مختصراً (3-5 جمل كحد أقصى)"""
+
+
+async def call_llm(
+    user_message: str,
+    rag_context: str = "",
+    session_id: str = None
+) -> str:
+    """استدعاء نموذج اللغة مع سياق RAG"""
+
+    system = SYSTEM_PROMPT
+    if rag_context:
+        system += f"\n\nمعلومات طبية موثوقة:\n{rag_context}"
+
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user_message}
+    ]
+
+    # ── الخيار 1: OpenRouter ──
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if api_key:
+        return await _call_openrouter(messages, api_key)
+
+    # ── الخيار 2: Groq ──
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        return await _call_groq(messages, groq_key)
+
+    raise Exception("لم يتم تعيين مفتاح LLM API")
+
+
+async def _call_openrouter(messages: list, api_key: str) -> str:
+    """استدعاء OpenRouter API"""
+    models = [
+        "meta-llama/llama-3.2-3b-instruct:free",
+        "google/gemma-2-9b-it:free",
+        "mistralai/mistral-7b-instruct:free",
+    ]
+
+    async with httpx.AsyncClient(timeout=30) as client:
+        for model in models:
+            try:
+                resp = await client.post(
+                    "https://openrouter.ai/api/v1/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": model,
+                        "max_tokens": 300,
+                        "messages": messages
+                    }
+                )
+
+                if resp.status_code == 429:
+                    continue  # rate limited, جرب الموديل التالي
+
+                data = resp.json()
+                content = data.get("choices", [{}])[0] \
+                              .get("message", {}) \
+                              .get("content")
+                if content:
+                    return content
+
+            except Exception:
+                continue
+
+    raise Exception("كل النماذج فشلت")
+
+
+async def _call_groq(messages: list, api_key: str) -> str:
+    """استدعاء Groq API (أسرع خيار)"""
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "llama-3.1-8b-instant",
+                "max_tokens": 300,
+                "messages": messages
+            }
+        )
+
+        data = resp.json()
+        return data["choices"][0]["message"]["content"]
+</pre>
+</div>
+
+<h3>كشف التخصص: app/services/specialty.py</h3>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# app/services/specialty.py
+
+SPECIALTY_KEYWORDS = {
+    "أمراض القلب":  ["قلب", "صدر", "خفقان", "ضغط الدم"],
+    "طبيب العظام":  ["عظام", "مفاصل", "ركبة", "ظهر", "عمود فقري"],
+    "طب الأسرة":    ["عام", "حرارة", "حمى", "برد", "إنفلونزا"],
+    "الجهاز الهضمي": ["هضم", "بطن", "معدة", "قولون", "إسهال"],
+    "الأمراض الجلدية": ["جلد", "طفح", "حكة", "أكزيما"],
+    "طب العيون":     ["عيون", "رؤية", "نظر", "احمرار العين"],
+    "أنف وأذن وحنجرة": ["أنف", "أذن", "حنجرة", "سمع", "التهاب حلق"],
+    "الأمراض العصبية": ["أعصاب", "صداع", "تنميل", "دوخة"],
+    "أمراض الصدر":    ["تنفس", "ربو", "سعال", "كحة"],
+}
+
+
+def detect_specialty(text: str) -> str | None:
+    """كشف التخصص الطبي من نص رد المساعد"""
+    for specialty, keywords in SPECIALTY_KEYWORDS.items():
+        if any(kw in text for kw in keywords):
+            return specialty
+    return None
+</pre>
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 8 ═══════════════ -->
+<div class="section" id="sec8">
+<h2><span class="step-num">8</span> ربط تطبيق Android بالـ API</h2>
+
+<h3>الفكرة</h3>
+<p>التطبيق هيتصل بـ FastAPI server بدل Supabase Edge Function. الفرق الوحيد هو الـ URL.</p>
+
+<h3>إضافة Retrofit للمشروع</h3>
+<div class="code-wrap">
+  <span class="lang-label">kotlin (build.gradle.kts)</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+// في app/build.gradle.kts أضف:
+implementation("com.squareup.retrofit2:retrofit:2.9.0")
+implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+</pre>
+</div>
+
+<h3>تعريف الـ API Interface</h3>
+<div class="code-wrap">
+  <span class="lang-label">kotlin</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+// data/remote/AssistantApi.kt
+
+interface AssistantApi {
+
+    @POST("api/chat")
+    suspend fun sendMessage(
+        @Body request: ChatRequest
+    ): ChatResponse
+
+    @POST("api/get-doctors")
+    suspend fun getDoctors(
+        @Body request: DoctorsRequest
+    ): DoctorsResponse
+
+    @POST("api/get-slots")
+    suspend fun getSlots(
+        @Body request: SlotsRequest
+    ): SlotsResponse
+
+    @POST("api/book")
+    suspend fun bookAppointment(
+        @Body request: BookRequest
+    ): BookResponse
+}
+
+// ── Data Classes ──
+
+data class ChatRequest(
+    val message: String,
+    val session_id: String? = null
+)
+
+data class ChatResponse(
+    val session_id: String?,
+    val assistant_message: String,
+    val quick_replies: List&lt;String&gt;,
+    val detected_specialty: String?,
+    val recommended_doctors: List&lt;DoctorCard&gt;?
+)
+
+data class DoctorCard(
+    val id: String,
+    val full_name: String,
+    val specialty: String,
+    val rating: Double?,
+    val clinic_address: String?,
+    val avatar_url: String?
+)
+
+// ... باقي الـ data classes
+</pre>
+</div>
+
+<h3>إنشاء Retrofit Client</h3>
+<div class="code-wrap">
+  <span class="lang-label">kotlin</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+// data/remote/ApiClient.kt
+
+object ApiClient {
+    private const val BASE_URL = "https://your-app.railway.app/"
+    // أثناء التطوير: "http://10.0.2.2:8000/" (للمحاكي)
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+            // إضافة JWT token تلقائياً
+            val token = SupabaseProvider.client.auth
+                .currentSessionOrNull()?.accessToken
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    val api: AssistantApi = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(AssistantApi::class.java)
+}
+</pre>
+</div>
+
+<h3>استخدام في ViewModel</h3>
+<div class="code-wrap">
+  <span class="lang-label">kotlin</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+// ui/screens/assistant/AssistantViewModel.kt
+
+class AssistantViewModel : ViewModel() {
+    private val api = ApiClient.api
+
+    fun sendMessage(text: String) {
+        viewModelScope.launch {
+            try {
+                _state.update { it.copy(isLoading = true) }
+                val response = api.sendMessage(
+                    ChatRequest(message = text, session_id = sessionId)
+                )
+                // أضف رسالة المساعد للشاشة
+                addAssistantMessage(response)
+            } catch (e: Exception) {
+                // عرض خطأ
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+}
+</pre>
+</div>
+
+<div class="box box-info">
+  <strong>أثناء التطوير:</strong>
+  شغّل الـ FastAPI محلياً (<code class="inline">uvicorn app.main:app --reload --port 8000</code>) واستخدم <code class="inline">http://10.0.2.2:8000/</code> كـ BASE_URL في المحاكي. <code class="inline">10.0.2.2</code> هو عنوان الـ localhost من داخل المحاكي.
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 9 ═══════════════ -->
+<div class="section" id="sec9">
+<h2><span class="step-num">9</span> النشر (Deployment)</h2>
+
+<h3>خيارات النشر المجانية</h3>
+<table>
+  <tr><th>المنصة</th><th>الخطة المجانية</th><th>المميزات</th></tr>
+  <tr>
+    <td><strong>Railway</strong></td>
+    <td>$5 رصيد مجاني/شهر</td>
+    <td>نشر سهل من GitHub، HTTPS تلقائي، Dockerfile</td>
+  </tr>
+  <tr>
+    <td><strong>Render</strong></td>
+    <td>750 ساعة مجانية/شهر</td>
+    <td>نشر من GitHub، ينام بعد 15 دقيقة خمول</td>
+  </tr>
+  <tr>
+    <td><strong>Fly.io</strong></td>
+    <td>3 VMs مجانية</td>
+    <td>Docker، قريب من المستخدم جغرافياً</td>
+  </tr>
+</table>
+
+<h3>النشر على Railway (الأسهل)</h3>
+
+<h4>1. جهّز Dockerfile</h4>
+<div class="code-wrap">
+  <span class="lang-label">Dockerfile</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# تحميل نموذج embedding مسبقاً (أسرع عند التشغيل)
+RUN python -c "from sentence_transformers import SentenceTransformer; \
+    SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+</pre>
+</div>
+
+<h4>2. ارفع على GitHub</h4>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+cd mawid-assistant
+git init
+git add .
+git commit -m "Initial: Mawid+ AI Assistant API"
+git remote add origin https://github.com/YOUR_USER/mawid-assistant.git
+git push -u origin main
+</pre>
+</div>
+
+<h4>3. انشر على Railway</h4>
+<ol>
+  <li>ادخل <a href="https://railway.app" target="_blank" style="color:var(--primary)">railway.app</a> وسجل بـ GitHub</li>
+  <li>اضغط <strong>"New Project"</strong> → <strong>"Deploy from GitHub Repo"</strong></li>
+  <li>اختر الـ repo</li>
+  <li>أضف متغيرات البيئة في <strong>Settings → Variables</strong>:
+    <ul>
+      <li><code class="inline">SUPABASE_URL</code></li>
+      <li><code class="inline">SUPABASE_SERVICE_ROLE_KEY</code></li>
+      <li><code class="inline">SUPABASE_JWT_SECRET</code></li>
+      <li><code class="inline">OPENROUTER_API_KEY</code> (أو <code class="inline">GROQ_API_KEY</code>)</li>
+    </ul>
+  </li>
+  <li>Railway هيكتشف الـ Dockerfile ويبني وينشر تلقائياً</li>
+  <li>هتلاقي الـ URL زي: <code class="inline">https://mawid-assistant-production.up.railway.app</code></li>
+</ol>
+
+<h4>4. حدّث BASE_URL في Android</h4>
+<div class="code-wrap">
+  <span class="lang-label">kotlin</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+// حدّث الـ URL في ApiClient.kt
+private const val BASE_URL =
+    "https://mawid-assistant-production.up.railway.app/"
+</pre>
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 10 ═══════════════ -->
+<div class="section" id="sec10">
+<h2><span class="step-num">10</span> الاختبار</h2>
+
+<h3>تشغيل السيرفر محلياً</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# تأكد إنك في مجلد المشروع والبيئة مفعّلة
+cd mawid-assistant
+venv\Scripts\activate    # Windows
+
+# تشغيل السيرفر
+uvicorn app.main:app --reload --port 8000
+
+# هتشوف:
+# INFO:     Uvicorn running on http://127.0.0.1:8000
+# INFO:     Started reloader process
+</pre>
+</div>
+
+<h3>اختبار Health Check</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+curl http://localhost:8000/health
+# {"status":"ok","service":"mawid-assistant"}
+</pre>
+</div>
+
+<h3>اختبار المحادثة</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+curl -X POST http://localhost:8000/api/chat \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "عندي ألم في صدري مع خفقان"}'
+
+# الرد المتوقع:
+# {
+#   "session_id": null,
+#   "assistant_message": "أهلاً بك. ألم الصدر مع خفقان يحتاج
+#     تقييم. هل الألم يزيد مع المجهود أو الراحة؟",
+#   "quick_replies": ["نعم، مع المجهود", "لا، مستمر", "أحياناً"],
+#   "detected_specialty": "أمراض القلب",
+#   "recommended_doctors": [
+#     {"id": "...", "full_name": "د. أحمد", "specialty": "أمراض القلب", ...}
+#   ]
+# }
+</pre>
+</div>
+
+<h3>اختبار جلب الأطباء</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+curl -X POST http://localhost:8000/api/get-doctors \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"specialty": "أمراض القلب"}'
+</pre>
+</div>
+
+<h3>اختبار الأوقات المتاحة</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+curl -X POST http://localhost:8000/api/get-slots \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"doctor_id": "DOCTOR_UUID", "date": "2026-04-20"}'
+</pre>
+</div>
+
+<h3>اختبار الحجز</h3>
+<div class="code-wrap">
+  <span class="lang-label">bash</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+curl -X POST http://localhost:8000/api/book \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"doctor_id": "DOCTOR_UUID", "date": "2026-04-20", "time_slot": "09:30"}'
+</pre>
+</div>
+
+<h3>سيناريو محادثة كاملة</h3>
+<table>
+  <tr><th>الخطوة</th><th>المريض</th><th>المساعد</th></tr>
+  <tr>
+    <td>1</td>
+    <td>"أشعر بصداع مستمر في الجبهة مع دوخة"</td>
+    <td>"يؤسفني سماع ذلك. هل الصداع يزداد مع الضوء أو الضوضاء؟"</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>"نعم، مع الضوء"</td>
+    <td>"أنصحك بمراجعة طبيب أعصاب. إليك أفضل الأطباء المتاحين." + بطاقات 3 أطباء</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>يضغط "اختر" على طبيب</td>
+    <td>يعرض تقويم الأيام المتاحة</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>يختار يوم</td>
+    <td>يعرض الأوقات المتاحة (09:00, 09:30, 10:00...)</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>يختار وقت "10:00"</td>
+    <td>"تم حجز موعدك بنجاح! رقم الطابور: 3"</td>
+  </tr>
+</table>
+
+<h3>اختبار من المحاكي</h3>
+<ol>
+  <li>شغّل السيرفر: <code class="inline">uvicorn app.main:app --reload --port 8000</code></li>
+  <li>في Android، استخدم <code class="inline">http://10.0.2.2:8000/</code> كـ BASE_URL</li>
+  <li>سجل دخول في التطبيق (عشان يكون عندك JWT token)</li>
+  <li>افتح شاشة المساعد الذكي</li>
+  <li>اكتب عرض وتابع التدفق</li>
+</ol>
+
+<div class="box box-success">
+  <strong>FastAPI Swagger UI:</strong>
+  افتح <code class="inline">http://localhost:8000/docs</code> في المتصفح — هتلاقي واجهة تفاعلية لاختبار كل الـ endpoints بدون curl!
+</div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div class="footer">
+  <p>دليل بناء المساعد الذكي — موعد+ | أبريل 2026</p>
+  <p>تم إنشاؤه كمرجع تطويري للمشروع</p>
+</div>
+
+</div><!-- /wrapper -->
+
+<script>
+function copyCode(btn){
+  const pre = btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+    btn.textContent = 'تم النسخ ✓';
+    setTimeout(() => btn.textContent = 'نسخ', 1500);
+  });
+}
+</script>
+</body>
+</html>
