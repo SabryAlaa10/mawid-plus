@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Info
@@ -113,9 +113,13 @@ private fun formatArabicAppointmentDate(iso: String): String {
 @Composable
 fun MyQueueScreen(
     doctorId: String,
+    appointmentFocus: String = "all",
     viewModel: MyQueueViewModel = viewModel(
-        key = doctorId,
-        factory = MyQueueViewModel.factory(doctorId)
+        key = "$doctorId|${appointmentFocus.trim().ifEmpty { "all" }}",
+        factory = MyQueueViewModel.factory(
+            doctorId,
+            appointmentFocus.trim().ifEmpty { "all" },
+        ),
     ),
     onBack: () -> Unit = {},
     onNavigateToNotifications: () -> Unit = {},
@@ -155,7 +159,7 @@ fun MyQueueScreen(
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(
-                                Icons.Filled.ArrowBack,
+                                Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "رجوع",
                                 tint = Primary
                             )

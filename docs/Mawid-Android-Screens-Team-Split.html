@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تقسيم شاشات تطبيق Mawid+ (Android) — Sabry · Esraa · Hanin</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #1a73e8;
+      --sabry: #0d9488;
+      --esraa: #7c3aed;
+      --hanin: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      margin: 0;
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; }
+    h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; border-bottom: 2px solid var(--border); padding-bottom: 0.35rem; }
+    h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+    p, li { color: var(--muted); }
+    .meta {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .b-sabry { background: #ccfbf1; color: #0f766e; }
+    .b-esraa { background: #ede9fe; color: #5b21b6; }
+    .b-hanin { background: #ffedd5; color: #9a3412; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0.75rem 0 1.5rem;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
+      text-align: start;
+      vertical-align: top;
+    }
+    th { background: #f1f5f9; font-weight: 600; color: var(--text); }
+    tr:nth-child(even) { background: #fafbfc; }
+    code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.85em;
+      background: #f1f5f9;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+    .count { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    ul.files { margin: 0.25rem 0 0; padding-inline-start: 1.1rem; }
+    ul.files li { margin: 0.2rem 0; }
+    .note { font-size: 0.9rem; color: var(--muted); border-inline-start: 4px solid var(--primary); padding-inline-start: 0.75rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+
+  <h1>مشروع Mawid+ — تطبيق المريض (Android)</h1>
+  <p class="count">عدد الشاشات (وجهات تنقّل مستقلة): <strong>15</strong> شاشة</p>
+
+  <div class="meta">
+    <p style="margin:0 0 0.5rem;"><strong>المرجع في الكود:</strong> <code>AppNavGraph.kt</code> + <code>MainTabContainer</code> (تبويبات داخل <code>Routes.HOME</code> ومسارات مرتبطة)</p>
+    <p style="margin:0;"><strong>تقسيم العمل:</strong> 3 مهندسين — <span class="badge b-sabry">Sabry</span> <span class="badge b-esraa">Esraa</span> <span class="badge b-hanin">Hanin</span> — <strong>5 وحدات عمل لكل مهندس</strong> (شاشات Android؛ و<strong>صبري</strong> يضيف مشروع <code>Ai_Mawid</code> للمساعد الذكي). لموازنة النقل: الشاشة 5 انتقلت من صبري إلى حنين مقابل إسناد الشاشة 15 و<code>Ai_Mawid</code> لصبري.</p>
+  </div>
+
+  <h2>1) جدول الشاشات والملفات الرئيسية</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>اسم الشاشة (وظيفة)</th>
+        <th>المسار / المفتاح (Route)</th>
+        <th>ملف(ات) الـ Composable + ViewModel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>شاشة الإقلاع (Splash)</td>
+        <td><code>splash</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/splash/SplashScreen.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>تسجيل الدخول</td>
+        <td><code>login</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/login/LoginScreen.kt</code></li>
+            <li><code>ui/screens/login/AuthPhoneFlowScreen.kt</code></li>
+            <li><code>ui/screens/login/LoginViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>إنشاء حساب</td>
+        <td><code>register?phone=…</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/register/RegisterScreen.kt</code></li>
+            <li><code>ui/screens/register/RegisterViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>الرئيسية (تبويب Home)</td>
+        <td>ضمن <code>main</code> + تبويب <code>home</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/home/HomeScreen.kt</code></li>
+            <li><code>ui/screens/home/HomeViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>البحث عن أطباء (تبويب Search)</td>
+        <td><code>search?query=…</code> / تبويب <code>search</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/search/SearchScreen.kt</code></li>
+            <li><code>ui/screens/search/SearchViewModel.kt</code></li>
+            <li><code>ui/screens/search/SearchModels.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>مواعيدي (تبويب Appointments)</td>
+        <td>تبويب <code>appointments</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/appointments/AppointmentsScreen.kt</code></li>
+            <li><code>ui/screens/appointments/AppointmentsViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>حسابي (تبويب Profile)</td>
+        <td>تبويب <code>profile</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/profile/ProfileScreen.kt</code></li>
+            <li><code>ui/screens/profile/ProfileViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>طابوري (My Queue)</td>
+        <td><code>my_queue/{doctorId}/{appointmentFocus}</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/queue/MyQueueScreen.kt</code></li>
+            <li><code>ui/screens/queue/MyQueueViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>الإشعارات</td>
+        <td><code>notifications</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/notifications/NotificationsScreen.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>خريطة عامة (Map View)</td>
+        <td><code>map_view</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/search/SearchFlowScreens.kt</code> — الدالة <code>MapViewScreen</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>تصفية البحث (فلاتر)</td>
+        <td><code>search_filters</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/search/SearchFlowScreens.kt</code> — الدالة <code>SearchFiltersScreen</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>تفاصيل طبيب</td>
+        <td><code>doctor_detail/{doctorId}</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/search/DoctorDetailScreen.kt</code></li>
+            <li><code>ui/screens/search/DoctorDetailViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>خريطة الطبيب</td>
+        <td><code>doctor_map/{doctorId}</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/search/DoctorMapScreen.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>الحجز (Booking)</td>
+        <td><code>booking/{doctorId}</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/booking/BookingScreen.kt</code></li>
+            <li><code>ui/screens/booking/BookingViewModel.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>المساعد الذكي (AI Chat)</td>
+        <td><code>ai_assistant</code></td>
+        <td>
+          <ul class="files">
+            <li><code>ui/screens/assistant/ChatScreen.kt</code></li>
+            <li><code>ui/screens/assistant/AssistantViewModel.kt</code></li>
+            <li><code>ui/screens/assistant/DoctorSuggestionCard.kt</code></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="note">ملاحظة: <code>MainTabContainer</code> و<code>BottomNavigationBar</code> و<code>AppNavGraph.kt</code> و<code>Routes.kt</code> تربط كل الشاشات — يفضّل تنسيق تعديلات المسارات بين الفريق (انظر قسم «مشترك» أدناه).</p>
+
+  <h2>2) تقسيم المهام (5 وحدات لكل مهندس + Ai_Mawid لصبري)</h2>
+
+  <h3><span class="badge b-sabry">Sabry</span> — 5 شاشات في Android + مشروع المساعد الذكي</h3>
+  <ol>
+    <li>الشاشة 1 — Splash</li>
+    <li>الشاشة 2 — Login (+ Auth phone flow + LoginViewModel)</li>
+    <li>الشاشة 3 — Register</li>
+    <li>الشاشة 4 — Home (الرئيسية)</li>
+    <li>الشاشة 15 — AI Assistant: الشات + بطاقة اقتراح طبيب (<code>ui/screens/assistant/</code>)</li>
+  </ol>
+  <p><strong>مشروع المساعد (FastAPI) — نفس مسؤولية صبري:</strong></p>
+  <ul>
+    <li><code>Ai_Mawid/mawid-assistant/</code> — الجذر (مثلاً <code>app/main.py</code>، <code>requirements.txt</code>، <code>.env</code>)</li>
+    <li><code>Ai_Mawid/mawid-assistant/app/routers/</code> — مسارات API (chat، doctors، appointments)</li>
+    <li><code>Ai_Mawid/mawid-assistant/app/services/</code> — منطق LLM، RAG، تخصصات (<code>llm.py</code>، <code>rag.py</code>، <code>specialty.py</code>، …)</li>
+    <li><code>Ai_Mawid/mawid-assistant/app/auth.py</code>، <code>app/database.py</code> — حسب الحاجة للربط مع Supabase</li>
+  </ul>
+  <p class="note">الشاشة 5 (تبويب Search) <strong>نُقلت إلى حنين</strong> لإبقاء توزيع متوازٍ (5 شاشات لكل مهندس في Android).</p>
+
+  <h3><span class="badge b-esraa">Esraa</span> — 5 شاشات</h3>
+  <ol>
+    <li>الشاشة 6 — Appointments (مواعيدي)</li>
+    <li>الشاشة 7 — Profile (حسابي)</li>
+    <li>الشاشة 12 — Doctor Detail</li>
+    <li>الشاشة 13 — Doctor Map</li>
+    <li>الشاشة 10 — Map View (الخريطة العامة من SearchFlowScreens)</li>
+  </ol>
+
+  <h3><span class="badge b-hanin">Hanin</span> — 5 شاشات</h3>
+  <ol>
+    <li>الشاشة 5 — Search (تبويب البحث + <code>SearchViewModel</code> + <code>SearchModels</code>) — <em>منقولة من صبري</em></li>
+    <li>الشاشة 8 — My Queue (طابوري)</li>
+    <li>الشاشة 9 — Notifications</li>
+    <li>الشاشة 11 — Search Filters</li>
+    <li>الشاشة 14 — Booking (الحجز)</li>
+  </ol>
+
+  <h2>3) ملفات مشتركة وطبقة بيانات (تنسيق جماعي)</h2>
+  <p>يُنصح بعدم تكرار التعديل دون مراجعة:</p>
+  <ul>
+    <li><code>ui/navigation/AppNavGraph.kt</code> — مسارات NavHost + <code>MainTabContainer</code></li>
+    <li><code>ui/navigation/Routes.kt</code> — أسماء المسارات</li>
+    <li><code>ui/components/BottomNavigationBar.kt</code></li>
+    <li><code>MainActivity.kt</code> — نقطة الدخول</li>
+    <li><code>data/repository/</code> — مثل <code>AuthRepository.kt</code>، مستودعات المواعيد/الأطباء حسب الاستيراد في كل ViewModel</li>
+    <li><code>core/network/SupabaseProvider.kt</code></li>
+  </ul>
+
+  <h2>4) المسار الجذر للمشروع (مرجع)</h2>
+  <p><code>Mawid-Android/app/src/main/java/com/mawidplus/patient/</code></p>
+
+  <p style="margin-top:2rem; font-size:0.85rem; color: var(--muted);">عدد الشاشات 15 كما في الجدول. التعيين: صبري = 1,2,3,4,15 + <code>Ai_Mawid/mawid-assistant</code>؛ حنين = 5,8,9,11,14؛ إسراء = 6,7,10,12,13. آخر تعديل: نقل 15 و<code>Ai_Mawid</code> لصبري ونقل 5 لحنين.</p>
+</body>
+</html>

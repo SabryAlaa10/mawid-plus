@@ -19,7 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Notifications
@@ -543,7 +543,7 @@ private fun ProfileMenuRow(
             )
         }
         Icon(
-            Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+            Icons.Filled.KeyboardArrowLeft,
             contentDescription = null,
             tint = OnSurfaceVariant.copy(alpha = 0.5f),
             modifier = Modifier.size(22.dp),

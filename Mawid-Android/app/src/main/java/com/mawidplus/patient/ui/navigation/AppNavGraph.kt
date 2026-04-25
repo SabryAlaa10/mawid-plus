@@ -36,6 +36,7 @@ import com.mawidplus.patient.ui.screens.splash.SplashScreen
 import com.mawidplus.patient.ui.screens.profile.ProfileScreen
 import com.mawidplus.patient.ui.screens.queue.MyQueueScreen
 import com.mawidplus.patient.ui.screens.booking.BookingScreen
+import com.mawidplus.patient.ui.screens.assistant.ChatScreen
 import com.mawidplus.patient.ui.screens.search.DoctorDetailScreen
 import com.mawidplus.patient.ui.screens.search.DoctorMapScreen
 import com.mawidplus.patient.ui.screens.search.MapViewScreen
@@ -197,11 +198,19 @@ fun AppNavGraph(
         composable(Routes.PROFILE) { MainTabContainer(navController, startTab = Tabs.Profile.route) }
         composable(
             route = Routes.MY_QUEUE_PATTERN,
-            arguments = listOf(navArgument("doctorId") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("doctorId") { type = NavType.StringType },
+                navArgument("appointmentFocus") {
+                    type = NavType.StringType
+                    defaultValue = "all"
+                },
+            ),
         ) { entry ->
             val doctorId = entry.arguments?.getString("doctorId").orEmpty()
+            val appointmentFocus = entry.arguments?.getString("appointmentFocus").orEmpty()
             MyQueueScreen(
                 doctorId = doctorId,
+                appointmentFocus = appointmentFocus,
                 onBack = { navController.navigateUp() },
                 onNavigateToNotifications = {
                     navController.navigate(Routes.NOTIFICATIONS) {
@@ -296,6 +305,17 @@ fun AppNavGraph(
                 }
             )
         }
+
+        composable(Routes.AI_ASSISTANT) {
+            ChatScreen(
+                onBack = { navController.navigateUp() },
+                onBookDoctor = { doctorId ->
+                    navController.navigate(Routes.bookingRoute(doctorId)) {
+                        launchSingleTop = true
+                    }
+                },
+            )
+        }
     }
 }
 
@@ -334,11 +354,12 @@ fun MainTabContainer(
         ) {
             when (selectedTab) {
                 Tabs.Home.route -> HomeScreen(
-                    onNavigateToQueue = { doctorId ->
-                        navController.navigate(Routes.myQueueRoute(doctorId)) {
+                    onNavigateToQueue = { doctorId, appointmentId ->
+                        navController.navigate(Routes.myQueueRoute(doctorId, appointmentId)) {
                             launchSingleTop = true
                         }
                     },
+                    onNavigateToAppointments = { selectedTab = Tabs.Appointments.route },
                     onNavigateToSearch = { query ->
                         navController.navigate(Routes.searchRoute(query)) {
                             launchSingleTop = true
@@ -357,18 +378,15 @@ fun MainTabContainer(
                         }
                     },
                     onNearMe = {
-                        navController.navigate(Routes.searchRoute()) {
+                        navController.navigate(Routes.MAP_VIEW) {
                             launchSingleTop = true
-                            popUpTo(Routes.HOME) { inclusive = false }
                         }
                     },
-                    onVideoConsult = {
-                        navController.navigate(Routes.searchRoute()) {
+                    onSmartAssistant = {
+                        navController.navigate(Routes.AI_ASSISTANT) {
                             launchSingleTop = true
-                            popUpTo(Routes.HOME) { inclusive = false }
                         }
                     },
-                    onSmartAssistant = { },
                     onHealthTipClick = {
                         navController.navigate(Routes.searchRoute()) {
                             launchSingleTop = true
@@ -411,8 +429,8 @@ fun MainTabContainer(
                     }
                 )
                 Tabs.Appointments.route -> AppointmentsScreen(
-                    onNavigateToQueue = { doctorId ->
-                        navController.navigate(Routes.myQueueRoute(doctorId)) {
+                    onNavigateToQueue = { doctorId, appointmentId ->
+                        navController.navigate(Routes.myQueueRoute(doctorId, appointmentId)) {
                             launchSingleTop = true
                         }
                     },

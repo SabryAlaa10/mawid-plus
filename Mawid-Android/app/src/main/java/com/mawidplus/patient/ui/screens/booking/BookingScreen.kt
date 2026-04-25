@@ -5,7 +5,6 @@ package com.mawidplus.patient.ui.screens.booking
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,7 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
@@ -51,6 +51,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -87,6 +88,11 @@ import com.mawidplus.patient.ui.theme.SurfaceContainerLow
 import com.mawidplus.patient.ui.theme.SurfaceContainerLowest
 
 private enum class ConsultationKind { Video, InPerson }
+
+/** تطابق مرجع «الوقت المتاح»: حبوب بيضاء/زرقاء/رمادية مع ظل. */
+private val TimeSlotPillShape = RoundedCornerShape(28.dp)
+private val TimeSlotDisabledBg = Color(0xFFF5F5F5)
+private val TimeSlotDisabledFg = Color(0xFFBDBDBD)
 
 private fun dayNameAr(d: DayOfWeek): String = when (d) {
     DayOfWeek.SATURDAY -> "سبت"
@@ -315,10 +321,13 @@ fun BookingScreen(
                     Text(
                         "الوقت المتاح",
                         fontFamily = Manrope,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = OnSurface,
-                        modifier = Modifier.padding(horizontal = 4.dp)
+                        color = Color.Black,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     if (slotsUi.loading) {
@@ -398,7 +407,7 @@ private fun BookingTopBar(
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(
-                    Icons.Filled.ArrowBack,
+                    Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "رجوع",
                     tint = Primary
                 )
@@ -595,86 +604,80 @@ private fun TimeSlotGrid(
     selectedIndex: Int,
     onSelect: (Int) -> Unit
 ) {
-    slots.chunked(3).forEach { rowSlots ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            val start = slots.indexOf(rowSlots.first())
-            rowSlots.forEachIndexed { _, slot ->
-                val i = start + rowSlots.indexOf(slot)
-                val selected = i == selectedIndex && slot.isAvailable
-                val clickable = slot.isAvailable
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(
-                            when {
-                                selected -> Primary
-                                slot.isBooked -> SurfaceContainerLow.copy(alpha = 0.55f)
-                                slot.isPast -> SurfaceContainerLow.copy(alpha = 0.45f)
-                                slot.isAvailable -> SurfaceContainerLowest
-                                else -> SurfaceContainerLow.copy(alpha = 0.5f)
-                            }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 0.dp)
+    ) {
+        slots.chunked(3).forEachIndexed { rowIndex, rowSlots ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                rowSlots.forEachIndexed { col, slot ->
+                    val i = rowIndex * 3 + col
+                    val selected = i == selectedIndex && slot.isAvailable
+                    val clickable = slot.isAvailable
+                    val unavailable = !slot.isAvailable
+                    val (topColor, bottomColor, bg) = when {
+                        selected -> Triple(
+                            OnPrimary,
+                            OnPrimary.copy(alpha = 0.92f),
+                            Primary
                         )
-                        .then(
-                            if (slot.isAvailable && !selected) {
-                                Modifier.border(1.dp, Primary.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
-                            } else Modifier
+                        unavailable -> Triple(
+                            TimeSlotDisabledFg,
+                            TimeSlotDisabledFg,
+                            TimeSlotDisabledBg
                         )
-                        .clickable(enabled = clickable) { onSelect(i) }
-                        .padding(vertical = 10.dp, horizontal = 4.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        if (selected) {
-                            Icon(
-                                Icons.Filled.Check,
-                                contentDescription = null,
-                                tint = OnPrimary,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                        }
-                        Text(
-                            slot.displayArabic,
-                            fontFamily = Manrope,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = when {
-                                selected -> OnPrimary
-                                slot.isAvailable -> OnSurface
-                                else -> OnSurface.copy(alpha = 0.45f)
-                            },
-                            textAlign = TextAlign.Center
+                        else -> Triple(OnSurface, OnSurface, Color.White)
+                    }
+                    val shadowMod = when {
+                        selected -> Modifier.shadow(
+                            elevation = 8.dp,
+                            shape = TimeSlotPillShape,
+                            spotColor = Primary.copy(alpha = 0.5f),
+                            ambientColor = Primary.copy(alpha = 0.18f)
                         )
-                        Text(
-                            slot.time,
-                            fontSize = 11.sp,
-                            fontFamily = PublicSans,
-                            color = when {
-                                selected -> OnPrimary.copy(alpha = 0.9f)
-                                slot.isAvailable -> OnSurfaceVariant
-                                else -> OnSurfaceVariant.copy(alpha = 0.45f)
-                            }
+                        unavailable -> Modifier
+                        else -> Modifier.shadow(
+                            elevation = 4.dp,
+                            shape = TimeSlotPillShape,
+                            spotColor = Color.Black.copy(alpha = 0.08f),
+                            ambientColor = Color.Black.copy(alpha = 0.04f)
                         )
-                        when {
-                            slot.isBooked -> Text(
-                                "محجوز",
-                                fontSize = 10.sp,
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .heightIn(min = 64.dp)
+                            .then(shadowMod)
+                            .clip(TimeSlotPillShape)
+                            .background(bg)
+                            .clickable(enabled = clickable) { onSelect(i) }
+                            .padding(vertical = 12.dp, horizontal = 4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = slot.timeLine12h,
+                                fontFamily = Manrope,
                                 fontWeight = FontWeight.Bold,
-                                color = Error.copy(alpha = 0.85f),
-                                modifier = Modifier.padding(top = 4.dp)
+                                fontSize = 17.sp,
+                                lineHeight = 20.sp,
+                                color = topColor,
+                                textAlign = TextAlign.Center
                             )
-                            slot.isPast -> Text(
-                                "انتهى",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = OnSurfaceVariant.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(top = 4.dp)
+                            Spacer(modifier = Modifier.height(3.dp))
+                            Text(
+                                text = slot.periodAr,
+                                fontFamily = PublicSans,
+                                fontSize = 12.sp,
+                                lineHeight = 14.sp,
+                                color = bottomColor,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
@@ -803,7 +806,7 @@ private fun BookingBottomBar(
                     fontSize = 16.sp
                 )
                 Icon(
-                    Icons.Filled.ArrowBack,
+                    Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 8.dp)

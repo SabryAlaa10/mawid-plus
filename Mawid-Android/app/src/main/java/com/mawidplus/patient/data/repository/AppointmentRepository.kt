@@ -13,6 +13,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -124,6 +125,27 @@ class AppointmentRepository(
                         .minWithOrNull(compareBy({ it.appointmentDate }, { it.queueNumber }))
                     Log.d(TAG, "getNextAppointment: next id=${next?.id} date=${next?.appointmentDate}")
                     next
+                }
+            }
+        }
+
+    /**
+     * آخر موعد مكتمل للمريض (حسب التاريخ ثم رقم الطابور).
+     */
+    suspend fun getLastDoneAppointment(patientId: String): Result<Appointment?> =
+        traceRepositoryCall(TAG, "getLastDoneAppointment") {
+            withContext(Dispatchers.IO) {
+                safeCall {
+                    val rows = supabase.from("appointments").select(columns = APPOINTMENT_COLUMNS) {
+                        filter {
+                            eq("patient_id", patientId)
+                            eq("status", "done")
+                        }
+                        order(column = "appointment_date", order = Order.DESCENDING)
+                        order(column = "queue_number", order = Order.DESCENDING)
+                        limit(1)
+                    }.decodeList<AppointmentDto>().map { it.toDomain() }
+                    rows.firstOrNull()
                 }
             }
         }

@@ -1,0 +1,15 @@
+# === Web Framework ===
+fastapi
+uvicorn
+
+# === Supabase ===
+supabase
+
+# === RAG / Embeddings ===
+sentence-transformers
+
+# === Utilities ===
+python-dotenv
+pydantic
+httpx
+python-jose[cryptography]

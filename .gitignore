@@ -33,6 +33,9 @@ Thumbs.db
 # Claude — إعدادات محلية (مسارات آلية)
 .claude/settings.local.json
 
+# Supabase CLI local cache
+**/supabase/.temp/
+
 # Logs & temp
 *.log
 *.tmp

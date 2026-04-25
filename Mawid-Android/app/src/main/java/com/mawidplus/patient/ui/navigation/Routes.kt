@@ -26,7 +26,8 @@ object Routes {
     const val APPOINTMENTS = "appointments"
     const val PROFILE = "profile"
     // Others
-    const val MY_QUEUE_PATTERN = "my_queue/{doctorId}"
+    /** [appointmentFocus] = `all` (أي موعد نشط) أو [uuid] لصف حجز محدد (بما فيه done/cancelled). */
+    const val MY_QUEUE_PATTERN = "my_queue/{doctorId}/{appointmentFocus}"
     const val NOTIFICATIONS = "notifications"
     /** نتائج البحث — شاشات فرعية */
     const val MAP_VIEW = "map_view"
@@ -36,9 +37,14 @@ object Routes {
 
     const val BOOKING_PATTERN = "booking/{doctorId}"
 
+    /** مساعد الذكاء الاصطناعي (FastAPI) */
+    const val AI_ASSISTANT = "ai_assistant"
+
     fun doctorDetailRoute(id: String) = "doctor_detail/$id"
     fun bookingRoute(id: String) = "booking/$id"
-    fun myQueueRoute(doctorId: String) = "my_queue/$doctorId"
+    fun myQueueRoute(doctorId: String, appointmentId: String? = null) =
+        if (appointmentId.isNullOrBlank()) "my_queue/$doctorId/all"
+        else "my_queue/$doctorId/${appointmentId.trim()}"
 
     fun doctorMapRoute(doctorId: String) = "doctor_map/$doctorId"
 

@@ -56,6 +56,8 @@ sealed class MyQueueUiState {
 
 class MyQueueViewModel(
     private val doctorId: String,
+    /** `all` أو معرّف الموعد المفتوح من الكرت (يعرض الصف حتى لو done/cancelled). */
+    private val appointmentFocus: String = "all",
     private val doctorRepository: DoctorRepository = DoctorRepository(),
     private val queueRepository: QueueRepository = QueueRepository(),
     private val appointmentRepository: AppointmentRepository = AppointmentRepository(),
@@ -150,7 +152,7 @@ class MyQueueViewModel(
         if (uid != null) {
             when (val apps = appointmentRepository.getPatientAppointments(uid)) {
                 is Result.Success -> {
-                    row = resolveActiveAppointment(apps.data, doctorId)
+                    row = resolveAppointmentRow(apps.data, doctorId, appointmentFocus)
                 }
                 else -> {}
             }
@@ -218,6 +220,28 @@ class MyQueueViewModel(
 
     private fun isCancelled(s: String): Boolean = normalizeStatus(s) == "cancelled"
 
+    private fun idsEqual(a: String, b: String): Boolean =
+        a.trim().equals(b.trim(), ignoreCase = true)
+
+    /**
+     * عند اختيار كرت: [appointmentFocus] = id. وإلا نُختار أقرب موعد **نشط** (ليست done/cancelled) لهذا الطبيب.
+     */
+    private fun resolveAppointmentRow(
+        apps: List<Appointment>,
+        routeDoctorId: String,
+        focus: String,
+    ): Appointment? {
+        val f = focus.trim()
+        if (f.isNotEmpty() && !idsEqual(f, "all")) {
+            val byId = apps.find { idsEqual(it.id, f) } ?: return resolveActiveAppointment(apps, routeDoctorId)
+            if (!idsEqual(byId.doctorId, routeDoctorId)) {
+                return resolveActiveAppointment(apps, routeDoctorId)
+            }
+            return byId
+        }
+        return resolveActiveAppointment(apps, routeDoctorId)
+    }
+
     /**
      * Prefer today's active appointment; else nearest future; else most recent active.
      */
@@ -225,7 +249,7 @@ class MyQueueViewModel(
         apps: List<Appointment>,
         doctorId: String,
     ): Appointment? {
-        val forDoctor = apps.filter { it.doctorId == doctorId }
+        val forDoctor = apps.filter { idsEqual(it.doctorId, doctorId) }
         val active = forDoctor.filter {
             val s = normalizeStatus(it.status)
             !isCancelled(s) && s != "done"
@@ -251,11 +275,17 @@ class MyQueueViewModel(
     companion object {
         private const val POLL_INTERVAL_MS = 6_000L
 
-        fun factory(doctorId: String): ViewModelProvider.Factory =
+        fun factory(
+            doctorId: String,
+            appointmentFocus: String = "all",
+        ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return MyQueueViewModel(doctorId) as T
+                    return MyQueueViewModel(
+                        doctorId,
+                        appointmentFocus = appointmentFocus.trim().ifEmpty { "all" },
+                    ) as T
                 }
             }
     }

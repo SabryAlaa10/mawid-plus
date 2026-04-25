@@ -142,7 +142,7 @@ private fun friendlyErrorMessage(message: String): String {
 }
 
 private fun validatePhoneForUi(phoneDigits: String): String? {
-    if (phoneDigits.isEmpty()) return null
+    if (phoneDigits.isBlank()) return "أدخل رقم هاتفك أولاً"
     if (phoneDigits.length < 10) return "رقم الهاتف غير مكتمل"
     if (!EgyptPhone.isValidLocal(phoneDigits)) return "أدخل رقم مصري صحيح"
     return null

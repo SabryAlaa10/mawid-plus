@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -127,7 +127,7 @@ fun DoctorMapScreen(
                         title = { Text("الخريطة", fontFamily = Manrope) },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
-                                Icon(Icons.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = SurfaceBright)
@@ -249,7 +249,7 @@ private fun DoctorMapBody(
                 title = { Text(doctor.fullName, fontFamily = Manrope, maxLines = 1) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

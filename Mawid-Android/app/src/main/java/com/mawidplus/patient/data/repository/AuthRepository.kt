@@ -14,6 +14,8 @@ import com.mawidplus.patient.data.dto.ProfileWriteDto
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.Google
+import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.ktor.client.HttpClient
@@ -43,6 +45,7 @@ import kotlinx.serialization.json.put
 /**
  * تسجيل عبر Anonymous Auth + ملف في [profiles] برقم حقيقي واسم حقيقي للمستخدمين الجدد.
  * التحقق من الرقم عبر RPC ([check_phone_registered]) لأن RLS لا يسمح بقراءة أرقام الآخرين.
+ * مسار Google: [signInWithGoogleAndPhone] يمرّر [IDToken] إلى Supabase (مزوّد Google في لوحة التحكم) ثم يكمل ربط الرقم في [profiles].
  */
 class AuthRepository {
 
@@ -281,6 +284,7 @@ class AuthRepository {
         }
     }.flowOn(Dispatchers.IO)
 
+    /** Google عبر Supabase ([IDToken] + [Google]) ثم تسجيل الدخول أو إنشاء الملف بالرقم كما في المسار الاعتيادي. */
     fun signInWithGoogleAndPhone(
         localPhone: String,
         idToken: String,
@@ -303,6 +307,11 @@ class AuthRepository {
             ?: email?.substringBefore("@")?.takeIf { it.isNotBlank() }
         try {
             val profile = withContext(Dispatchers.IO) {
+                supabase.auth.awaitInitialization()
+                supabase.auth.signInWith(IDToken) {
+                    this.idToken = idToken
+                    provider = Google
+                }
                 when (val exists = checkPhoneExists(localPhone)) {
                     is Result.Success -> {
                         if (exists.data) {

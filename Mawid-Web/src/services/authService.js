@@ -18,3 +18,19 @@ export function getCurrentUser() {
 export function getCurrentSession() {
   return supabase.auth.getSession()
 }
+
+export async function signUpDoctor({ fullName, specialty, email, password }) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullName,
+        specialty,
+        role: 'doctor',
+      }
+    }
+  })
+  if (error) throw error
+  return data
+}

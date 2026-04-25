@@ -32,8 +32,13 @@ sealed class BookingDoctorState {
 }
 
 data class TimeSlotRow(
+    /** HH:mm للتخزين والحجز. */
     val time: String,
     val displayArabic: String,
+    /** عرض 12 ساعة في السطر العلوي للشريحة (مثل 10:00). */
+    val timeLine12h: String,
+    /** صباحاً / مساءً في السطر السفلي. */
+    val periodAr: String,
     val isAvailable: Boolean,
     val isBooked: Boolean,
     val isPast: Boolean,
@@ -348,10 +353,13 @@ private fun generateTimeSlots(
         val isBooked = bookedSlots.contains(timeStr)
         val isPast = selectedDate == today && current.isBefore(nowTime)
         val isAvailable = !isBooked && !isPast
+        val (line12, period) = time12hAndPeriodAr(current)
         out.add(
             TimeSlotRow(
                 time = timeStr,
                 displayArabic = formatArabicTime(current),
+                timeLine12h = line12,
+                periodAr = period,
                 isAvailable = isAvailable,
                 isBooked = isBooked,
                 isPast = isPast,
@@ -362,7 +370,7 @@ private fun generateTimeSlots(
     return out
 }
 
-private fun formatArabicTime(t: LocalTime): String {
+private fun time12hAndPeriodAr(t: LocalTime): Pair<String, String> {
     val h24 = t.hour
     val m = t.minute
     val period = if (h24 < 12) "صباحاً" else "مساءً"
@@ -371,5 +379,10 @@ private fun formatArabicTime(t: LocalTime): String {
         h24 > 12 -> h24 - 12
         else -> h24
     }
-    return String.format("%d:%02d %s", h12, m, period)
+    return String.format("%d:%02d", h12, m) to period
+}
+
+private fun formatArabicTime(t: LocalTime): String {
+    val (line, period) = time12hAndPeriodAr(t)
+    return "$line $period"
 }

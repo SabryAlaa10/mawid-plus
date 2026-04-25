@@ -255,7 +255,7 @@ tr:nth-child(even) td{background:var(--surface)}
     <li><a href="#sec1">نظرة عامة على البنية (Architecture)</a></li>
     <li><a href="#sec2">تجهيز بيئة Python</a></li>
     <li><a href="#sec3">الاتصال بقاعدة بيانات Supabase</a></li>
-    <li><a href="#sec4">مصادر البيانات الطبية الموثوقة</a></li>
+    <li><a href="#sec4">مصادر البيانات الطبية الموثوقة</a> ✅ <span style="color:var(--secondary);font-size:.85rem;font-weight:600">(تم — 114 عنصر، 34 تخصص)</span></li>
     <li><a href="#sec5">بناء خط أنابيب RAG</a></li>
     <li><a href="#sec6">بناء سيرفر FastAPI</a></li>
     <li><a href="#sec7">دمج نموذج اللغة (LLM)</a></li>
@@ -697,35 +697,155 @@ def book_appointment(patient_id: str, doctor_id: str,
   </div>
 </div>
 
-<h3>الطريقة المقترحة: ابدأ بمحتوى مخصص ثم وسّع</h3>
+<h3>قاعدة المعرفة الطبية الجاهزة (تم إعدادها)</h3>
+
+<div class="box box-success">
+  <strong>تم إنجاز هذه الخطوة!</strong>
+  تم إعداد قاعدة معرفة طبية عربية شاملة جاهزة للاستخدام في الملف:
+  <code class="inline">mawid-assistant/data/medical_knowledge_ar.py</code>
+</div>
+
+<h4>إحصائيات قاعدة المعرفة</h4>
+<table>
+  <tr><th>البند</th><th>العدد</th></tr>
+  <tr><td>إجمالي العناصر الطبية</td><td><strong>114</strong> عنصر</td></tr>
+  <tr><td>التصنيفات (Categories)</td><td><strong>35</strong> تصنيف</td></tr>
+  <tr><td>التخصصات الطبية</td><td><strong>34</strong> تخصص</td></tr>
+  <tr><td>مستويات الخطورة</td><td>4 مستويات (طوارئ / عالي / متوسط / منخفض)</td></tr>
+</table>
+
+<h4>التخصصات المغطاة (34 تخصص)</h4>
+<table>
+  <tr><th>المجموعة</th><th>التخصصات</th></tr>
+  <tr><td><strong>الباطنية</strong></td><td>الباطنة العامة، القلب والأوعية الدموية، الجهاز الهضمي، الصدرية (الرئة)، الكلى، الغدد الصماء، الأمراض المعدية، الروماتيزم</td></tr>
+  <tr><td><strong>المخ والأعصاب</strong></td><td>المخ والأعصاب، الطب النفسي</td></tr>
+  <tr><td><strong>الأطفال</strong></td><td>طب الأطفال، حديثي الولادة</td></tr>
+  <tr><td><strong>النساء</strong></td><td>النساء والتوليد، العقم وأطفال الأنابيب</td></tr>
+  <tr><td><strong>الحواس</strong></td><td>العيون، الأنف والأذن والحنجرة</td></tr>
+  <tr><td><strong>الأسنان</strong></td><td>أسنان عام، تقويم الأسنان، جراحة الفم، علاج الجذور، تركيبات الأسنان</td></tr>
+  <tr><td><strong>الجلد</strong></td><td>الجلدية والتجميل</td></tr>
+  <tr><td><strong>الجراحة</strong></td><td>الجراحة العامة، جراحة المخ والأعصاب، جراحة القلب، جراحة التجميل، جراحة المسالك البولية</td></tr>
+  <tr><td><strong>التشخيصية</strong></td><td>الأشعة، التحاليل (الباثولوجي)</td></tr>
+  <tr><td><strong>الطوارئ والرعاية</strong></td><td>الطوارئ، التخدير، الرعاية المركزة</td></tr>
+  <tr><td><strong>متقدمة</strong></td><td>الأورام (السرطان)</td></tr>
+</table>
+
+<h4>توزيع مستويات الخطورة</h4>
+<table>
+  <tr><th>المستوى</th><th>العدد</th><th>الاستخدام</th></tr>
+  <tr><td>🟢 منخفض</td><td>16</td><td>نصائح وقائية، فحوصات دورية</td></tr>
+  <tr><td>🟡 متوسط</td><td>49</td><td>أعراض تحتاج زيارة طبيب مختص</td></tr>
+  <tr><td>🟠 عالي</td><td>33</td><td>أعراض تحتاج تقييم عاجل</td></tr>
+  <tr><td>🔴 طوارئ</td><td>16</td><td>حالات تستدعي إسعاف فوري</td></tr>
+</table>
+
+<h4>القواعد المتبعة في كل المحتوى</h4>
+<ul>
+  <li>لا يشخّص المريض أبداً</li>
+  <li>يوجّه للتخصص الطبي المناسب فقط</li>
+  <li>يحدد حالات الطوارئ بوضوح ويطلب التوجه فوراً</li>
+  <li>يطمئن المريض ويشجعه على زيارة الطبيب</li>
+  <li>لا يقترح أدوية أبداً</li>
+</ul>
+
+<h4>مثال على البيانات</h4>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# الملف: mawid-assistant/data/medical_knowledge_ar.py
+
+MEDICAL_KNOWLEDGE = [
+    {
+        "category": "القلب والأوعية الدموية",
+        "content": "ألم ضاغط أو حارق في منتصف الصدر يمتد للذراع "
+                   "الأيسر أو الفك مع ضيق تنفس أو تعرق بارد حالة "
+                   "طوارئ. توجه فوراً لأقرب طوارئ أو اتصل بالإسعاف.",
+        "specialty": "طبيب قلب",
+        "severity": "طوارئ"
+    },
+    {
+        "category": "العظام",
+        "content": "آلام الركبة المستمرة مع تورم أو صعوبة في المشي "
+                   "أو صوت طقطقة يُنصح بمراجعة طبيب عظام لتقييم "
+                   "المفصل وعمل أشعة.",
+        "specialty": "طبيب عظام",
+        "severity": "متوسط"
+    },
+    {
+        "category": "الطب النفسي",
+        "content": "أفكار إيذاء النفس أو الانتحار حالة طوارئ نفسية. "
+                   "تواصل فوراً مع خط مساعدة أو اذهب لأقرب طوارئ.",
+        "specialty": "طبيب نفسي",
+        "severity": "طوارئ"
+    },
+    # ... 114 عنصر إجمالي يغطي 34 تخصص
+]
+</pre>
+</div>
+
+<h4>هيكل ملفات البيانات</h4>
+<div class="code-wrap">
+  <span class="lang-label">text</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+mawid-assistant/
+├── data/
+│   ├── __init__.py
+│   └── medical_knowledge_ar.py    ← 114 عنصر طبي جاهز
+├── scripts/
+│   └── load_dataset.py            ← سكربت التحميل لـ Supabase
+├── requirements.txt               ← متطلبات Python
+└── .env.example                   ← نموذج ملف البيئة
+</pre>
+</div>
+
+<h4>سكربت التحميل (جاهز للتشغيل)</h4>
 <div class="code-wrap">
   <span class="lang-label">python</span>
   <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
 <pre>
 # scripts/load_dataset.py
-# الخطوة 1: ابدأ بمحتوى عربي مخصص (الأسرع والأدق)
+# يقوم بتحويل كل البيانات لـ embeddings وحفظها في Supabase
 
-medical_knowledge = [
-    {
-        "category": "أمراض القلب",
-        "content": "ألم الصدر: إذا شعرت بألم ضاغط أو حارق في "
-                   "منتصف الصدر يمتد للذراع الأيسر أو الفك، مع "
-                   "ضيق تنفس أو تعرق بارد، توجه للطوارئ فوراً.",
-        "specialty": "طبيب قلب",
-        "severity": "عالي"
-    },
-    {
-        "category": "العظام",
-        "content": "آلام الركبة: ألم مستمر في الركبة مع تورم أو "
-                   "صعوبة في المشي قد يشير إلى التهاب المفاصل أو "
-                   "إصابة في الأربطة. يُنصح بمراجعة طبيب عظام.",
-        "specialty": "طبيب عظام",
-        "severity": "متوسط"
-    },
-    # ... أضف 50-100 عنصر يغطي كل التخصصات
-]
+from sentence_transformers import SentenceTransformer
+from supabase import create_client
+from data.medical_knowledge_ar import MEDICAL_KNOWLEDGE
 
-# الخطوة 2: لاحقاً أضف ترجمة MedQuAD
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+for item in MEDICAL_KNOWLEDGE:
+    embedding = model.encode(item["content"]).tolist()
+    supabase.table("kb_chunks").insert({
+        "content": item["content"],
+        "category": item["category"],
+        "specialty": item.get("specialty"),
+        "severity": item.get("severity", "متوسط"),
+        "embedding": embedding,
+        "metadata": {
+            "category": item["category"],
+            "specialty": item.get("specialty"),
+            "severity": item.get("severity"),
+        }
+    }).execute()
+</pre>
+</div>
+
+<h4>خطوات التشغيل</h4>
+<ol>
+  <li>شغّل SQL إنشاء جدول <code class="inline">kb_chunks</code> (موجود في القسم 5 أسفل)</li>
+  <li>أنشئ ملف <code class="inline">.env</code> من <code class="inline">.env.example</code> وأضف مفاتيح Supabase</li>
+  <li>ثبّت المتطلبات: <code class="inline">pip install -r requirements.txt</code></li>
+  <li>شغّل السكربت: <code class="inline">python scripts/load_dataset.py</code></li>
+</ol>
+
+<h4>التوسع لاحقاً</h4>
+<div class="code-wrap">
+  <span class="lang-label">python</span>
+  <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+<pre>
+# لاحقاً يمكنك إضافة بيانات من مصادر خارجية:
 # pip install datasets transformers
 from datasets import load_dataset
 
@@ -738,7 +858,7 @@ dataset = load_dataset("medalpaca/medical_meadow_mediqa")
 
 <div class="box box-warn">
   <strong>نصيحة مهمة:</strong>
-  ابدأ بـ 50-100 سؤال مخصص بالعربي يغطي التخصصات الموجودة في تطبيقك. هذا أفضل بكتير من 10,000 سؤال إنجليزي مترجم آلياً. التوسع يكون تدريجي.
+  قاعدة المعرفة الحالية (114 عنصر) كافية للبداية وتغطي كل التخصصات. التوسع يكون تدريجياً حسب الحاجة — أضف بيانات جديدة فقط عند ملاحظة ضعف في تخصص معين.
 </div>
 </div>
 

@@ -37,6 +37,7 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${supabaseUrlFromLocal()}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${supabaseAnonKeyFromLocal()}\"")
+        buildConfigField("String", "ASSISTANT_API_BASE_URL", "\"http://10.0.2.2:8000\"")
         manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY") ?: ""
     }
 
@@ -111,6 +112,8 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:gotrue-kt")
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:2.3.12")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 

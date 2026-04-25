@@ -5,6 +5,7 @@ package com.mawidplus.patient.ui.screens.appointments
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,16 +18,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Assignment
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -55,6 +63,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -83,11 +93,14 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun AppointmentsScreen(
     viewModel: AppointmentsViewModel = viewModel { AppointmentsViewModel() },
-    onNavigateToQueue: (doctorId: String) -> Unit = {},
+    onNavigateToQueue: (doctorId: String, appointmentId: String?) -> Unit = { _, _ -> },
     onNavigateToNotifications: () -> Unit = {},
     onNavigateToSearch: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val statusFilter by viewModel.statusFilter.collectAsStateWithLifecycle()
+    val periodFilter by viewModel.periodFilter.collectAsStateWithLifecycle()
+    val filteredRows by viewModel.filteredRows.collectAsStateWithLifecycle()
     val ratingInFlightId by viewModel.ratingInFlightId.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     var pendingCancel by remember { mutableStateOf<AppointmentListRow?>(null) }
@@ -287,46 +300,93 @@ fun AppointmentsScreen(
                         } else {
                             val zone = MawidRegion.timeZone
                             val today = remember { LocalDate.now(zone) }
-                            val flatItems = remember(s.rows) {
-                                val sections = buildAppointmentSections(s.rows)
-                                buildList {
-                                    sections.forEachIndexed { idx, section ->
-                                        add(AppointmentListEntry.Header(idx, section.title))
-                                        section.rows.forEach { row ->
-                                            add(AppointmentListEntry.RowItem(row))
+                            Spacer(modifier = Modifier.height(12.dp))
+                            FilterChipRow(
+                                label = "حالة الموعد",
+                                options = listOf("الكل", "قادم", "مكتمل", "ملغي"),
+                                selected = statusFilter,
+                                onSelect = { viewModel.setStatusFilter(it) },
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            FilterChipRow(
+                                label = "الفترة الزمنية",
+                                options = listOf("الكل", "هذا الشهر", "آخر 3 شهور", "هذه السنة"),
+                                selected = periodFilter,
+                                onSelect = { viewModel.setPeriodFilter(it) },
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            if (filteredRows.isEmpty() && s.rows.isNotEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxWidth()
+                                        .padding(top = 48.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Icon(
+                                            Icons.Filled.CalendarToday,
+                                            contentDescription = null,
+                                            tint = OnSurfaceVariant.copy(alpha = 0.5f),
+                                            modifier = Modifier.size(48.dp),
+                                        )
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Text(
+                                            "لا توجد مواعيد تطابق الفلتر المحدد",
+                                            fontSize = 14.sp,
+                                            color = OnSurfaceVariant,
+                                            fontFamily = PublicSans,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                    }
+                                }
+                            } else {
+                                val flatItems = remember(filteredRows) {
+                                    val sections = buildAppointmentSections(filteredRows)
+                                    buildList {
+                                        sections.forEachIndexed { idx, section ->
+                                            add(AppointmentListEntry.Header(idx, section.title))
+                                            section.rows.forEach { row ->
+                                                add(AppointmentListEntry.RowItem(row))
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            LazyColumn(
-                                modifier = Modifier.weight(1f),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                                verticalArrangement = Arrangement.spacedBy(14.dp)
-                            ) {
-                                items(
-                                    items = flatItems,
-                                    key = { entry ->
+                                LazyColumn(
+                                    modifier = Modifier.weight(1f),
+                                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                                ) {
+                                    items(
+                                        items = flatItems,
+                                        key = { entry ->
+                                            when (entry) {
+                                                is AppointmentListEntry.Header -> "h_${entry.index}_${entry.title}"
+                                                is AppointmentListEntry.RowItem -> entry.row.appointment.id
+                                            }
+                                        },
+                                    ) { entry ->
                                         when (entry) {
-                                            is AppointmentListEntry.Header -> "h_${entry.index}_${entry.title}"
-                                            is AppointmentListEntry.RowItem -> entry.row.appointment.id
+                                            is AppointmentListEntry.Header -> AppointmentSectionHeader(
+                                                title = entry.title,
+                                                isFirst = entry.index == 0,
+                                            )
+                                            is AppointmentListEntry.RowItem -> AppointmentSummaryCard(
+                                                row = entry.row,
+                                                today = today,
+                                                ratingInFlightId = ratingInFlightId,
+                                                onOpenQueue = {
+                                                    onNavigateToQueue(
+                                                        entry.row.appointment.doctorId,
+                                                        entry.row.appointment.id,
+                                                    )
+                                                },
+                                                onRequestCancel = { pendingCancel = entry.row },
+                                                onRateDoctor = { id, stars ->
+                                                    viewModel.submitDoctorRating(id, stars)
+                                                },
+                                            )
                                         }
-                                    }
-                                ) { entry ->
-                                    when (entry) {
-                                        is AppointmentListEntry.Header -> AppointmentSectionHeader(
-                                            title = entry.title,
-                                            isFirst = entry.index == 0
-                                        )
-                                        is AppointmentListEntry.RowItem -> AppointmentSummaryCard(
-                                            row = entry.row,
-                                            today = today,
-                                            ratingInFlightId = ratingInFlightId,
-                                            onOpenQueue = { onNavigateToQueue(entry.row.appointment.doctorId) },
-                                            onRequestCancel = { pendingCancel = entry.row },
-                                            onRateDoctor = { id, stars ->
-                                                viewModel.submitDoctorRating(id, stars)
-                                            },
-                                        )
                                     }
                                 }
                             }
@@ -345,9 +405,9 @@ fun AppointmentsScreen(
                         ) {
                             Button(
                                 onClick = {
-                                    val id = s.rows.firstOrNull()?.appointment?.doctorId
-                                        ?: SeedDoctorIds.FAMILY_AHMED
-                                    onNavigateToQueue(id)
+                                    val first = filteredRows.firstOrNull()
+                                    val id = first?.appointment?.doctorId ?: SeedDoctorIds.FAMILY_AHMED
+                                    onNavigateToQueue(id, first?.appointment?.id)
                                 },
                                 modifier = Modifier.weight(1f),
                                 colors = ButtonDefaults.buttonColors(
@@ -374,6 +434,52 @@ fun AppointmentsScreen(
                         }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FilterChipRow(
+    label: String,
+    options: List<String>,
+    selected: String,
+    onSelect: (String) -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = OnSurfaceVariant,
+            fontFamily = PublicSans,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+        Row(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            options.forEach { option ->
+                val isSelected = option == selected
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(if (isSelected) Primary else Color.Transparent)
+                        .border(
+                            width = 1.dp,
+                            color = if (isSelected) Primary else OnSurfaceVariant.copy(alpha = 0.4f),
+                            shape = RoundedCornerShape(20.dp),
+                        )
+                        .clickable { onSelect(option) }
+                        .padding(horizontal = 14.dp, vertical = 7.dp),
+                ) {
+                    Text(
+                        text = option,
+                        fontSize = 13.sp,
+                        fontFamily = PublicSans,
+                        color = if (isSelected) Color.White else OnSurfaceVariant,
+                        fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+                    )
                 }
             }
         }
@@ -460,185 +566,311 @@ private fun AppointmentSummaryCard(
 ) {
     val scheme = MaterialTheme.colorScheme
     val date = LocalDate.parse(row.appointment.appointmentDate)
-    val dateLine = date.format(DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", MawidRegion.arabicLocale))
+    val dateCompact = date.format(DateTimeFormatter.ofPattern("d MMMM yyyy", MawidRegion.arabicLocale))
     val daysChip = daysUntilLabelAr(date, today)
     val st = row.appointment.status.lowercase()
-    val badgeColor = when {
-        st == "cancelled" -> scheme.error
-        st == "done" -> scheme.secondary
-        st == "in_progress" -> scheme.primary
-        else -> scheme.primary
-    }
     val canCancel = !statusIsCancelledOrDone(row.appointment.status)
-    val timeSlot = row.appointment.timeSlot?.trim()?.takeIf { it.isNotEmpty() }
+    val timeSlot = row.appointment.timeSlot?.trim()?.takeIf { it.isNotEmpty() } ?: "—"
     val patientRating = row.appointment.patientRating
+
+    val cardWhite = Color(0xFFFFFFFF)
+    val pillGray = Color(0xFFF1F3F4)
+    val completedBg = Color(0xFFE0F2F1)
+    val completedDot = Color(0xFF2E7D32)
+    val completedText = Color(0xFF1B5E20)
+    val notesBg = Color(0xFFE3F2FD)
+    val starOrange = Color(0xFFFF9800)
+    val secondaryBtnBg = Color(0xFFE8EAED)
+    val subtleBorder = Color(0xFFE0E0E0)
+
+    val statusPillBg: Color
+    val statusPillFg: Color
+    val statusDot: Color
+    when {
+        st == "done" -> {
+            statusPillBg = completedBg
+            statusPillFg = completedText
+            statusDot = completedDot
+        }
+        st == "cancelled" -> {
+            statusPillBg = scheme.errorContainer.copy(alpha = 0.5f)
+            statusPillFg = scheme.onErrorContainer
+            statusDot = scheme.error
+        }
+        else -> {
+            statusPillBg = scheme.primaryContainer.copy(alpha = 0.45f)
+            statusPillFg = scheme.onPrimaryContainer
+            statusDot = scheme.primary
+        }
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = scheme.surfaceContainerLowest),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = cardWhite),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onOpenQueue)
-            ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         row.doctorName,
                         fontFamily = Manrope,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp,
-                        color = scheme.onSurface,
+                        fontSize = 18.sp,
+                        color = Color(0xFF1A1A1A),
                         textAlign = TextAlign.Start
                     )
                     Text(
                         row.specialty,
                         fontFamily = PublicSans,
-                        fontSize = 13.sp,
-                        color = scheme.onSurfaceVariant,
+                        fontSize = 12.sp,
+                        color = Color(0xFF757575),
+                        letterSpacing = 0.2.sp,
                         modifier = Modifier.padding(top = 4.dp),
                         textAlign = TextAlign.Start
                     )
                 }
-                Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = badgeColor.copy(alpha = 0.14f)
-                ) {
-                    Text(
-                        statusLabelAr(row.appointment.status),
-                        fontFamily = PublicSans,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = badgeColor,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                if (row.doctorPhotoUrl != null) {
+                    AsyncImage(
+                        model = row.doctorPhotoUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, subtleBorder, CircleShape),
+                        contentScale = ContentScale.Crop
                     )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .background(pillGray)
+                            .border(1.dp, subtleBorder, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Filled.Person,
+                            contentDescription = null,
+                            tint = Color(0xFF9E9E9E),
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Surface(shape = RoundedCornerShape(24.dp), color = pillGray) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "الدور",
+                            fontFamily = PublicSans,
+                            fontSize = 11.sp,
+                            color = Color(0xFF616161)
+                        )
+                        Text(
+                            "#${row.appointment.queueNumber}",
+                            fontFamily = Manrope,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color(0xFF1A1A1A)
+                        )
+                    }
+                }
+                Surface(shape = RoundedCornerShape(24.dp), color = statusPillBg) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(7.dp)
+                                .clip(CircleShape)
+                                .background(statusDot)
+                        )
+                        Text(
+                            statusLabelAr(row.appointment.status),
+                            fontFamily = PublicSans,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = statusPillFg
+                        )
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Surface(
+                    modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
-                    color = scheme.primaryContainer.copy(alpha = 0.35f)
+                    color = pillGray
                 ) {
-                    Text(
-                        "دور #${row.appointment.queueNumber}",
-                        fontFamily = Manrope,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
-                        color = scheme.onPrimaryContainer,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                    )
-                }
-                Column(modifier = Modifier.weight(1f)) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Column {
+                            Text(
+                                "الوقت",
+                                fontFamily = PublicSans,
+                                fontSize = 11.sp,
+                                color = Color(0xFF757575)
+                            )
+                            Text(
+                                timeSlot,
+                                fontFamily = Manrope,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 15.sp,
+                                color = Color(0xFF1A1A1A)
+                            )
+                        }
+                        Icon(
+                            Icons.Filled.Schedule,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    color = pillGray
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                "التاريخ",
+                                fontFamily = PublicSans,
+                                fontSize = 11.sp,
+                                color = Color(0xFF757575)
+                            )
+                            Text(
+                                dateCompact,
+                                fontFamily = Manrope,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp,
+                                color = Color(0xFF1A1A1A)
+                            )
+                        }
                         Icon(
                             Icons.Filled.CalendarToday,
                             contentDescription = null,
-                            tint = scheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Text(
-                            dateLine,
-                            fontFamily = PublicSans,
-                            fontSize = 13.sp,
-                            color = scheme.onSurface,
-                            textAlign = TextAlign.Start
-                        )
-                    }
-                    if (timeSlot != null) {
-                        Text(
-                            "الوقت: $timeSlot",
-                            fontFamily = PublicSans,
-                            fontSize = 12.sp,
-                            color = scheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp, start = 24.dp),
-                            textAlign = TextAlign.Start
+                            tint = Primary,
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
-            }
             }
 
             if (st == "done" && !row.appointment.doctorNotes.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(14.dp))
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = scheme.primary.copy(alpha = 0.45f),
-                            shape = RoundedCornerShape(14.dp)
-                        )
-                        .background(
-                            scheme.primaryContainer.copy(alpha = 0.25f),
-                            RoundedCornerShape(14.dp)
-                        )
-                        .padding(14.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.Top
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(notesBg)
+                        .padding(14.dp)
                 ) {
-                    Icon(
-                        Icons.Filled.MedicalServices,
-                        contentDescription = null,
-                        tint = scheme.primary,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             "ملاحظات الطبيب",
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp,
-                            color = scheme.primary,
-                        )
-                        Text(
-                            row.appointment.doctorNotes.orEmpty(),
-                            fontFamily = PublicSans,
                             fontSize = 14.sp,
-                            color = scheme.onSurface,
-                            modifier = Modifier.padding(top = 6.dp),
-                            textAlign = TextAlign.Start,
-                            lineHeight = 20.sp,
+                            color = Primary
+                        )
+                        Icon(
+                            Icons.AutoMirrored.Filled.Assignment,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(22.dp)
                         )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        row.appointment.doctorNotes.orEmpty(),
+                        fontFamily = PublicSans,
+                        fontSize = 14.sp,
+                        color = Color(0xFF424242),
+                        textAlign = TextAlign.Start,
+                        lineHeight = 22.sp
+                    )
                 }
             }
 
-            if (st == "done" && patientRating == null) {
+            if (st == "done" && patientRating != null) {
                 Spacer(modifier = Modifier.height(14.dp))
+                HorizontalDivider(color = subtleBorder, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        "${patientRating}.0",
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color(0xFF1A1A1A)
+                    )
+                    DoctorRatingStarsDisplayOrange(
+                        stars = patientRating,
+                        starColor = starOrange
+                    )
+                }
+            } else if (st == "done" && patientRating == null) {
+                Spacer(modifier = Modifier.height(14.dp))
+                HorizontalDivider(color = subtleBorder, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     "قيّم تجربتك مع الطبيب",
                     fontFamily = Manrope,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    color = scheme.primary,
+                    color = Primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 if (ratingInFlightId == row.appointment.id) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(28.dp),
-                            color = scheme.primary,
-                            strokeWidth = 2.dp,
+                            color = Primary,
+                            strokeWidth = 2.dp
                         )
                     }
                 } else {
@@ -647,18 +879,8 @@ private fun AppointmentSummaryCard(
                         onPick = { onRateDoctor(row.appointment.id, it) },
                     )
                 }
-            } else if (st == "done" && patientRating != null) {
-                Spacer(modifier = Modifier.height(14.dp))
-                Text(
-                    "تقييمك",
-                    fontFamily = Manrope,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    color = scheme.onSurfaceVariant,
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                DoctorRatingStarsDisplay(stars = patientRating)
             }
+
             if (daysChip != null) {
                 Spacer(modifier = Modifier.height(10.dp))
                 Surface(
@@ -675,15 +897,71 @@ private fun AppointmentSummaryCard(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Button(
+                    onClick = onOpenQueue,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Primary,
+                        contentColor = OnPrimary
+                    )
+                ) {
+                    Text(
+                        "التفاصيل",
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Button(
+                    onClick = onOpenQueue,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = secondaryBtnBg,
+                        contentColor = Color(0xFF424242)
+                    )
+                ) {
+                    Text(
+                        "عرض الطابور",
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+
             if (canCancel) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 TextButton(
                     onClick = onRequestCancel,
-                    colors = ButtonDefaults.textButtonColors(contentColor = Error)
+                    colors = ButtonDefaults.textButtonColors(contentColor = Error),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("إلغاء الموعد", fontFamily = Manrope, fontWeight = FontWeight.Bold)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun DoctorRatingStarsDisplayOrange(stars: Int, starColor: Color) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 1..5) {
+            Icon(
+                imageVector = if (i <= stars) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                contentDescription = null,
+                tint = if (i <= stars) starColor else Color(0xFFE0E0E0),
+                modifier = Modifier.size(22.dp)
+            )
         }
     }
 }
@@ -712,20 +990,3 @@ private fun DoctorRatingStarsRow(
     }
 }
 
-@Composable
-private fun DoctorRatingStarsDisplay(stars: Int) {
-    val scheme = MaterialTheme.colorScheme
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        for (i in 1..5) {
-            Icon(
-                imageVector = if (i <= stars) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                contentDescription = null,
-                tint = if (i <= stars) scheme.primary else scheme.outline,
-                modifier = Modifier.size(28.dp),
-            )
-        }
-    }
-}
