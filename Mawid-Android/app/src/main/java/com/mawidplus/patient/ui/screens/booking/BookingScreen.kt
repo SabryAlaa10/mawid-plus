@@ -18,14 +18,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.LocationOn
@@ -37,8 +35,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -120,7 +116,6 @@ fun BookingScreen(
     val slotsUi by viewModel.slotsUi.collectAsStateWithLifecycle()
     val selectedDayIndex by viewModel.selectedDayIndex.collectAsStateWithLifecycle()
     val selectedSlotIndex by viewModel.selectedSlotIndex.collectAsStateWithLifecycle()
-    val queueClosed by viewModel.queueClosed.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     val meta: BookingDoctorMeta? = remember(doctorState) {
@@ -276,36 +271,6 @@ fun BookingScreen(
                         color = Primary,
                         modifier = Modifier.padding(horizontal = 4.dp)
                     )
-                    if (queueClosed) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Card(
-                            colors = CardDefaults.cardColors(containerColor = Error.copy(alpha = 0.08f)),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 4.dp)
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null,
-                                    tint = Error,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    "الطابور مغلق حالياً — الطبيب لا يستقبل حجوزات جديدة",
-                                    fontFamily = PublicSans,
-                                    fontSize = 13.sp,
-                                    color = Error,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                        }
-                    }
                     slotsUi.dayClosedMessage?.let { msg ->
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
@@ -382,7 +347,6 @@ fun BookingScreen(
                 enabled = doctorState is BookingDoctorState.Ready &&
                     submitState !is BookingSubmitState.Submitting &&
                     !slotsUi.loading &&
-                    !queueClosed &&
                     slotsUi.dayClosedMessage == null &&
                     slotsUi.slots.any { it.isAvailable },
                 modifier = Modifier.align(Alignment.BottomCenter)

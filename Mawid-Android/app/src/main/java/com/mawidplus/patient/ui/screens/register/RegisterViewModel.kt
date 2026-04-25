@@ -60,8 +60,6 @@ class RegisterViewModel(
                     }
                     Result.Loading -> Unit
                 }
-            } catch (e: kotlin.coroutines.cancellation.CancellationException) {
-                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "submitRegister", e)
                 _uiState.value = UiState.Error(e.message ?: "فشل إنشاء الحساب")

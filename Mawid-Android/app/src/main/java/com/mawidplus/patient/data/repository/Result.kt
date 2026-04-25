@@ -16,7 +16,7 @@ sealed class Result<out T> {
 
 fun <T> Flow<T>.asResult(): Flow<Result<T>> = this
     .map<T, Result<T>> { Result.Success(it) }
-    .catch { e -> emit(Result.Error(e.message ?: "حدث خطأ غير متوقع", e)) }
+    .catch { e -> emit(Result.Error(e.message ?: "Unknown error", e)) }
     .onStart { emit(Result.Loading) }
 
 suspend fun <T> safeCall(action: suspend () -> T): Result<T> = try {
@@ -24,7 +24,7 @@ suspend fun <T> safeCall(action: suspend () -> T): Result<T> = try {
 } catch (e: CancellationException) {
     throw e
 } catch (e: Exception) {
-    Result.Error(e.message ?: "حدث خطأ غير متوقع", e)
+    Result.Error(e.message ?: "Unknown error", e)
 }
 
 /**
@@ -48,6 +48,6 @@ suspend fun <T> traceRepositoryCall(tag: String, operation: String, block: suspe
         throw e
     } catch (e: Exception) {
         Log.e(tag, "$operation: unexpected exception", e)
-        Result.Error(e.message ?: "حدث خطأ غير متوقع", e)
+        Result.Error(e.message ?: "Unknown error", e)
     }
 }

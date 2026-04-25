@@ -34,7 +34,6 @@ object Routes {
     const val SEARCH_FILTERS = "search_filters"
 
     const val DOCTOR_DETAIL_PATTERN = "doctor_detail/{doctorId}"
-
     const val BOOKING_PATTERN = "booking/{doctorId}"
 
     /** مساعد الذكاء الاصطناعي (FastAPI) */

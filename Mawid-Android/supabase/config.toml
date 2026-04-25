@@ -1,8 +1,0 @@
-# Supabase CLI — إعدادات Edge Functions (المشروع يستخدم migrations من هذا المجلد)
-# التشغيل المحلي: من Mawid-Android/supabase نفّذ `npx supabase start` ثم `npx supabase functions serve patient-assistant`
-
-[functions.patient-assistant]
-enabled = true
-verify_jwt = true
-import_map = "./functions/patient-assistant/deno.json"
-entrypoint = "./functions/patient-assistant/index.ts"
