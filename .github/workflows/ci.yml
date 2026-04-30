@@ -9,7 +9,7 @@ on:
 jobs:
   web:
     runs-on: ubuntu-latest
-    # مطلوب لـ vitest و build: supabaseClient يُحمَّل عند استيراد الخدمات
+    # مطلوب لأن build يحمّل vite وملفات تستخدم VITE_* عند التجميع
     env:
       VITE_SUPABASE_URL: https://example.supabase.co
       VITE_SUPABASE_ANON_KEY: ci-placeholder-not-a-real-secret
@@ -24,7 +24,7 @@ jobs:
           cache: npm
           cache-dependency-path: Mawid-Web/package-lock.json
       - run: npm ci
-      - run: npm test
+      # لا يوجد اختبارات وحدة بعد؛ البناء يكفي للتحقق من التجميع
       - run: npm run build
 
   android-unit:
