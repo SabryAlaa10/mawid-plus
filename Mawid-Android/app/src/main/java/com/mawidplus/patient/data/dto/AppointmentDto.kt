@@ -16,7 +16,6 @@ data class AppointmentDto(
     val notes: String? = null,
     @SerialName("doctor_notes") val doctorNotes: String? = null,
     @SerialName("time_slot") val timeSlot: String? = null,
-    @SerialName("patient_rating") val patientRating: Int? = null,
 ) {
     fun toDomain(): Appointment = Appointment(
         id = id,
@@ -28,20 +27,12 @@ data class AppointmentDto(
         notes = notes,
         doctorNotes = doctorNotes,
         timeSlot = timeSlot,
-        patientRating = patientRating,
     )
 }
 
 @Serializable
 data class AppointmentTimeSlotRowDto(
     @SerialName("time_slot") val timeSlot: String? = null,
-)
-
-/** Minimal row returned after cancel update (verify status only). */
-@Serializable
-data class AppointmentCancelVerifyDto(
-    val id: String,
-    val status: String,
 )
 
 @Serializable

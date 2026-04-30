@@ -7,10 +7,16 @@ app = FastAPI(title="Mawid+ AI Assistant", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://10.0.2.2",           # Android emulator dev
+        "http://localhost:5173",      # Vite Web dev
+        "http://localhost:3000",      # alternative Web dev
+        # Add your production domain here before launch:
+        # "https://your-production-domain.com",
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.include_router(chat.router, prefix="/api", tags=["Chat"])

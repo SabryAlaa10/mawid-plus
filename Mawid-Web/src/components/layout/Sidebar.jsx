@@ -65,12 +65,6 @@ export default function Sidebar({ doctor, loading }) {
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold truncate text-slate-100">{doctor?.full_name ?? 'طبيب'}</p>
               <p className="text-xs text-slate-400 truncate">{doctor?.specialty ?? ''}</p>
-              {(doctor?.review_count > 0 || doctor?.rating != null) && (
-                <p className="text-[11px] text-amber-200/95 font-semibold mt-1 m-0 tabular-nums truncate">
-                  ★ {doctor.rating != null ? Number(doctor.rating).toFixed(1) : '—'} · {doctor.review_count ?? 0}{' '}
-                  تقييم
-                </p>
-              )}
             </div>
           </div>
         )}

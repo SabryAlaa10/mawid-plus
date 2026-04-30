@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { AR_LOCALE } from '../constants/region'
 
 function formatArabicDate(dateStr) {
   if (!dateStr) return ''
   try {
     const d = new Date(dateStr.includes('T') ? dateStr : `${dateStr}T12:00:00`)
-    return new Intl.DateTimeFormat(AR_LOCALE, {
+    return new Intl.DateTimeFormat('ar-SA', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -29,19 +28,13 @@ async function fetchPatientName(patientId) {
 
 /**
  * إشعارات لوحة الطبيب (في الذاكرة فقط — تُصفّر عند تحديث الصفحة).
- * Realtime: INSERT موعد جديد، UPDATE → إلغاء أو تقييم جديد (patient_rating).
+ * Realtime: INSERT موعد جديد، UPDATE → إلغاء.
  *
  * لا نستخدم filter على القناة؛ نعتمد على RLS (الطبيب يرى مواعيده فقط) ثم نتحقق من doctorId محلياً.
  * تجنّباً لمشاكل تطابق UUID أو تأخير «أول تحميل» الذي كان يُسقط أحداث الحجز المبكرة.
- * يُستبعد تكرار إشعار التقييم لنفس الموعد (تحديثات لاحقة مثل الملاحظات) عبر Set في الذاكرة.
  */
 export function useNotifications(doctorId) {
   const [notifications, setNotifications] = useState([])
-  const ratingNotifiedApptIdsRef = useRef(new Set())
-
-  useEffect(() => {
-    ratingNotifiedApptIdsRef.current = new Set()
-  }, [doctorId])
 
   const unreadCount = useMemo(
     () => notifications.filter((n) => !n.read).length,
@@ -95,57 +88,26 @@ export function useNotifications(doctorId) {
           schema: 'public',
           table: 'appointments',
         },
-        async (payload) => {
+        (payload) => {
           try {
             const appt = payload.new
             const old = payload.old
             if (!appt?.id || !sameDoctorId(appt.doctor_id, doctorId)) return
+            const nowCancelled = appt.status === 'cancelled'
+            const wasCancelled = old?.status === 'cancelled'
+            if (!nowCancelled || wasCancelled) return
 
-            const nowCancelled = appt.status === 'cancelled' || appt.status === 'canceled'
-            const wasCancelled = old?.status === 'cancelled' || old?.status === 'canceled'
-            if (nowCancelled && !wasCancelled) {
-              const cancelNotif = {
-                id: `cancel_${appt.id}_${Date.now()}`,
-                type: 'cancellation',
-                title: 'إلغاء موعد',
-                message: `تم إلغاء الموعد رقم #${appt.queue_number ?? '—'}`,
-                appointmentId: appt.id,
-                appointmentDate: appt.appointment_date,
-                timestamp: new Date(),
-                read: false,
-              }
-              setNotifications((prev) => [cancelNotif, ...prev].slice(0, 100))
-              return
-            }
-
-            const prevRating = old?.patient_rating
-            if (prevRating != null && prevRating !== '') return
-
-            const rawStars = appt.patient_rating
-            const stars = rawStars != null && rawStars !== '' ? Number(rawStars) : NaN
-            if (!Number.isFinite(stars) || stars < 1 || stars > 5) return
-
-            if (ratingNotifiedApptIdsRef.current.has(appt.id)) return
-            ratingNotifiedApptIdsRef.current.add(appt.id)
-
-            const patientName = await fetchPatientName(appt.patient_id)
-            const formattedDate = formatArabicDate(appt.appointment_date)
-            const q = appt.queue_number ?? '—'
-
-            const ratingNotif = {
-              id: `rating_${appt.id}_${Date.now()}`,
-              type: 'new_rating',
-              title: 'تقييم جديد من مريض',
-              message: `${patientName} قيّمك بـ ${stars} من 5 — دور #${q} — ${formattedDate}`,
+            const cancelNotif = {
+              id: `cancel_${appt.id}_${Date.now()}`,
+              type: 'cancellation',
+              title: 'إلغاء موعد',
+              message: `تم إلغاء الموعد رقم #${appt.queue_number ?? '—'}`,
               appointmentId: appt.id,
               appointmentDate: appt.appointment_date,
-              queueNumber: appt.queue_number,
-              patientName,
-              stars,
               timestamp: new Date(),
               read: false,
             }
-            setNotifications((prev) => [ratingNotif, ...prev].slice(0, 100))
+            setNotifications((prev) => [cancelNotif, ...prev].slice(0, 100))
           } catch (e) {
             console.warn('[useNotifications] UPDATE handler', e)
           }

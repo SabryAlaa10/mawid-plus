@@ -36,7 +36,6 @@ import com.mawidplus.patient.ui.screens.splash.SplashScreen
 import com.mawidplus.patient.ui.screens.profile.ProfileScreen
 import com.mawidplus.patient.ui.screens.queue.MyQueueScreen
 import com.mawidplus.patient.ui.screens.booking.BookingScreen
-import com.mawidplus.patient.ui.screens.assistant.ChatScreen
 import com.mawidplus.patient.ui.screens.search.DoctorDetailScreen
 import com.mawidplus.patient.ui.screens.search.DoctorMapScreen
 import com.mawidplus.patient.ui.screens.search.MapViewScreen
@@ -56,9 +55,16 @@ import kotlinx.coroutines.withContext
 
 private fun NavHostController.navigateHomeAfterAuth() {
     try {
+        val clearedLogin = popBackStack(Routes.LOGIN, inclusive = true, saveState = false)
+        if (!clearedLogin) {
+            popBackStack(Routes.REGISTER, inclusive = true, saveState = false)
+        }
+    } catch (e: Exception) {
+        Log.w("AppNavGraph", "popBackStack before HOME", e)
+    }
+    try {
         navigate(Routes.HOME) {
             launchSingleTop = true
-            popUpTo(Routes.LOGIN) { inclusive = true }
         }
     } catch (e: Exception) {
         Log.e("AppNavGraph", "navigate HOME failed", e)
@@ -93,23 +99,6 @@ fun AppNavGraph(
                     } catch (_: Throwable) {
                         // Session load failed; treat as logged out and continue
                     }
-                    val currentUid = try {
-                        SupabaseProvider.client.auth.currentUserOrNull()?.id?.toString()
-                    } catch (_: Throwable) {
-                        null
-                    }
-                    val storedUid = UiSessionPrefs.getLastAuthUserId(context)
-                    if (currentUid != null && storedUid != null && currentUid != storedUid) {
-                        Log.w(
-                            "AppNavGraph",
-                            "Session user id changed (likely new anon after token loss). Signing out. stored=$storedUid current=$currentUid",
-                        )
-                        try {
-                            SupabaseProvider.client.auth.signOut()
-                        } catch (_: Throwable) {
-                        }
-                        UiSessionPrefs.clear(context)
-                    }
                     val hasSupabaseSession = try {
                         SupabaseProvider.client.auth.currentUserOrNull() != null
                     } catch (_: Throwable) {
@@ -136,44 +125,28 @@ fun AppNavGraph(
                 },
                 onNavigateToRegister = {
                     try {
-                        navController.navigate(Routes.registerRoute()) {
+                        navController.navigate(Routes.REGISTER) {
                             launchSingleTop = true
                         }
                     } catch (e: Exception) {
                         Log.e("AppNavGraph", "navigate REGISTER failed", e)
                     }
-                },
-                onNavigateToRegisterWithPhone = { digits ->
-                    try {
-                        navController.navigate(Routes.registerRoute(digits)) {
-                            launchSingleTop = true
-                        }
-                    } catch (e: Exception) {
-                        Log.e("AppNavGraph", "navigate REGISTER with phone failed", e)
-                    }
-                },
+                }
             )
         }
 
         composable(
-            route = Routes.REGISTER_WITH_PHONE_PATTERN,
-            arguments = listOf(
-                navArgument("phone") {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
-            ),
+            route = Routes.REGISTER,
             deepLinks = listOf(
-                navDeepLink { uriPattern = "mawidplus://auth/register" },
-            ),
-        ) { backStackEntry ->
-            val phoneArg = backStackEntry.arguments?.getString("phone").orEmpty()
+                navDeepLink { uriPattern = "mawidplus://auth/register" }
+            )
+        ) {
             RegisterScreen(
-                preFilledPhoneLocalDigits = phoneArg,
+                preFilledPhoneLocalDigits = "",
                 onRegisterSuccess = {
                     navController.navigateHomeAfterAuth()
                 },
-                onNavigateToLogin = { navController.navigateUp() },
+                onNavigateToLogin = { navController.navigateUp() }
             )
         }
 
@@ -198,19 +171,11 @@ fun AppNavGraph(
         composable(Routes.PROFILE) { MainTabContainer(navController, startTab = Tabs.Profile.route) }
         composable(
             route = Routes.MY_QUEUE_PATTERN,
-            arguments = listOf(
-                navArgument("doctorId") { type = NavType.StringType },
-                navArgument("appointmentFocus") {
-                    type = NavType.StringType
-                    defaultValue = "all"
-                },
-            ),
+            arguments = listOf(navArgument("doctorId") { type = NavType.StringType })
         ) { entry ->
             val doctorId = entry.arguments?.getString("doctorId").orEmpty()
-            val appointmentFocus = entry.arguments?.getString("appointmentFocus").orEmpty()
             MyQueueScreen(
                 doctorId = doctorId,
-                appointmentFocus = appointmentFocus,
                 onBack = { navController.navigateUp() },
                 onNavigateToNotifications = {
                     navController.navigate(Routes.NOTIFICATIONS) {
@@ -305,17 +270,6 @@ fun AppNavGraph(
                 }
             )
         }
-
-        composable(Routes.AI_ASSISTANT) {
-            ChatScreen(
-                onBack = { navController.navigateUp() },
-                onBookDoctor = { doctorId ->
-                    navController.navigate(Routes.bookingRoute(doctorId)) {
-                        launchSingleTop = true
-                    }
-                },
-            )
-        }
     }
 }
 
@@ -354,12 +308,11 @@ fun MainTabContainer(
         ) {
             when (selectedTab) {
                 Tabs.Home.route -> HomeScreen(
-                    onNavigateToQueue = { doctorId, appointmentId ->
-                        navController.navigate(Routes.myQueueRoute(doctorId, appointmentId)) {
+                    onNavigateToQueue = { doctorId ->
+                        navController.navigate(Routes.myQueueRoute(doctorId)) {
                             launchSingleTop = true
                         }
                     },
-                    onNavigateToAppointments = { selectedTab = Tabs.Appointments.route },
                     onNavigateToSearch = { query ->
                         navController.navigate(Routes.searchRoute(query)) {
                             launchSingleTop = true
@@ -378,13 +331,15 @@ fun MainTabContainer(
                         }
                     },
                     onNearMe = {
-                        navController.navigate(Routes.MAP_VIEW) {
+                        navController.navigate(Routes.searchRoute()) {
                             launchSingleTop = true
+                            popUpTo(Routes.HOME) { inclusive = false }
                         }
                     },
-                    onSmartAssistant = {
-                        navController.navigate(Routes.AI_ASSISTANT) {
+                    onVideoConsult = {
+                        navController.navigate(Routes.searchRoute()) {
                             launchSingleTop = true
+                            popUpTo(Routes.HOME) { inclusive = false }
                         }
                     },
                     onHealthTipClick = {
@@ -429,8 +384,8 @@ fun MainTabContainer(
                     }
                 )
                 Tabs.Appointments.route -> AppointmentsScreen(
-                    onNavigateToQueue = { doctorId, appointmentId ->
-                        navController.navigate(Routes.myQueueRoute(doctorId, appointmentId)) {
+                    onNavigateToQueue = { doctorId ->
+                        navController.navigate(Routes.myQueueRoute(doctorId)) {
                             launchSingleTop = true
                         }
                     },

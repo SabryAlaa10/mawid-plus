@@ -1,7 +1,6 @@
 package com.mawidplus.patient.data.repository
 
 import android.util.Log
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -21,8 +20,6 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> = this
 
 suspend fun <T> safeCall(action: suspend () -> T): Result<T> = try {
     Result.Success(action())
-} catch (e: CancellationException) {
-    throw e
 } catch (e: Exception) {
     Result.Error(e.message ?: "Unknown error", e)
 }
@@ -44,8 +41,6 @@ suspend fun <T> traceRepositoryCall(tag: String, operation: String, block: suspe
             Result.Loading -> Log.d(tag, "$operation: loading")
         }
         result
-    } catch (e: CancellationException) {
-        throw e
     } catch (e: Exception) {
         Log.e(tag, "$operation: unexpected exception", e)
         Result.Error(e.message ?: "Unknown error", e)

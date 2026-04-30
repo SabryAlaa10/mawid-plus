@@ -3,12 +3,10 @@ package com.mawidplus.patient.ui.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mawidplus.patient.core.model.Appointment
 import com.mawidplus.patient.data.SeedDoctorIds
 import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
-import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +17,9 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 private const val HOME_VM_TAG = "HomeVM"
-private val HOME_ZONE: ZoneId = MawidRegion.timeZone
+private val HOME_ZONE: ZoneId = ZoneId.of("Asia/Riyadh")
 
 data class UpcomingAppointmentCardData(
-    val appointmentId: String,
     val doctorId: String,
     val doctorName: String,
     val clinicLabel: String,
@@ -33,7 +30,6 @@ data class UpcomingAppointmentCardData(
     val displayDateAr: String,
     val queueNumber: Int,
     val doctorPhotoUrl: String?,
-    val appointmentTime: String = "",
     val statusBadgeAr: String,
 )
 
@@ -90,14 +86,36 @@ class HomeViewModel(
                             Log.d(HOME_VM_TAG, "result: $nextResult")
                             Log.d(HOME_VM_TAG, "appointments count: ${if (next != null) 1 else 0}")
                             val upcoming = next?.let { ap ->
-                                buildUpcomingCardData(ap, homeStatusBadgeAr(ap.status))
-                            } ?: run {
-                                when (val doneRes = appointmentRepository.getLastDoneAppointment(uid)) {
-                                    is Result.Success ->
-                                        doneRes.data?.let { ap ->
-                                            buildUpcomingCardData(ap, "مكتمل")
-                                        }
-                                    else -> null
+                                val rel = relativeDateLabelAr(ap.appointmentDate)
+                                val badge = homeStatusBadgeAr(ap.status)
+                                when (val doc = doctorRepository.getDoctorById(ap.doctorId)) {
+                                    is Result.Success -> {
+                                        val d = doc.data
+                                        UpcomingAppointmentCardData(
+                                            doctorId = ap.doctorId,
+                                            doctorName = d.fullName,
+                                            clinicLabel = d.clinicName ?: "عيادة",
+                                            specialty = d.specialty,
+                                            appointmentDateIso = ap.appointmentDate,
+                                            relativeDateLabel = rel,
+                                            displayDateAr = formatDateAr(ap.appointmentDate),
+                                            queueNumber = ap.queueNumber,
+                                            doctorPhotoUrl = d.photoUrl,
+                                            statusBadgeAr = badge,
+                                        )
+                                    }
+                                    else -> UpcomingAppointmentCardData(
+                                        doctorId = ap.doctorId,
+                                        doctorName = "طبيب",
+                                        clinicLabel = "عيادة",
+                                        specialty = "",
+                                        appointmentDateIso = ap.appointmentDate,
+                                        relativeDateLabel = rel,
+                                        displayDateAr = formatDateAr(ap.appointmentDate),
+                                        queueNumber = ap.queueNumber,
+                                        doctorPhotoUrl = null,
+                                        statusBadgeAr = badge,
+                                    )
                                 }
                             }
                             val queueDoc = upcoming?.doctorId ?: SeedDoctorIds.FAMILY_AHMED
@@ -110,47 +128,6 @@ class HomeViewModel(
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun buildUpcomingCardData(
-        ap: Appointment,
-        statusBadgeAr: String,
-    ): UpcomingAppointmentCardData {
-        val rel = relativeDateLabelAr(ap.appointmentDate)
-        val timeStr = ap.timeSlot?.trim() ?: ""
-        return when (val doc = doctorRepository.getDoctorById(ap.doctorId)) {
-            is Result.Success -> {
-                val d = doc.data
-                UpcomingAppointmentCardData(
-                    appointmentId = ap.id,
-                    doctorId = ap.doctorId,
-                    doctorName = d.fullName,
-                    clinicLabel = d.clinicName ?: "عيادة",
-                    specialty = d.specialty,
-                    appointmentDateIso = ap.appointmentDate,
-                    relativeDateLabel = rel,
-                    displayDateAr = formatDateAr(ap.appointmentDate),
-                    queueNumber = ap.queueNumber,
-                    doctorPhotoUrl = d.photoUrl,
-                    appointmentTime = timeStr,
-                    statusBadgeAr = statusBadgeAr,
-                )
-            }
-            else -> UpcomingAppointmentCardData(
-                appointmentId = ap.id,
-                doctorId = ap.doctorId,
-                doctorName = "طبيب",
-                clinicLabel = "عيادة",
-                specialty = "",
-                appointmentDateIso = ap.appointmentDate,
-                relativeDateLabel = rel,
-                displayDateAr = formatDateAr(ap.appointmentDate),
-                queueNumber = ap.queueNumber,
-                doctorPhotoUrl = null,
-                appointmentTime = timeStr,
-                statusBadgeAr = statusBadgeAr,
-            )
         }
     }
 }
@@ -186,7 +163,5 @@ private fun relativeDateLabelAr(iso: String): String {
 private fun homeStatusBadgeAr(status: String): String = when (status.lowercase().trim()) {
     "waiting", "scheduled" -> "في الانتظار"
     "in_progress" -> "قيد المعاينة"
-    "done" -> "مكتمل"
-    "cancelled" -> "ملغى"
     else -> "مجدول"
 }

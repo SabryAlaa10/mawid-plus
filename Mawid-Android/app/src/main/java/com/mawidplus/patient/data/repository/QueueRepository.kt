@@ -8,7 +8,6 @@ import com.mawidplus.patient.data.dto.QueueSettingsDto
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,16 +17,13 @@ class QueueRepository(
 
     private companion object {
         private const val TAG = "QueueRepository"
-        private val QUEUE_SETTINGS_COLUMNS = Columns.raw(
-            "doctor_id, current_number, queue_date, is_open, updated_at",
-        )
     }
 
     suspend fun getQueueSettings(doctorId: String): Result<QueueSettings> =
         traceRepositoryCall(TAG, "getQueueSettings") {
             withContext(Dispatchers.IO) {
                 safeCall {
-                    supabase.from("queue_settings").select(columns = QUEUE_SETTINGS_COLUMNS) {
+                    supabase.from("queue_settings").select(columns = Columns.ALL) {
                         filter {
                             eq("doctor_id", doctorId)
                         }
@@ -53,10 +49,8 @@ class QueueRepository(
                             eq("doctor_id", doctorId)
                             eq("appointment_date", appointmentDateIso)
                         }
-                        order(column = "queue_number", order = Order.DESCENDING)
-                        limit(1)
                     }.decodeList<QueueNumberRowDto>()
-                    rows.firstOrNull()?.queueNumber ?: 0
+                    rows.maxOfOrNull { it.queueNumber } ?: 0
                 }
             }
         }

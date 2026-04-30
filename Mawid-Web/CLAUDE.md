@@ -36,9 +36,3 @@ Copy `.env.example` → `.env` with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_
 - RTL + primary `#1A73E8`, sidebar `#1E293B`
 - No hardcoded doctor IDs; use `user.id` from Supabase Auth
 - Realtime: always `removeChannel` / returned cleanup from hooks
-
-## Production readiness (repo)
-- Run `npm test` then `npm run build` (needs `VITE_SUPABASE_*` in `.env`).
-- Apply all SQL in `Mawid-Android/supabase/migrations/` (including `015_performance_indexes.sql`) on the Supabase project.
-- CI: `.github/workflows/ci.yml` runs Web tests/build and Android unit tests.
-- Never commit `service_role` keys; clients use **anon** + RLS only.

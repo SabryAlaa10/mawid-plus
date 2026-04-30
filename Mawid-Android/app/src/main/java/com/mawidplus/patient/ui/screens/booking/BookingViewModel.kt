@@ -10,7 +10,6 @@ import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
 import com.mawidplus.patient.data.repository.QueueRepository
-import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +22,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val TAG = "BookingViewModel"
-private val APP_ZONE: ZoneId = MawidRegion.timeZone
+private val ZONE_RIYADH: ZoneId = ZoneId.of("Asia/Riyadh")
 
 sealed class BookingDoctorState {
     data object Loading : BookingDoctorState()
@@ -32,13 +31,8 @@ sealed class BookingDoctorState {
 }
 
 data class TimeSlotRow(
-    /** HH:mm للتخزين والحجز. */
     val time: String,
     val displayArabic: String,
-    /** عرض 12 ساعة في السطر العلوي للشريحة (مثل 10:00). */
-    val timeLine12h: String,
-    /** صباحاً / مساءً في السطر السفلي. */
-    val periodAr: String,
     val isAvailable: Boolean,
     val isBooked: Boolean,
     val isPast: Boolean,
@@ -91,7 +85,7 @@ class BookingViewModel(
     val selectedSlotIndex: StateFlow<Int> = _selectedSlotIndex.asStateFlow()
 
     val weekDates: List<LocalDate> = run {
-        val today = LocalDate.now(APP_ZONE)
+        val today = LocalDate.now(ZONE_RIYADH)
         (0..6).map { today.plusDays(it.toLong()) }
     }
 
@@ -149,9 +143,8 @@ class BookingViewModel(
                 _selectedSlotIndex.value = -1
                 return@launch
             }
-            val rawStart = parseLocalTime(doctor.startTime) ?: LocalTime.of(9, 0)
-            val rawEnd = parseLocalTime(doctor.endTime) ?: LocalTime.of(17, 0)
-            val (start, end) = normalizeClinicHours(rawStart, rawEnd)
+            val start = parseLocalTime(doctor.startTime) ?: LocalTime.of(9, 0)
+            val end = parseLocalTime(doctor.endTime) ?: LocalTime.of(17, 0)
             val slotMinutes = doctor.slotDurationMinutes.coerceIn(5, 240)
             val bookedResult = appointmentRepository.getBookedSlotsForDoctorAndDate(doctorId, dateIso)
             val booked = when (bookedResult) {
@@ -162,14 +155,14 @@ class BookingViewModel(
                 }
                 else -> emptySet()
             }
-            val nowTime = LocalTime.now(APP_ZONE)
+            val nowTime = LocalTime.now(ZONE_RIYADH)
             val slots = generateTimeSlots(
                 startTime = start,
                 endTime = end,
                 slotDuration = slotMinutes,
                 bookedSlots = booked,
                 selectedDate = date,
-                today = LocalDate.now(APP_ZONE),
+                today = LocalDate.now(ZONE_RIYADH),
                 nowTime = nowTime,
             )
             val availableCount = slots.count { it.isAvailable }
@@ -212,16 +205,7 @@ class BookingViewModel(
             _submitState.value = BookingSubmitState.Submitting
             val queueNum = when (val m = queueRepository.maxQueueNumberForDoctorAndDate(doctorId, appointmentDateIso)) {
                 is Result.Success -> m.data + 1
-                is Result.Error -> {
-                    _submitState.value = BookingSubmitState.Failed(
-                        m.message.ifBlank { "تعذر حساب رقم الطابور لهذا اليوم. تحقق من الاتصال." }
-                    )
-                    return@launch
-                }
-                Result.Loading -> {
-                    _submitState.value = BookingSubmitState.Failed("تعذر حساب رقم الطابور.")
-                    return@launch
-                }
+                else -> 0
             }
             if (queueNum <= 0) {
                 _submitState.value = BookingSubmitState.Failed(
@@ -301,25 +285,11 @@ private fun isDoctorAvailableOnDay(date: LocalDate, doctor: Doctor): Boolean {
 }
 
 private fun formatWorkingHoursLine(doctor: Doctor): String {
-    val rawStart = parseLocalTime(doctor.startTime) ?: LocalTime.of(9, 0)
-    val rawEnd = parseLocalTime(doctor.endTime) ?: LocalTime.of(17, 0)
-    val (start, end) = normalizeClinicHours(rawStart, rawEnd)
+    val start = parseLocalTime(doctor.startTime) ?: LocalTime.of(9, 0)
+    val end = parseLocalTime(doctor.endTime) ?: LocalTime.of(17, 0)
     val fmt = DateTimeFormatter.ofPattern("h:mm a")
     val dur = doctor.slotDurationMinutes.coerceAtLeast(5)
     return "مواعيد العمل: ${start.format(fmt)} — ${end.format(fmt)} | كل $dur دقيقة"
-}
-
-/**
- * إذا كان وقت البداية في قاعدة البيانات بعد وقت النهاية (خطأ إدخال في لوحة الطبيب)،
- * نعكسهما حتى يُولَّد جدول فترات. يُفضّل تصحيح الجدول من الويب.
- */
-private fun normalizeClinicHours(start: LocalTime, end: LocalTime): Pair<LocalTime, LocalTime> {
-    return if (start >= end) {
-        Log.w(TAG, "clinic hours inverted in DB (start=$start >= end=$end); using swapped range for slots")
-        Pair(end, start)
-    } else {
-        Pair(start, end)
-    }
 }
 
 private fun generateTimeSlots(
@@ -339,13 +309,10 @@ private fun generateTimeSlots(
         val isBooked = bookedSlots.contains(timeStr)
         val isPast = selectedDate == today && current.isBefore(nowTime)
         val isAvailable = !isBooked && !isPast
-        val (line12, period) = time12hAndPeriodAr(current)
         out.add(
             TimeSlotRow(
                 time = timeStr,
                 displayArabic = formatArabicTime(current),
-                timeLine12h = line12,
-                periodAr = period,
                 isAvailable = isAvailable,
                 isBooked = isBooked,
                 isPast = isPast,
@@ -356,7 +323,7 @@ private fun generateTimeSlots(
     return out
 }
 
-private fun time12hAndPeriodAr(t: LocalTime): Pair<String, String> {
+private fun formatArabicTime(t: LocalTime): String {
     val h24 = t.hour
     val m = t.minute
     val period = if (h24 < 12) "صباحاً" else "مساءً"
@@ -365,10 +332,5 @@ private fun time12hAndPeriodAr(t: LocalTime): Pair<String, String> {
         h24 > 12 -> h24 - 12
         else -> h24
     }
-    return String.format("%d:%02d", h12, m) to period
-}
-
-private fun formatArabicTime(t: LocalTime): String {
-    val (line, period) = time12hAndPeriodAr(t)
-    return "$line $period"
+    return String.format("%d:%02d %s", h12, m, period)
 }

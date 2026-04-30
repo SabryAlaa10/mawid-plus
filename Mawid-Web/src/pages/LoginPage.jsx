@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff, Loader2, Check } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 
@@ -254,12 +254,6 @@ export default function LoginPage() {
             <button type="button" className="text-primary font-medium hover:underline">
               هل نسيت كلمة المرور؟
             </button>
-          </p>
-
-          <p className="text-center text-sm text-slate-600">
-            <Link to="/register" className="text-primary font-medium hover:underline">
-              طبيب جديد؟ سجّل هنا
-            </Link>
           </p>
         </div>
       </section>

@@ -2,11 +2,7 @@ import { format } from 'date-fns'
 import { supabase } from '../lib/supabaseClient'
 
 export async function getQueueSettings(doctorId) {
-  const { data, error } = await supabase
-    .from('queue_settings')
-    .select('doctor_id, current_number, queue_date, is_open, updated_at')
-    .eq('doctor_id', doctorId)
-    .maybeSingle()
+  const { data, error } = await supabase.from('queue_settings').select('*').eq('doctor_id', doctorId).maybeSingle()
   if (error) throw error
   return data
 }
@@ -22,10 +18,7 @@ export async function updateCurrentNumber(doctorId, newNumber) {
   return data
 }
 
-/**
- * أقصى رقم طابور اليوم — يشمل الملغاة ليتوافق مع تطبيق أندرويد (max على كل الصفوف)
- * حتى لا يُعاد استخدام رقم ما زال موجوداً في صف ملغى.
- */
+/** أقصى رقم طابور اليوم (غير ملغى) — مفيد للعرض والتحقق مع الاشتراك المباشر */
 export async function getMaxQueueNumber(doctorId) {
   const todayIso = format(new Date(), 'yyyy-MM-dd')
   const { data, error } = await supabase
@@ -33,6 +26,7 @@ export async function getMaxQueueNumber(doctorId) {
     .select('queue_number')
     .eq('doctor_id', doctorId)
     .eq('appointment_date', todayIso)
+    .neq('status', 'cancelled')
     .order('queue_number', { ascending: false })
     .limit(1)
   if (error) return 0
@@ -120,7 +114,7 @@ export async function toggleQueueOpen(doctorId, isOpen) {
     .from('queue_settings')
     .update({ is_open: isOpen, updated_at: new Date().toISOString() })
     .eq('doctor_id', doctorId)
-    .select('doctor_id, current_number, queue_date, is_open, updated_at')
+    .select()
     .maybeSingle()
   if (error) throw error
   return data

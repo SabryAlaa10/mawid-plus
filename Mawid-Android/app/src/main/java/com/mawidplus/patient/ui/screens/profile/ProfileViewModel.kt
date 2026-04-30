@@ -27,10 +27,6 @@ class ProfileViewModel(
     private val authRepository: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
-    private companion object {
-        private const val MAX_NAME_LEN = 80
-    }
-
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
@@ -72,8 +68,7 @@ class ProfileViewModel(
 
     fun updateEditedName(value: String) {
         val s = _uiState.value as? ProfileUiState.Ready ?: return
-        val clipped = value.take(MAX_NAME_LEN)
-        _uiState.value = s.copy(editedName = clipped)
+        _uiState.value = s.copy(editedName = value)
     }
 
     fun cancelEdit() {
@@ -83,9 +78,9 @@ class ProfileViewModel(
 
     fun saveProfile(onMessage: (String, Boolean) -> Unit) {
         val s = _uiState.value as? ProfileUiState.Ready ?: return
-        val name = s.editedName.replace(Regex("\\s+"), " ").trim()
+        val name = s.editedName.trim()
         if (name.length < 3) {
-            onMessage("الاسم يجب أن يكون 3 أحرفاً على الأقل", true)
+            onMessage("الاسم يجب أن يكون 3 أحرف على الأقل", true)
             return
         }
         viewModelScope.launch {
@@ -105,7 +100,7 @@ class ProfileViewModel(
                         editedName = name,
                         isSaving = false,
                     )
-                    onMessage("تم حفظ اسمك بنجاح", false)
+                    onMessage("تم تحديث معلوماتك بنجاح", false)
                 }
                 is Result.Error -> {
                     _uiState.value = s.copy(isSaving = false)

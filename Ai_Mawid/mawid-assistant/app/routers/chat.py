@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.models.schemas import ChatRequest, ChatResponse
 from app.services.rag import build_rag_context
 from app.services.llm import call_llm
-from app.services.specialty import detect_specialty_combined, normalize_specialty
-from app.database import get_doctors_by_specialty
+from app.services.specialty import detect_specialty_combined, match_specialty_to_db
+from app.database import get_doctors_by_specialty, get_all_specialties
 from app.auth import get_current_user
 
 router = APIRouter()
@@ -84,12 +84,13 @@ async def chat(req: ChatRequest, user=Depends(get_current_user)):
             no_match = True
             recommended_doctor = []
         else:
-            canonical = normalize_specialty(specialty)
-            if canonical is None:
+            db_specialties = get_all_specialties()
+            matched = match_specialty_to_db(str(specialty).strip(), db_specialties)
+            if matched is None:
                 no_match = True
                 recommended_doctor = []
             else:
-                out = get_doctors_by_specialty(canonical)
+                out = get_doctors_by_specialty(matched)
                 recommended_doctor = out["doctors"] or []
                 if out["matched"] and recommended_doctor:
                     specialty_available = True

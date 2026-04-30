@@ -24,7 +24,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -58,6 +57,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -74,6 +74,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -83,7 +84,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -101,7 +101,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.mawidplus.patient.ui.components.rememberCrossfadeImageRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -124,10 +123,10 @@ private val Slate400 = Color(0xFF94A3B8)
 /** نص الحقول: أسود/أزرق داكن لضمان الوضوح على كل الشاشات */
 private val InputTextBlack = Color(0xFF0A0A0A)
 private val BorderLight = Color(0xFFE2E8F0)
-/** حد زر Google الرسمي (رمادي داكن — قريب من إرشادات العلامة) */
-private val GoogleButtonBorder = Color(0xFF747775)
 private val ErrorRed = Color(0xFFEF4444)
 private val GradientTop = Color(0xFFF0F7FF)
+private const val IMG_GOOGLE =
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBUxaT0yZCYFQuGxLZgVw1NstaPDqx4MrQ6nE2zSmusvaJ0O7oJFWub4tLOAvZJWTzaZrlyOBksHM70PwOBg9dtmiWdVdxykQWPOeL24tQhhmNnnuIJeYY0zDNcQ4hqCYkN5o-btsA4rn1MQaU5G-MpRv_cnx9ycw6iHFlVjNPF3oX6zg3W4hyR-5qheeyNerEizlKia7sWhKHWz39z3zDFa-PT8pfzZwAp7GNecrTnKgsHjdhMM4psDmGkCkQ-jAsGKbCxiw3n584"
 private const val IMG_LOGIN_BANNER =
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCOCO3TDq0iH_QGBjEonzLnajPNloPRjzOi0cQUiTA6lComZNzi54igI7_AfO4hBvws5MMMR9tAeVR8Sacfcm1xS3ci7uPUifkPZvuMTAB3XERp3D4xspZ4hworBnxhLc1-2nlGOagsXjL8WG2owXxfD5_YdXZY4v_YZb7V6AogrMQbefijcKTNlmM-qQQRFich9ikPBwSk-21PK3NoAUO5a6DXUMBtBk8J9mTjITFB7qzvuPj0g6kUVzcFRAaHRu6KNN0d1NRD7pY"
 
@@ -142,7 +141,7 @@ private fun friendlyErrorMessage(message: String): String {
 }
 
 private fun validatePhoneForUi(phoneDigits: String): String? {
-    if (phoneDigits.isBlank()) return "أدخل رقم هاتفك أولاً"
+    if (phoneDigits.isEmpty()) return null
     if (phoneDigits.length < 10) return "رقم الهاتف غير مكتمل"
     if (!EgyptPhone.isValidLocal(phoneDigits)) return "أدخل رقم مصري صحيح"
     return null
@@ -190,8 +189,6 @@ fun AuthPhoneFlowScreen(
     onBottomLinkClick: () -> Unit,
     onTopBarBack: (() -> Unit)?,
     isRegisterFlow: Boolean,
-    /** شاشة الدخول: التحقق من الرقم ثم تسجيل الدخول أو التوجيه للتسجيل */
-    isLoginFlow: Boolean = false,
     onAuthSuccess: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -199,11 +196,6 @@ fun AuthPhoneFlowScreen(
     var fullName by rememberSaveable { mutableStateOf("") }
     var phoneError by remember { mutableStateOf<String?>(null) }
     val isLoading = uiState is LoginViewModel.UiState.Submitting
-    val loadingMessage = when {
-        isLoginFlow && !isRegisterFlow && isLoading -> "جارٍ التحقق من الرقم…"
-        isLoading -> "جارٍ التحقق…"
-        else -> ""
-    }
     val isAuthenticated = uiState is LoginViewModel.UiState.Authenticated
     var authNavigationFired by remember { mutableStateOf(false) }
 
@@ -326,6 +318,7 @@ fun AuthPhoneFlowScreen(
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
         label = "google_scale"
     )
+
     val phoneDigits = phone
     val canSubmitPhone = phoneDigits.isNotBlank()
     fun runPhoneValidation(): Boolean {
@@ -566,11 +559,7 @@ fun AuthPhoneFlowScreen(
                                     viewModel.reportError("أدخل الاسم الكامل")
                                     return@Button
                                 }
-                                when {
-                                    isRegisterFlow -> viewModel.submitPhoneAuth(phone, fullName, true)
-                                    isLoginFlow -> viewModel.submitPhoneLogin(phone)
-                                    else -> viewModel.submitPhoneAuth(phone, fullName, false)
-                                }
+                                viewModel.submitPhoneAuth(phone, fullName, isRegisterFlow)
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -632,7 +621,7 @@ fun AuthPhoneFlowScreen(
                             trackColor = BorderLight
                         )
                         Text(
-                            loadingMessage.ifBlank { "جارٍ التحقق…" },
+                            "جارٍ التحقق…",
                             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                             textAlign = TextAlign.Center,
                             fontFamily = PublicSans,
@@ -652,55 +641,43 @@ fun AuthPhoneFlowScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    val googlePillHeight = 52.dp
-                    val googlePillShape = RoundedCornerShape(googlePillHeight / 2)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(googlePillHeight)
-                            .scale(googleScale)
-                            .clip(googlePillShape)
-                            .border(BorderStroke(1.dp, GoogleButtonBorder), googlePillShape)
-                            .background(Color.White, googlePillShape)
-                            .clickable(
-                                interactionSource = googleInteractionSource,
-                                indication = null,
-                                enabled = !isLoading,
-                                onClick = {
-                                    if (!runPhoneValidation()) return@clickable
-                                    if (isRegisterFlow && fullName.isBlank()) {
-                                        viewModel.reportError("أدخل الاسم الكامل أولاً لمتابعة التسجيل بجوجل")
-                                        return@clickable
-                                    }
-                                    if (webClientId.contains("REPLACE", ignoreCase = true)) {
-                                        viewModel.reportError(
-                                            "أضف default_web_client_id (Web Client ID من Google Cloud) في strings.xml"
-                                        )
-                                    } else {
-                                        googleLauncher.launch(googleClient.signInIntent)
-                                    }
-                                },
-                            ),
-                        contentAlignment = Alignment.Center,
+                    OutlinedButton(
+                        onClick = {
+                            if (!runPhoneValidation()) return@OutlinedButton
+                            if (isRegisterFlow && fullName.isBlank()) {
+                                viewModel.reportError("أدخل الاسم الكامل أولاً لمتابعة التسجيل بجوجل")
+                                return@OutlinedButton
+                            }
+                            if (webClientId.contains("REPLACE", ignoreCase = true)) {
+                                viewModel.reportError(
+                                    "أضف default_web_client_id (Web Client ID من Google Cloud) في strings.xml"
+                                )
+                            } else {
+                                googleLauncher.launch(googleClient.signInIntent)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(56.dp).scale(googleScale).shadow(4.dp, RoundedCornerShape(16.dp)),
+                        enabled = !isLoading,
+                        interactionSource = googleInteractionSource,
+                        colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White, contentColor = Slate900),
+                        border = BorderStroke(1.dp, BorderLight),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 22.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                            ) {
-                                Image(
-                                    painter = painterResource(R.drawable.ic_google_g),
-                                    contentDescription = "Google",
-                                    modifier = Modifier.size(24.dp),
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                AsyncImage(
+                                    model = IMG_GOOGLE,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(22.dp),
+                                    contentScale = ContentScale.Fit
                                 )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
-                                    "تسجيل الدخول بواسطة Google",
+                                    "المتابعة مع Google",
                                     fontFamily = PublicSans,
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 15.sp,
-                                    color = Slate900,
+                                    color = Slate900
                                 )
                             }
                         }
@@ -741,9 +718,8 @@ fun AuthPhoneFlowScreen(
                     .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                     .height(200.dp)
             ) {
-                val loginBannerReq = rememberCrossfadeImageRequest(IMG_LOGIN_BANNER)
                 AsyncImage(
-                    model = loginBannerReq ?: IMG_LOGIN_BANNER,
+                    model = IMG_LOGIN_BANNER,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop

@@ -61,11 +61,8 @@ export async function updateAvatarUrl(doctorId, publicUrl) {
   return data
 }
 
-const DOCTOR_PROFILE_COLUMNS =
-  'id, clinic_id, full_name, specialty, slot_duration_minutes, image_url, avatar_url, experience_years, about, rating, review_count, consultation_fee_sar, available_days, start_time, end_time, latitude, longitude, clinic_address, created_at'
-
 export async function getDoctorProfile(doctorId) {
-  const { data, error } = await supabase.from('doctors').select(DOCTOR_PROFILE_COLUMNS).eq('id', doctorId).maybeSingle()
+  const { data, error } = await supabase.from('doctors').select('*').eq('id', doctorId).maybeSingle()
   if (error) throw error
   return data
 }
@@ -82,11 +79,10 @@ export async function updateSchedule(doctorId, scheduleData) {
   return data
 }
 
-/** المبلغ بالجنيه المصري؛ عمود قاعدة البيانات ما زال consultation_fee_sar. */
-export async function updateFee(doctorId, feeEgp) {
+export async function updateFee(doctorId, feeSar) {
   const { data, error } = await supabase
     .from('doctors')
-    .update({ consultation_fee_sar: feeEgp })
+    .update({ consultation_fee_sar: feeSar })
     .eq('id', doctorId)
     .select()
     .maybeSingle()

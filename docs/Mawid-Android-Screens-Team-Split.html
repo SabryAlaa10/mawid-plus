@@ -83,11 +83,12 @@
 <body>
 
   <h1>مشروع Mawid+ — تطبيق المريض (Android)</h1>
-  <p class="count">عدد الشاشات (وجهات تنقّل مستقلة): <strong>15</strong> شاشة</p>
+  <p class="count">عدد الشاشات (وجهات تنقّل مستقلة): <strong>15</strong> شاشة — التعيين: إسراء = 1–3 + 10،12،13 | صبري = 4،6،7،15 + Ai_Mawid | حنين = 5،8،9،11،14</p>
+  <p style="margin:0 0 1rem; font-size:0.95rem;"><strong>دليل مذاكرة (HTML Dark):</strong> <a href="Mawid-Team-Study-Guides-Index.html">فهرس أدلية الفريق</a> — <a href="Mawid-Sabry-Study-Guide-Dark.html">Sabry</a> · <a href="Mawid-Esraa-Study-Guide-Dark.html">Esraa</a> · <a href="Mawid-Hanin-Study-Guide-Dark.html">Hanin</a></p>
 
   <div class="meta">
     <p style="margin:0 0 0.5rem;"><strong>المرجع في الكود:</strong> <code>AppNavGraph.kt</code> + <code>MainTabContainer</code> (تبويبات داخل <code>Routes.HOME</code> ومسارات مرتبطة)</p>
-    <p style="margin:0;"><strong>تقسيم العمل:</strong> 3 مهندسين — <span class="badge b-sabry">Sabry</span> <span class="badge b-esraa">Esraa</span> <span class="badge b-hanin">Hanin</span> — <strong>5 وحدات عمل لكل مهندس</strong> (شاشات Android؛ و<strong>صبري</strong> يضيف مشروع <code>Ai_Mawid</code> للمساعد الذكي). لموازنة النقل: الشاشة 5 انتقلت من صبري إلى حنين مقابل إسناد الشاشة 15 و<code>Ai_Mawid</code> لصبري.</p>
+    <p style="margin:0;"><strong>تقسيم العمل:</strong> 3 مهندسين — <span class="badge b-sabry">Sabry</span> <span class="badge b-esraa">Esraa</span> <span class="badge b-hanin">Hanin</span> — <strong>صبري</strong>: <strong>4 (Home)</strong>، <strong>6 (مواعيدي)</strong>، <strong>7 (حسابي)</strong>، <strong>15 (AI)</strong> + <code>Ai_Mawid/mawid-assistant</code>؛ <strong>إسراء</strong>: <strong>1–3</strong> (Splash، Login، Register) + 10، 12، 13. <strong>حنين</strong>: 5، 8، 9، 11، 14. التبويبات <code>home</code> / <code>appointments</code> / <code>profile</code> ومسار المساعد يتطلب تنسيقاً مع <code>MainTabContainer</code>.</p>
   </div>
 
   <h2>1) جدول الشاشات والملفات الرئيسية</h2>
@@ -269,37 +270,37 @@
 
   <p class="note">ملاحظة: <code>MainTabContainer</code> و<code>BottomNavigationBar</code> و<code>AppNavGraph.kt</code> و<code>Routes.kt</code> تربط كل الشاشات — يفضّل تنسيق تعديلات المسارات بين الفريق (انظر قسم «مشترك» أدناه).</p>
 
-  <h2>2) تقسيم المهام (5 وحدات لكل مهندس + Ai_Mawid لصبري)</h2>
+  <h2>2) تقسيم المهام (محدّث: صبري = 4، 6، 7، 15 + Ai_Mawid)</h2>
 
-  <h3><span class="badge b-sabry">Sabry</span> — 5 شاشات في Android + مشروع المساعد الذكي</h3>
+  <h3><span class="badge b-sabry">Sabry</span> — 4 شاشات في Android + مشروع المساعد الذكي</h3>
   <ol>
-    <li>الشاشة 1 — Splash</li>
-    <li>الشاشة 2 — Login (+ Auth phone flow + LoginViewModel)</li>
-    <li>الشاشة 3 — Register</li>
-    <li>الشاشة 4 — Home (الرئيسية)</li>
-    <li>الشاشة 15 — AI Assistant: الشات + بطاقة اقتراح طبيب (<code>ui/screens/assistant/</code>)</li>
+    <li>الشاشة 4 — Home (الرئيسية) — <code>ui/screens/home/</code></li>
+    <li>الشاشة 6 — Appointments (مواعيدي) — <code>ui/screens/appointments/</code></li>
+    <li>الشاشة 7 — Profile (حسابي) — <code>ui/screens/profile/</code></li>
+    <li>الشاشة 15 — AI Assistant: الشات + بطاقة اقتراح طبيب — <code>ui/screens/assistant/</code></li>
   </ol>
-  <p><strong>مشروع المساعد (FastAPI) — نفس مسؤولية صبري:</strong></p>
+  <p><strong>مشروع المساعد (FastAPI) — صبري:</strong></p>
   <ul>
     <li><code>Ai_Mawid/mawid-assistant/</code> — الجذر (مثلاً <code>app/main.py</code>، <code>requirements.txt</code>، <code>.env</code>)</li>
     <li><code>Ai_Mawid/mawid-assistant/app/routers/</code> — مسارات API (chat، doctors، appointments)</li>
     <li><code>Ai_Mawid/mawid-assistant/app/services/</code> — منطق LLM، RAG، تخصصات (<code>llm.py</code>، <code>rag.py</code>، <code>specialty.py</code>، …)</li>
     <li><code>Ai_Mawid/mawid-assistant/app/auth.py</code>، <code>app/database.py</code> — حسب الحاجة للربط مع Supabase</li>
   </ul>
-  <p class="note">الشاشة 5 (تبويب Search) <strong>نُقلت إلى حنين</strong> لإبقاء توزيع متوازٍ (5 شاشات لكل مهندس في Android).</p>
+  <p class="note">تبويبات <strong>الرئيسية / المواعيد / الحساب</strong> و<strong>المساعد</strong> قريبة في التنقل — يفضّل تنسيق تعديل <code>MainTabContainer</code> و<code>BottomNavigationBar</code> مع إسراء (1–3) وحنين (5 وما يرتبط بالبحث).</p>
 
-  <h3><span class="badge b-esraa">Esraa</span> — 5 شاشات</h3>
+  <h3><span class="badge b-esraa">Esraa</span> — 6 شاشات (1–3 + 10، 12، 13)</h3>
   <ol>
-    <li>الشاشة 6 — Appointments (مواعيدي)</li>
-    <li>الشاشة 7 — Profile (حسابي)</li>
+    <li>الشاشة 1 — Splash</li>
+    <li>الشاشة 2 — Login (+ Auth phone flow + LoginViewModel)</li>
+    <li>الشاشة 3 — Register</li>
+    <li>الشاشة 10 — Map View (الخريطة العامة من SearchFlowScreens)</li>
     <li>الشاشة 12 — Doctor Detail</li>
     <li>الشاشة 13 — Doctor Map</li>
-    <li>الشاشة 10 — Map View (الخريطة العامة من SearchFlowScreens)</li>
   </ol>
 
   <h3><span class="badge b-hanin">Hanin</span> — 5 شاشات</h3>
   <ol>
-    <li>الشاشة 5 — Search (تبويب البحث + <code>SearchViewModel</code> + <code>SearchModels</code>) — <em>منقولة من صبري</em></li>
+    <li>الشاشة 5 — Search (تبويب البحث + <code>SearchViewModel</code> + <code>SearchModels</code>)</li>
     <li>الشاشة 8 — My Queue (طابوري)</li>
     <li>الشاشة 9 — Notifications</li>
     <li>الشاشة 11 — Search Filters</li>
@@ -320,6 +321,6 @@
   <h2>4) المسار الجذر للمشروع (مرجع)</h2>
   <p><code>Mawid-Android/app/src/main/java/com/mawidplus/patient/</code></p>
 
-  <p style="margin-top:2rem; font-size:0.85rem; color: var(--muted);">عدد الشاشات 15 كما في الجدول. التعيين: صبري = 1,2,3,4,15 + <code>Ai_Mawid/mawid-assistant</code>؛ حنين = 5,8,9,11,14؛ إسراء = 6,7,10,12,13. آخر تعديل: نقل 15 و<code>Ai_Mawid</code> لصبري ونقل 5 لحنين.</p>
+  <p style="margin-top:2rem; font-size:0.85rem; color: var(--muted);">عدد الشاشات 15 كما في الجدول. التعيين الحالي: <strong>صبري</strong> = 4,6,7,15 + <code>Ai_Mawid/mawid-assistant</code>؛ <strong>إسراء</strong> = 1,2,3,10,12,13؛ <strong>حنين</strong> = 5,8,9,11,14. آخر تعديل: إسناد 4 (Home) و6 (مواعيدي) و7 (Profile) لصبري.</p>
 </body>
 </html>
