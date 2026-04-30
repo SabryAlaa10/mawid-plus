@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mawid+ — عرض تقديمي | Academic Presentation</title>
+    <meta
+      name="description"
+      content="Mawid+ integrated healthcare booking: doctor web portal and patient mobile app — bilingual overview for university submission."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#web-slides">تخطي إلى قسم الويب</a>
+
+    <header class="deck-header">
+      <h1>+Mawid <span>Mawid+</span></h1>
+      <nav aria-label="أقسام العرض">
+        <a href="#overview">نظرة عامة</a>
+        <a href="#web-slides">بوابة الطبيب</a>
+        <a href="#app-slides">تطبيق المريض</a>
+      </nav>
+    </header>
+
+    <div class="hero" id="top">
+      <span class="hero-badge">مشروع تخرّج / عرض تقني ثنائي اللغة</span>
+      <h2>منصة موعد+ — ربط المريض بالعيادة والطبيب</h2>
+      <p class="subtitle-ar">
+        نظام متكامل لإدارة الحجز، الطابور، والملفات؛ مع لوحة ويب للأطباء وتطبيق أندرويد للمرضى، ومساعد ذكي للإرشاد الصحي العام.
+      </p>
+      <p class="subtitle-en">
+        An integrated stack for bookings, live queues, and profiles: a React web dashboard for doctors, an Android patient app, and an AI assistant for general health guidance.
+      </p>
+      <div class="hero-pills">
+        <span>Supabase + RLS</span>
+        <span>React · Vite · Tailwind</span>
+        <span>Kotlin · Jetpack Compose</span>
+        <span>FastAPI · Mawid Assistant</span>
+      </div>
+    </div>
+
+    <div class="overview" id="overview">
+      <article class="overview-card">
+        <h3>الويب — بوابة الطبيب</h3>
+        <p class="en">Web — Physician portal</p>
+        <p>
+          تسجيل دخول آمن، لوحة تحكم، جدول المواعيد الحي، إدارة طابور الانتظار، الجدول والرسوم، والملف الشخصي الظاهر للمرضى.
+        </p>
+      </article>
+      <article class="overview-card">
+        <h3>التطبيق — تجربة المريض</h3>
+        <p class="en">Mobile — Patient experience</p>
+        <p>
+          تسجيل بالهاتف أو Google، الرئيسية مع الموعد القادم، البحث عن الأطباء، مواعيدي، الحساب، ومساعد موعد الذكي.
+        </p>
+      </article>
+      <article class="overview-card">
+        <h3>الخلفية والذكاء</h3>
+        <p class="en">Backend &amp; intelligence</p>
+        <p>
+          قاعدة بيانات موحّدة عبر Supabase، وواجهة برمجة للمساعد الطبي تدعم المحادثة واقتراح التخصصات والمواعيد ضمن سياسات المنصة.
+        </p>
+      </article>
+    </div>
+
+    <section class="deck-section" id="web-slides" aria-labelledby="web-heading">
+      <div class="section-head">
+        <h2 id="web-heading">لقطات — بوابة الطبيب (ويب)</h2>
+        <p class="en-title">Screens — Doctor web dashboard</p>
+      </div>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ١ / Web 1</span>
+            <h3>تسجيل الدخول — بوابة الأطباء</h3>
+            <p class="caption-en">Login — Doctors portal (RTL)</p>
+            <p>
+              هوية بصرية موحّدة، حقول بريد وكلمة مرور، وتذكّر الجلسة؛ بوابة الدخول إلى لوحة التحكم.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20060852.png"
+              alt="شاشة تسجيل دخول بوابة الأطباء +Mawid"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ٢ / Web 2</span>
+            <h3>لوحة التحكم</h3>
+            <p class="caption-en">Dashboard &amp; KPIs</p>
+            <p>
+              ملخص مواعيد اليوم والطابور، رسم بياني أسبوعي، ومؤشرات الانتظار والإكمال — مع تفعيل الطابور من الشريط العلوي.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20060916.png"
+              alt="لوحة تحكم الطبيب — إحصائيات وطابور مباشر"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ٣ / Web 3</span>
+            <h3>المواعيد</h3>
+            <p class="caption-en">Appointments table</p>
+            <p>
+              ترشيح بالتاريخ والحالة والبحث بالاسم، جدول تفصيلي لحالات الانتظار والمكتمل والملغي، مع إجراء عرض التفاصيل.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20060934.png"
+              alt="صفحة المواعيد — جدول وفلاتر"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ٤ / Web 4</span>
+            <h3>إدارة الطابور</h3>
+            <p class="caption-en">Queue management</p>
+            <p>
+              عرض وجه لوجه: الرقم الحالي وقائمة الانتظار، مع أزرار استدعاء التالي وتصفير أو إغلاق الطابور وتحديث مباشر.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20060945.png"
+              alt="إدارة طابور الانتظار في بوابة الطبيب"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ٥ / Web 5</span>
+            <h3>الجدول والرسوم</h3>
+            <p class="caption-en">Schedule &amp; fees preview</p>
+            <p>
+              معاينة أيام العمل والساعات ومدة الموعد ورسوم الكشف، مع تعريف بالبروفايل وتصدير أو مشاركة الجدول.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20060957.png"
+              alt="معاينة الجدول والرسوم للطبيب"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">ويب ٦ / Web 6</span>
+            <h3>الملف الشخصي</h3>
+            <p class="caption-en">Profile &amp; ratings</p>
+            <p>
+              تقييمات المرضى، الصورة والبريد، والحقول النصية للاسم والتخصص والنبذة وسنوات الخبرة كما تظهر للمراجعين.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061006.png"
+              alt="صفحة الملف الشخصي للطبيب"
+              width="1280"
+              height="720"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+    </section>
+
+    <section class="deck-section" id="app-slides" aria-labelledby="app-heading">
+      <div class="section-head">
+        <h2 id="app-heading">لقطات — تطبيق المريض (أندرويد)</h2>
+        <p class="en-title">Screens — Patient Android app</p>
+      </div>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ١ / App 1</span>
+            <h3>تسجيل الدخول</h3>
+            <p class="caption-en">Phone &amp; Google sign-in</p>
+            <p>
+              بوابة المريض: إدخال رقم الهاتف مع رمز الدولة، أو تسجيل الدخول عبر Google، مع دعوة لإنشاء حساب جديد.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061416.png"
+              alt="شاشة تسجيل دخول تطبيق المريض"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ٢ / App 2</span>
+            <h3>الرئيسية</h3>
+            <p class="caption-en">Home — next appointment</p>
+            <p>
+              ترحيب بالمستخدم، بطاقة الموعد القادم مع رقم الدور والتخصص، وإجراءات سريعة للحجز الجديد ومساعد موعد.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061443.png"
+              alt="الشاشة الرئيسية — الموعد القادم والإجراءات السريعة"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ٣ / App 3</span>
+            <h3>البحث عن طبيب</h3>
+            <p class="caption-en">Doctor search &amp; filters</p>
+            <p>
+              شريط بحث، فلاتر التوفر والتقييم والقرب، قائمة أطباء مع بطاقات تحقق وحجز موعد وربط بعرض الخريطة.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061456.png"
+              alt="البحث عن الأطباء والفلاتر"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ٤ / App 4</span>
+            <h3>مواعيدي</h3>
+            <p class="caption-en">My appointments</p>
+            <p>
+              فرز بالحالة والفترة الزمنية، بطاقة موعد تفصيلية مع ملاحظات الطبيب وتقييم، وارتباط بطابوري والبحث.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061505.png"
+              alt="شاشة مواعيدي مع فلاتر وبطاقة موعد"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner reverse">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ٥ / App 5</span>
+            <h3>حسابي</h3>
+            <p class="caption-en">Account &amp; shortcuts</p>
+            <p>
+              بطاقة الهوية والهاتف وتاريخ العضوية، مع اختصارات لمواعيدي والطابور والبحث والإشعارات والتفضيلات.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061514.png"
+              alt="شاشة حسابي والاختصارات"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-inner">
+          <div class="slide-meta">
+            <span class="slide-num">تطبيق ٦ / App 6</span>
+            <h3>مساعد موعد الذكي</h3>
+            <p class="caption-en">AI health assistant chat</p>
+            <p>
+              محادثة مع تنبيه بعدم كونها تشخيصاً طبياً، فقاعة ترحيب من المساعد، وحقل إدخال نصي مع دعم الإرسال/الصوت.
+            </p>
+          </div>
+          <figure class="slide-figure">
+            <img
+              src="../../App%20and%20Web%20png/Screenshot%202026-04-28%20061522.png"
+              alt="شاشة مساعد موعد الذكي — المحادثة"
+              width="1080"
+              height="2400"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </article>
+    </section>
+
+    <footer class="deck-footer">
+      <strong>+Mawid — Mawid+</strong>
+      عرض تقديمي لأغراض أكاديمية · الصور من مجلد المشروع &quot;App and Web png&quot;.
+      <span class="en">Academic presentation deck · Images linked from repository folder.</span>
+    </footer>
+  </body>
+</html>

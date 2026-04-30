@@ -6,7 +6,6 @@ import com.mawidplus.patient.data.dto.DoctorDto
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -16,24 +15,14 @@ class DoctorRepository(
 
     private companion object {
         private const val TAG = "DoctorRepository"
-        /** Clinic embed; explicit columns (no SELECT *). */
-        private val DOCTOR_WITH_CLINIC = Columns.raw(
-            "id, clinic_id, full_name, specialty, slot_duration_minutes, image_url, avatar_url, " +
-                "experience_years, about, rating, review_count, consultation_fee_sar, available_days, " +
-                "start_time, end_time, latitude, longitude, clinic_address, created_at, " +
-                "clinics(name, address)",
-        )
-        /** PostgREST default max rows is 1000; cap list explicitly for predictable behavior. */
-        private const val MAX_DOCTOR_LIST = 1000L
+        /** Clinic name + address embed; all doctor columns from *. */
+        private val DOCTOR_WITH_CLINIC = Columns.raw("*, clinics(name, address)")
     }
 
     suspend fun listDoctors(): Result<List<Doctor>> = traceRepositoryCall(TAG, "listDoctors") {
         withContext(Dispatchers.IO) {
             safeCall {
-                supabase.from("doctors").select(columns = DOCTOR_WITH_CLINIC) {
-                    order(column = "full_name", order = Order.ASCENDING)
-                    limit(MAX_DOCTOR_LIST)
-                }.decodeList<DoctorDto>()
+                supabase.from("doctors").select(columns = DOCTOR_WITH_CLINIC).decodeList<DoctorDto>()
                     .map { it.toDomain() }
             }
         }

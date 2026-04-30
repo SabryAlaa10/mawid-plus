@@ -24,7 +24,7 @@ data class Doctor(
     /** Average rating; null if not set. */
     val rating: Double? = null,
     val reviewCount: Int = 0,
-    /** رسوم الكشف بالجنيه المصري (مخزَّنة في العمود `consultation_fee_sar` تاريخياً). */
+    /** Consultation fee in SAR (`consultation_fee_sar`). */
     val consultationFeeSar: Int = 0,
     /** Which weekdays are available — normalized Arabic labels (e.g. الأحد). */
     val availableDays: List<String> = emptyList(),

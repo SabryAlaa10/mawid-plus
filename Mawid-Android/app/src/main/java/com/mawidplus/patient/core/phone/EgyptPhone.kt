@@ -14,7 +14,4 @@ object EgyptPhone {
 
     fun isValidLocal(localDigits: String): Boolean =
         localDigits.length == 10 && localDigits.startsWith('1')
-
-    /** تنسيق E.164 لمصر (+20 + 10 أرقام محلية). */
-    fun normalizeToE164(localDigits: String): String = "${DIAL_CODE}${digitsOnly(localDigits)}"
 }

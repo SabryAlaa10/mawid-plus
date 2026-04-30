@@ -11,14 +11,6 @@ val localProperties = Properties().apply {
     if (f.exists()) f.inputStream().use { load(it) }
 }
 
-fun supabaseUrlFromLocal(): String =
-    localProperties.getProperty("SUPABASE_URL")
-        ?: error("Missing SUPABASE_URL in local.properties (project root)")
-
-fun supabaseAnonKeyFromLocal(): String =
-    localProperties.getProperty("SUPABASE_ANON_KEY")
-        ?: error("Missing SUPABASE_ANON_KEY in local.properties (project root)")
-
 android {
     namespace = "com.mawidplus.patient"
     compileSdk = 34
@@ -27,24 +19,27 @@ android {
         applicationId = "com.mawidplus.patient"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.0.6"
+        versionCode = 5
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "SUPABASE_URL", "\"${supabaseUrlFromLocal()}\"")
-        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${supabaseAnonKeyFromLocal()}\"")
-        buildConfigField("String", "ASSISTANT_API_BASE_URL", "\"http://10.0.2.2:8000\"")
+        buildConfigField("String", "SUPABASE_URL", "\"https://ccvhcytfozocejocmbqf.supabase.co\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjdmhjeXRmb3pvY2Vqb2NtYnFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzY1MjEsImV4cCI6MjA5MDcxMjUyMX0.btVghQ2-wEOfOGLuRj9cru2A6ldbKz9y41tNEvRiwx0\"")
+        buildConfigField(
+            "String",
+            "ASSISTANT_API_BASE_URL",
+            "\"${localProperties.getProperty("ASSISTANT_API_BASE_URL") ?: ""}\"",
+        )
         manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY") ?: ""
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -112,8 +107,6 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:gotrue-kt")
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:2.3.12")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 

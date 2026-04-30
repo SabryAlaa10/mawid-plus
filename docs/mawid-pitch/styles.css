@@ -1,0 +1,340 @@
+/* Mawid+ — university presentation deck */
+:root {
+  --primary: #1a73e8;
+  --primary-dark: #1557b0;
+  --sidebar: #1e293b;
+  --text: #0f172a;
+  --muted: #64748b;
+  --surface: #f1f5f9;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --font-ar: "Segoe UI", "Tahoma", "Cairo", "Tajawal", sans-serif;
+  --font-en: "Segoe UI", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ar);
+  color: var(--text);
+  background: var(--surface);
+  line-height: 1.6;
+}
+
+/* Skip link */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 9999;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 8px;
+}
+
+/* Top bar */
+.deck-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(135deg, var(--sidebar) 0%, #0f172a 100%);
+  color: #f8fafc;
+  box-shadow: var(--shadow);
+}
+
+.deck-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.deck-header h1 span {
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+.deck-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.deck-header a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.88rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  transition: background 0.2s, color 0.2s;
+}
+
+.deck-header a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Intro hero */
+.hero {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  background: rgba(26, 115, 232, 0.12);
+  color: var(--primary-dark);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.hero h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  color: var(--sidebar);
+}
+
+.hero .subtitle-ar {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.hero .subtitle-en {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-en);
+  font-size: 0.98rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.hero-pills span {
+  padding: 0.4rem 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+/* Overview grid */
+.overview {
+  max-width: 1120px;
+  margin: 0 auto 2.5rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.overview-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.overview-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--primary-dark);
+}
+
+.overview-card .en {
+  font-family: var(--font-en);
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 0.65rem;
+}
+
+.overview-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+/* Section titles */
+section.deck-section {
+  max-width: 1120px;
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--primary);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--sidebar);
+}
+
+.section-head .en-title {
+  margin: 0;
+  font-family: var(--font-en);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Slides */
+.slide {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+}
+
+.slide-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 900px) {
+  .slide-inner.reverse {
+    grid-template-columns: minmax(280px, 340px) 1fr;
+  }
+
+  .slide-inner:not(.reverse) {
+    grid-template-columns: 1fr minmax(280px, 340px);
+  }
+}
+
+.slide-meta {
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 900px) {
+  .slide-inner.reverse .slide-meta {
+    order: 1;
+    border-bottom: none;
+    border-inline-start: 1px solid var(--border);
+  }
+
+  .slide-inner:not(.reverse) .slide-meta {
+    border-bottom: none;
+    border-inline-end: 1px solid var(--border);
+  }
+}
+
+.slide-num {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.35rem;
+}
+
+.slide-meta h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.slide-meta .caption-en {
+  margin: 0;
+  font-family: var(--font-en);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.slide-meta p {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.92;
+}
+
+.slide-figure {
+  margin: 0;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.slide-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: middle;
+  object-fit: contain;
+  max-height: min(85vh, 820px);
+}
+
+/* Footer */
+.deck-footer {
+  text-align: center;
+  padding: 2rem 1.5rem 2.5rem;
+  background: var(--sidebar);
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.deck-footer strong {
+  color: #e2e8f0;
+}
+
+.deck-footer .en {
+  font-family: var(--font-en);
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+}

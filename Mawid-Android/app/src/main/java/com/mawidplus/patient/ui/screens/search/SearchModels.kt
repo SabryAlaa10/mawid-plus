@@ -26,8 +26,7 @@ data class BookingDoctorMeta(
     val imageUrl: String,
     val rating: String,
     val reviewShort: String,
-    /** رسوم الكشف بالجنيه المصري (يُخزَّن في العمود consultation_fee_sar كرقم). */
-    val consultationFeeEgp: Int,
+    val priceSar: Int
 )
 
 fun Doctor.toDoctorSearchItem(): DoctorSearchItem {
@@ -78,5 +77,5 @@ fun Doctor.toBookingMeta(): BookingDoctorMeta = BookingDoctorMeta(
     imageUrl = photoUrl ?: DEFAULT_DOCTOR_IMAGE,
     rating = rating?.let { String.format(Locale.US, "%.1f", it) } ?: "—",
     reviewShort = if (reviewCount > 0) "($reviewCount مراجعة)" else "",
-    consultationFeeEgp = consultationFeeSar
+    priceSar = consultationFeeSar
 )

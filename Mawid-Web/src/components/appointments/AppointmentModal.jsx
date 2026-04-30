@@ -91,26 +91,10 @@ export default function AppointmentModal({ appointment, onClose, onUpdated }) {
                 {formatArabicAppointmentDate(appointment.appointment_date)}
               </p>
             </div>
-            {appointment.time_slot ? (
-              <div>
-                <p className="text-xs font-bold text-slate-500 mb-1">وقت الحجز</p>
-                <p className="text-sm font-semibold text-slate-800 tabular-nums">{appointment.time_slot}</p>
-              </div>
-            ) : null}
           </div>
 
-          {appointment.doctor_notes?.trim() ? (
-            <div className="rounded-xl border border-emerald-100 bg-emerald-50/80 p-4">
-              <p className="text-xs font-bold text-emerald-800 mb-1">ملاحظات للمريض (مرسلة من العيادة)</p>
-              <p className="text-sm text-emerald-950 whitespace-pre-wrap">{appointment.doctor_notes.trim()}</p>
-            </div>
-          ) : null}
-
           <div>
-            <label className="text-xs font-bold text-slate-500 block mb-1.5">ملاحظات داخلية / للمريض عند الإنهاء</label>
-            <p className="text-xs text-slate-500 mb-2">
-              عند الضغط على «إنهاء» تُحفظ الملاحظات وتظهر للمريض في تطبيق موعد+.
-            </p>
+            <label className="text-xs font-bold text-slate-500 block mb-1.5">ملاحظات</label>
             <textarea
               className="dashboard-input min-h-[100px] resize-y"
               value={notes}

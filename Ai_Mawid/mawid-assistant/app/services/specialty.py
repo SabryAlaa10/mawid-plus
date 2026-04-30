@@ -1,82 +1,23 @@
 # app/services/specialty.py
 
-# Must match public.doctors.specialty values seeded in the DB.
-CANONICAL_DB_SPECIALTIES: tuple[str, ...] = (
-    "أمراض القلب",
-    "طبيب العظام",
-    "طب الأسرة",
-)
-
-# (canonical, needles) — first match wins; more specific / cardio before short tokens like "عام"
-_DB_SPECIALTY_NEEDLES: tuple[tuple[str, tuple[str, ...]], ...] = (
-    (
-        "أمراض القلب",
-        (
-            "أمراض القلب",
-            "أمراض قلب",
-            "طبيب قلب",
-            "دكتور قلب",
-            "قلب",
-            "القلب",
-            "صدر",
-            "خفقان",
-            "ضغط",
-            "نبض",
-        ),
-    ),
-    (
-        "طبيب العظام",
-        (
-            "طبيب العظام",
-            "دكتور عظام",
-            "عظام",
-            "العظام",
-            "مفاصل",
-            "ركبة",
-            "مفصل",
-            "عمود",
-            "ظهر",
-        ),
-    ),
-    (
-        "طب الأسرة",
-        (
-            "عيون",
-            "عين",
-            "بصر",
-            "نظر",
-            "رؤية",
-            "جفن",
-            "قرنية",
-        ),
-    ),
-    (
-        "طب الأسرة",
-        (
-            "طب الأسرة",
-            "طب اسرة",
-            "الأسرة",
-            "أسرة",
-            "عام",
-            "برد",
-            "حمى",
-            "انفلونزا",
-            "إنفلونزا",
-        ),
-    ),
-)
+import difflib
 
 SPECIALTY_KEYWORDS = {
-    "أمراض القلب":     ["قلب", "صدر", "خفقان", "ضغط الدم"],
-    "طبيب العظام":     ["عظام", "مفاصل", "ركبة", "ظهر", "عمود فقري"],
-    "طب الأسرة":       ["عام", "حرارة", "حمى", "برد", "إنفلونزا"],
-    "طب اسنان":        ["أسنان", "اسنان", "ضرس", "لثة", "سن"],
-    "الجهاز الهضمي":   ["هضم", "بطن", "معدة", "قولون", "إسهال"],
-    "الأمراض الجلدية": ["جلد", "طفح", "حكة", "أكزيما"],
-    "طب العيون":       ["عيون", "رؤية", "نظر", "احمرار العين"],
-    "أنف وأذن وحنجرة": ["أنف", "أذن", "حنجرة", "سمع", "التهاب حلق"],
-    "الأمراض العصبية":  ["أعصاب", "صداع", "تنميل", "دوخة"],
-    "أمراض الصدر":     ["تنفس", "ربو", "سعال", "كحة"],
+    "أمراض القلب": [
+        "قلب", "قلبي", "صدر", "خفقان", "ضغط الدم", "شرايين", "نبض", "ضغط"
+    ],
+    "طبيب العظام": [
+        "عظام", "مفاصل", "كسر", "ركبة", "ظهر", "عمود فقري", "عمود", "مفصل"
+    ],
+    "طب اسنان": [
+        "أسنان", "اسنان", "سنان", "ضرس", "ضروس", "لثة", "تسوس", "فم"
+    ],
+    "طب الأسرة": [
+        "طب الأسرة", "طب اسرة", "عام", "برد", "رشح", "حرارة", "حمى",
+        "إنفلونزا", "انفلونزا", "عيون", "عين", "بصر", "نظر", "جلد",
+        "جلدية", "باطني", "أعصاب", "عصبي", "نساء", "أطفال", "طفل",
+        "أنف", "أذن", "حنجرة", "معدة", "هضم", "كلى", "بول"
+    ],
 }
 
 
@@ -98,15 +39,24 @@ def detect_specialty_combined(assistant_text: str, user_context: str) -> str | N
     return detect_specialty(a)
 
 
-def normalize_specialty(raw: str) -> str | None:
-    """
-    Map a free-form specialty (LLM or keywords) to a canonical ``doctors.specialty`` value.
-    Returns None if no row in the DB is expected to match.
-    """
+def match_specialty_to_db(raw: str, db_specialties: list[str]) -> str | None:
     t = (raw or "").strip()
-    if not t:
+    if not t or not db_specialties:
         return None
-    for canonical, needles in _DB_SPECIALTY_NEEDLES:
-        if any(needle in t for needle in needles):
-            return canonical
+
+    # Step A — exact match (case-insensitive)
+    for s in db_specialties:
+        if t == s.strip():
+            return s
+
+    # Step B — substring match (longest DB specialty wins)
+    candidates = [s for s in db_specialties if t in s or s in t]
+    if candidates:
+        return max(candidates, key=len)
+
+    # Step C — fuzzy match
+    matches = difflib.get_close_matches(t, db_specialties, n=1, cutoff=0.6)
+    if matches:
+        return matches[0]
+
     return None

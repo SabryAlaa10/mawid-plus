@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>دليل مذاكرة — Esraa: شاشات 1–3 و10 و12 و13</title>
+  <style>
+    :root {
+      --bg: #0d1117; --bg-card: #161b22; --bg-elevated: #21262d; --border: #30363d;
+      --text: #e6edf3; --text-muted: #8b949e; --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.2);
+      --code-bg: #010409; --font-sans: system-ui, "Segoe UI", Tahoma, sans-serif;
+      --font-mono: ui-monospace, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; }
+    a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+    h1 { font-size: 1.6rem; margin: 0 0 0.4rem; }
+    .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+    h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; color: #c9d1d9; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin: 0.9rem 0; }
+    ul { padding-right: 1.2rem; } li { margin: 0.3rem 0; }
+    code, .path { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); padding: 0.12em 0.4em; border-radius: 5px; border: 1px solid var(--border); color: #d8b4fe; }
+    .path { display: block; word-break: break-all; margin: 0.25rem 0; }
+    .badge { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.2em 0.5em; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-inline-start: 0.35rem; }
+    .note { border: 1px solid rgba(167, 139, 250, 0.35); background: rgba(167, 139, 250, 0.08); border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.95rem; }
+    .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
+    footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>دليل مذاكرة — Esraa (إسراء)</h1>
+      <p class="subtitle">6 شاشات: <strong>1 · 2 · 3 · 10 · 12 · 13</strong> — دخول، تسجيل، ثم تدفقات البحث/الخريطة/تفاصيل الأطباء <span class="badge">Dark</span></p>
+    </header>
+
+    <p><a href="Mawid-Team-Study-Guides-Index.html">← فهرس أدلية الفريق</a> · <a href="Mawid-Android-Screens-Team-Split.html">تقسيم الشاشات الكامل</a></p>
+
+    <div class="note">
+      <strong>نطاقك:</strong> أول وصول للمستخدم (Splash → Login/Register) ثم شاشات مرتبطة بـ <strong>البحث وعرض الأطباء</strong> (خريطة عامة، تفاصيل، خريطة طبيب). تنسق مع <strong>صبري</strong> (تبويبات 4/6/7) و<strong>حنين</strong> (بحث 5، فلاتر 11، حجز 14) عبر <code>AppNavGraph</code> و<code>Routes</code>.
+    </div>
+
+    <nav class="toc" aria-label="فهرس">
+      <strong>فهرس</strong>
+      <ol>
+        <li><a href="#base">جذر الحزمة المشترك</a></li>
+        <li><a href="#s1">1 — Splash</a></li>
+        <li><a href="#s2">2 — Login + Auth phone + ViewModel</a></li>
+        <li><a href="#s3">3 — Register</a></li>
+        <li><a href="#s10">10 — Map View</a></li>
+        <li><a href="#s12">12 — Doctor Detail</a></li>
+        <li><a href="#s13">13 — Doctor Map</a></li>
+        <li><a href="#supa">Supabase (تركيزك)</a></li>
+        <li><a href="#shared">ملفات مشتركة إلزامية</a></li>
+        <li><a href="#check">Checklist</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="base">جذر الحزمة (كل المسارات نسبة له)</h2>
+    <p class="path">Mawid-Android/app/src/main/java/com/mawidplus/patient/</p>
+
+    <h2 id="s1">الشاشة 1 — Splash</h2>
+    <div class="card">
+      <p><strong>ماذا تذاكر:</strong> شرط الانتقال لـ <code>LOGIN</code> أو <code>HOME</code>، التزامن مع <code>UiSessionPrefs</code> وجلسة Supabase.</p>
+      <span class="path">.../ui/screens/splash/SplashScreen.kt</span>
+    </div>
+
+    <h2 id="s2">الشاشة 2 — Login</h2>
+    <div class="card">
+      <p><strong>الملفات:</strong></p>
+      <span class="path">.../ui/screens/login/LoginScreen.kt</span>
+      <span class="path">.../ui/screens/login/AuthPhoneFlowScreen.kt</span>
+      <span class="path">.../ui/screens/login/LoginViewModel.kt</span>
+      <p><strong>ماذا تذاكر:</strong> تدفق الرقم، Google <code>IDToken</code>، <code>PhoneNotFound</code> → Register، استدعاءات <code>AuthRepository</code>.</p>
+      <p><strong>موارد:</strong> <code>res/values/strings.xml</code> — <code>default_web_client_id</code> (Web client لـ Google في Supabase).</p>
+    </div>
+
+    <h2 id="s3">الشاشة 3 — Register</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/register/RegisterScreen.kt</span>
+      <span class="path">.../ui/screens/register/RegisterViewModel.kt</span>
+      <p><strong>ماذا تذاكر:</strong> <code>registerNewPatient</code>، الرقم المكرر → مسار تسجيل الدخول، الربط مع <code>profiles</code> بعد جلسة المستخدم.</p>
+    </div>
+
+    <h2 id="s10">الشاشة 10 — Map View (خريطة عامة)</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/search/SearchFlowScreens.kt</span> — Composable: <code>MapViewScreen</code>
+      <p><strong>ماذا تذاكر:</strong> الانتقال من/إلى <code>Routes.MAP_VIEW</code>، تكامل مع تدفق البحث (حنين: Search/Filters) دون تكرار منطق.</p>
+    </div>
+
+    <h2 id="s12">الشاشة 12 — تفاصيل طبيب</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/search/DoctorDetailScreen.kt</span>
+      <span class="path">.../ui/screens/search/DoctorDetailViewModel.kt</span>
+      <p><strong>طبقة بيانات شائعة:</strong> <code>.../data/repository/DoctorRepository.kt</code> (جلب أطباء/عيادات)</p>
+      <p><strong>ماذا تذاكر:</strong> الانتقال لـ <code>doctor_map</code> أو <code>booking</code> حسب المسارات في <code>AppNavGraph</code>.</p>
+    </div>
+
+    <h2 id="s13">الشاشة 13 — خريطة طبيب</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/search/DoctorMapScreen.kt</span>
+      <p><strong>ماذا تذاكر:</strong> تمرير <code>doctorId</code> من الـ route، مفاتيح الخرائط من <code>local.properties</code> / <code>BuildConfig</code> إن وُجدت.</p>
+    </div>
+
+    <h2 id="supa">الربط مع Supabase (تركيز إسراء)</h2>
+    <div class="card">
+      <ul>
+        <li><span class="path">.../core/network/SupabaseProvider.kt</span> — عميل واحد: <code>SUPABASE_URL</code> + <code>ANON</code> من <code>local.properties</code> → <code>BuildConfig</code>.</li>
+        <li><span class="path">.../data/repository/AuthRepository.kt</span> — <code>check_phone_registered</code>، <code>claim_patient_profile_by_phone</code>، <code>profiles</code>، Google، تسجيل خروج.</li>
+        <li><span class="path">.../core/session/UiSessionPrefs.kt</span> — تذكّر اجتياز الدخول.</li>
+        <li>لشاشات الأطباء: <code>DoctorRepository</code> + PostgREST على جداول مثل <code>doctors</code> (حسب RLS المعرّفة في الـ migrations).</li>
+      </ul>
+    </div>
+
+    <h2 id="shared">ملفات مشتركة (تعديل بحذر)</h2>
+    <div class="card">
+      <span class="path">.../ui/navigation/AppNavGraph.kt</span>
+      <span class="path">.../ui/navigation/Routes.kt</span>
+      <span class="path">.../ui/components/BottomNavigationBar.kt</span>
+      <span class="path">.../MainActivity.kt</span>
+    </div>
+
+    <h2 id="check">Checklist</h2>
+    <ol>
+      <li>تسلسل: Splash → لوجن/تسجيل → جلسة <code>auth.users</code> + صف <code>profiles</code>.</li>
+      <li>أسماء RPC: <code>check_phone_registered</code>، <code>claim_patient_profile_by_phone</code>.</li>
+      <li>Doctor flow: تفاصيل 12 → خريطة 13 / حجز 14 (حنين) — لا تكسر <code>Routes</code>.</li>
+      <li>راجع <code>SearchFlowScreens.kt</code> لأن 10 و11 في نفس الملف مع حنين.</li>
+    </ol>
+
+    <footer>مستند مرجعي لمشروع Mawid+ — يتماشى مع <code>Mawid-Android-Screens-Team-Split.html</code>.</footer>
+  </div>
+</body>
+</html>

@@ -73,6 +73,12 @@ class AssistantRepository(
                 ?: return@withContext Result.Error("يرجى تسجيل الدخول أولاً", null)
             try {
                 val base = BuildConfig.ASSISTANT_API_BASE_URL.trimEnd('/')
+                if (base.isBlank()) {
+                    return@withContext Result.Error(
+                        "مساعد الدردشة غير مُعدّ: أضف ASSISTANT_API_BASE_URL في local.properties",
+                        null,
+                    )
+                }
                 val response = httpClient.post("$base/api/chat") {
                     header("Authorization", "Bearer $token")
                     contentType(ContentType.Application.Json)

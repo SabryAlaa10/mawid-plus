@@ -1,9 +1,6 @@
 import { format } from 'date-fns'
 import { supabase } from '../lib/supabaseClient'
 
-/** Matches PostgREST default max rows; keeps doctor queries predictable. */
-const MAX_APPOINTMENT_ROWS = 1000
-
 /** Arabic week: Saturday → Friday */
 export function getWeekRange() {
   const today = new Date()
@@ -44,14 +41,11 @@ export async function getWeekAppointments(doctorId, { status, search } = {}) {
   const endStr = format(weekEnd, 'yyyy-MM-dd')
   const { data: apps, error } = await supabase
     .from('appointments')
-    .select(
-      'id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes, doctor_notes, time_slot',
-    )
+    .select('id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes')
     .eq('doctor_id', doctorId)
     .gte('appointment_date', startStr)
     .lte('appointment_date', endStr)
     .order('appointment_date', { ascending: true })
-    .limit(MAX_APPOINTMENT_ROWS)
   if (error) throw error
 
   const pmap = await mapProfiles(apps)
@@ -83,14 +77,11 @@ export async function getWeekAppointments(doctorId, { status, search } = {}) {
 export async function fetchAppointmentsForDoctor(doctorId, { date, status, search } = {}) {
   let q = supabase
     .from('appointments')
-    .select(
-      'id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes, doctor_notes, time_slot',
-    )
+    .select('id, patient_id, doctor_id, queue_number, status, appointment_date, created_at, notes')
     .eq('doctor_id', doctorId)
     .order('queue_number', { ascending: true })
 
   if (date) q = q.eq('appointment_date', date)
-  q = q.limit(MAX_APPOINTMENT_ROWS)
 
   const { data: apps, error } = await q
   if (error) throw error
@@ -115,10 +106,6 @@ export async function fetchAppointmentsForDoctor(doctorId, { date, status, searc
   return rows
 }
 
-/**
- * إحصائيات يوم محدد (نفس تاريخ التقويم المحلي عبر isoDate من date-fns).
- * الإلغاء يُحسب من حقل status الخام أولاً (cancelled / canceled) حتى لا يختلط مع normalizeStatus.
- */
 export async function fetchAppointmentStatsForDay(doctorId, isoDate) {
   const { data, error } = await supabase
     .from('appointments')
@@ -130,37 +117,20 @@ export async function fetchAppointmentStatsForDay(doctorId, isoDate) {
   const counts = { today: 0, waiting: 0, in_progress: 0, done: 0, cancelled: 0 }
   for (const row of data || []) {
     counts.today += 1
-    const raw = (row.status ?? '').toString().trim().toLowerCase()
-    if (raw === 'cancelled' || raw === 'canceled') {
-      counts.cancelled += 1
-      continue
-    }
     const s = normalizeStatus(row.status)
     if (s === 'waiting') counts.waiting += 1
     else if (s === 'in_progress') counts.in_progress += 1
     else if (s === 'done') counts.done += 1
+    else if (s === 'cancelled') counts.cancelled += 1
   }
   return counts
 }
 
-/** اسم بديل واضح لاستدعاء إحصائيات اليوم الحالي */
-export async function getTodayStats(doctorId) {
-  const today = format(new Date(), 'yyyy-MM-dd')
-  return fetchAppointmentStatsForDay(doctorId, today)
-}
-
 export async function fetchAppointmentsLast7Days(doctorId) {
-  const end = new Date()
-  const start = new Date(end)
-  start.setDate(start.getDate() - 6)
-  const startStr = format(start, 'yyyy-MM-dd')
-  const endStr = format(end, 'yyyy-MM-dd')
   const { data, error } = await supabase
     .from('appointments')
     .select('appointment_date')
     .eq('doctor_id', doctorId)
-    .gte('appointment_date', startStr)
-    .lte('appointment_date', endStr)
   if (error) throw error
 
   const byDay = {}

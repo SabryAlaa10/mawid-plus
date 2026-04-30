@@ -1,17 +1,52 @@
 import os
+import time
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
 load_dotenv()
 
-_url = os.getenv("SUPABASE_URL")
-_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-if not _url or not _key:
+_url = (os.getenv("SUPABASE_URL") or "").strip()
+if not _url:
+    raise RuntimeError("SUPABASE_URL مفقود في ملف .env")
+
+if not os.environ.get("SUPABASE_SERVICE_ROLE_KEY"):
     raise RuntimeError(
-        "SUPABASE_URL أو SUPABASE_SERVICE_ROLE_KEY مفقود في ملف .env"
+        "SUPABASE_SERVICE_ROLE_KEY is not set. "
+        "Never use the anon key for the assistant backend. "
+        "Set this environment variable before starting the server."
     )
 
+_key = os.environ["SUPABASE_SERVICE_ROLE_KEY"].strip()
+
+# WARNING: This uses the service role key which bypasses RLS.
+# Keep this service internal — never expose it to clients.
+# Restrict network access to this service in production.
 supabase: Client = create_client(_url, _key)
+
+_specialties_cache: dict = {"fetched_at": 0.0, "specialties": []}
+
+
+def get_all_specialties(ttl_seconds: int = 600) -> list[str]:
+    global _specialties_cache
+    now = time.monotonic()
+    if now - _specialties_cache["fetched_at"] < ttl_seconds and _specialties_cache["specialties"]:
+        return _specialties_cache["specialties"]
+    try:
+        response = supabase.table("doctors").select("specialty").execute()
+        specialties = list({
+            row["specialty"].strip()
+            for row in (response.data or [])
+            if row.get("specialty") and row["specialty"].strip()
+        })
+        specialties.sort()
+        _specialties_cache = {"fetched_at": now, "specialties": specialties}
+        return specialties
+    except Exception as e:
+        import logging
+
+        logging.getLogger(__name__).warning(f"get_all_specialties failed: {e}")
+        return _specialties_cache.get("specialties", [])
+
 
 def get_doctors_by_specialty(specialty: str, limit: int = 3) -> dict:
     """Return doctors for a specialty, or an empty list with matched=False. No unfiltered fallback."""
@@ -30,7 +65,7 @@ def get_doctors_by_specialty(specialty: str, limit: int = 3) -> dict:
     return {"doctors": response.data, "matched": True}
 
 
-def get_available_slots(doctor_id: int, date: str):
+def get_available_slots(doctor_id: str, date: str):
     doctor = (
         supabase.table("doctors")
         .select("start_time, end_time, slot_duration_minutes")

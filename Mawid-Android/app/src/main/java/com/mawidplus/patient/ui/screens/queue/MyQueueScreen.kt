@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Info
@@ -69,6 +69,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import com.mawidplus.patient.core.model.QueueSettings
 import com.mawidplus.patient.ui.components.DoctorPhotoDisplay
 import com.mawidplus.patient.ui.components.BottomNavigationBar
@@ -90,7 +91,6 @@ import com.mawidplus.patient.ui.theme.SecondaryFixed
 import com.mawidplus.patient.ui.theme.Surface
 import com.mawidplus.patient.ui.theme.SurfaceBright
 import com.mawidplus.patient.ui.theme.SurfaceContainer
-import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.ui.theme.SurfaceContainerHigh
 import com.mawidplus.patient.ui.theme.SurfaceContainerLow
 
@@ -105,7 +105,7 @@ private fun formatArabicAppointmentDate(iso: String): String {
     if (iso.isBlank()) return "—"
     return runCatching {
         val d = LocalDate.parse(iso)
-        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", MawidRegion.arabicLocale)
+        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale("ar", "SA"))
         d.format(formatter)
     }.getOrElse { iso }
 }
@@ -113,13 +113,9 @@ private fun formatArabicAppointmentDate(iso: String): String {
 @Composable
 fun MyQueueScreen(
     doctorId: String,
-    appointmentFocus: String = "all",
     viewModel: MyQueueViewModel = viewModel(
-        key = "$doctorId|${appointmentFocus.trim().ifEmpty { "all" }}",
-        factory = MyQueueViewModel.factory(
-            doctorId,
-            appointmentFocus.trim().ifEmpty { "all" },
-        ),
+        key = doctorId,
+        factory = MyQueueViewModel.factory(doctorId)
     ),
     onBack: () -> Unit = {},
     onNavigateToNotifications: () -> Unit = {},
@@ -159,7 +155,7 @@ fun MyQueueScreen(
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
+                                Icons.Filled.ArrowBack,
                                 contentDescription = "رجوع",
                                 tint = Primary
                             )

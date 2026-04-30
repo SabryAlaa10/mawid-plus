@@ -13,7 +13,6 @@ import com.mawidplus.patient.data.repository.AppointmentRepository
 import com.mawidplus.patient.data.repository.AuthRepository
 import com.mawidplus.patient.data.repository.DoctorRepository
 import com.mawidplus.patient.data.repository.QueueRepository
-import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.data.repository.Result
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -41,7 +40,7 @@ sealed class MyQueueUiState {
         /** Active appointment row for this doctor (today or nearest future). */
         val appointmentId: String?,
         val appointmentDateIso: String?,
-        /** True when [appointmentDateIso] is today (Africa/Cairo). */
+        /** True when [appointmentDateIso] is today (Asia/Riyadh). */
         val isAppointmentToday: Boolean,
         /** Days from today until appointment; 0 if today. */
         val daysUntilAppointment: Long,
@@ -56,8 +55,6 @@ sealed class MyQueueUiState {
 
 class MyQueueViewModel(
     private val doctorId: String,
-    /** `all` أو معرّف الموعد المفتوح من الكرت (يعرض الصف حتى لو done/cancelled). */
-    private val appointmentFocus: String = "all",
     private val doctorRepository: DoctorRepository = DoctorRepository(),
     private val queueRepository: QueueRepository = QueueRepository(),
     private val appointmentRepository: AppointmentRepository = AppointmentRepository(),
@@ -73,7 +70,7 @@ class MyQueueViewModel(
     private var pollJob: Job? = null
     private var wasVisitCompleteLastPoll: Boolean? = null
 
-    private val zone: ZoneId = MawidRegion.timeZone
+    private val zone: ZoneId = ZoneId.of("Asia/Riyadh")
 
     init {
         viewModelScope.launch { load(showLoading = true) }
@@ -152,7 +149,7 @@ class MyQueueViewModel(
         if (uid != null) {
             when (val apps = appointmentRepository.getPatientAppointments(uid)) {
                 is Result.Success -> {
-                    row = resolveAppointmentRow(apps.data, doctorId, appointmentFocus)
+                    row = resolveActiveAppointment(apps.data, doctorId)
                 }
                 else -> {}
             }
@@ -220,28 +217,6 @@ class MyQueueViewModel(
 
     private fun isCancelled(s: String): Boolean = normalizeStatus(s) == "cancelled"
 
-    private fun idsEqual(a: String, b: String): Boolean =
-        a.trim().equals(b.trim(), ignoreCase = true)
-
-    /**
-     * عند اختيار كرت: [appointmentFocus] = id. وإلا نُختار أقرب موعد **نشط** (ليست done/cancelled) لهذا الطبيب.
-     */
-    private fun resolveAppointmentRow(
-        apps: List<Appointment>,
-        routeDoctorId: String,
-        focus: String,
-    ): Appointment? {
-        val f = focus.trim()
-        if (f.isNotEmpty() && !idsEqual(f, "all")) {
-            val byId = apps.find { idsEqual(it.id, f) } ?: return resolveActiveAppointment(apps, routeDoctorId)
-            if (!idsEqual(byId.doctorId, routeDoctorId)) {
-                return resolveActiveAppointment(apps, routeDoctorId)
-            }
-            return byId
-        }
-        return resolveActiveAppointment(apps, routeDoctorId)
-    }
-
     /**
      * Prefer today's active appointment; else nearest future; else most recent active.
      */
@@ -249,7 +224,7 @@ class MyQueueViewModel(
         apps: List<Appointment>,
         doctorId: String,
     ): Appointment? {
-        val forDoctor = apps.filter { idsEqual(it.doctorId, doctorId) }
+        val forDoctor = apps.filter { it.doctorId == doctorId }
         val active = forDoctor.filter {
             val s = normalizeStatus(it.status)
             !isCancelled(s) && s != "done"
@@ -275,17 +250,11 @@ class MyQueueViewModel(
     companion object {
         private const val POLL_INTERVAL_MS = 6_000L
 
-        fun factory(
-            doctorId: String,
-            appointmentFocus: String = "all",
-        ): ViewModelProvider.Factory =
+        fun factory(doctorId: String): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return MyQueueViewModel(
-                        doctorId,
-                        appointmentFocus = appointmentFocus.trim().ifEmpty { "all" },
-                    ) as T
+                    return MyQueueViewModel(doctorId) as T
                 }
             }
     }

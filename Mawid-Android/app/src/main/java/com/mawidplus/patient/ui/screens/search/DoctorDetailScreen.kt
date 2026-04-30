@@ -23,7 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Star
@@ -65,7 +65,6 @@ import com.mawidplus.patient.ui.theme.PublicSans
 import com.mawidplus.patient.ui.theme.Secondary
 import com.mawidplus.patient.ui.theme.Surface
 import com.mawidplus.patient.ui.theme.SurfaceBright
-import com.mawidplus.patient.core.region.MawidRegion
 import com.mawidplus.patient.ui.theme.SurfaceContainerHigh
 import com.mawidplus.patient.ui.theme.SurfaceContainerLow
 import java.time.DayOfWeek
@@ -148,7 +147,7 @@ private fun DoctorDetailReadyContent(
                 title = { Text("ملف الطبيب", fontFamily = Manrope) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "رجوع", tint = Primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -264,7 +263,7 @@ private fun DoctorDetailReadyContent(
                 )
                 InfoStatCard(
                     title = "رسوم الكشف",
-                    value = "${doctor.consultationFeeSar} ${MawidRegion.currencySuffix}",
+                    value = "${doctor.consultationFeeSar} ر.س",
                 )
                 InfoStatCard(
                     title = "مدة الموعد",

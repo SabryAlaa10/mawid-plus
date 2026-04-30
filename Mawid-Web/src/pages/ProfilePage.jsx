@@ -163,29 +163,6 @@ export default function ProfilePage() {
         onChange={handleAvatarFile}
       />
 
-      <div className="dashboard-card p-6 opacity-0 animate-fade-in-up [animation-fill-mode:forwards] [animation-delay:0.05s]">
-        <h3 className="text-sm font-bold text-slate-800 mb-3">تقييمات المرضى</h3>
-        {doctor.review_count > 0 || doctor.rating != null ? (
-          <div className="flex flex-wrap items-end gap-3 mb-1">
-            <p className="text-3xl font-black text-slate-900 tabular-nums m-0">
-              {doctor.rating != null ? Number(doctor.rating).toFixed(1) : '—'}
-              <span className="text-base font-bold text-slate-500 ms-1">/ 5</span>
-            </p>
-            <p className="text-sm text-slate-600 m-0 pb-1">
-              بناءً على{' '}
-              <span className="font-bold tabular-nums">{doctor.review_count ?? 0}</span> تقييم
-            </p>
-          </div>
-        ) : (
-          <p className="text-sm text-slate-500 m-0 mb-1">
-            سيظهر هنا متوسط تقييمك وعدد التقييمات بعد أن يقيّمك المرضى من التطبيق (بعد اكتمال الموعد).
-          </p>
-        )}
-        <p className="text-xs text-slate-400 mt-2 m-0">
-          يُحدَّث المتوسط تلقائياً عند كل تقييم جديد ويظهر أيضاً في جرس الإشعارات.
-        </p>
-      </div>
-
       <div className="dashboard-card p-6 opacity-0 animate-fade-in-up [animation-fill-mode:forwards] [animation-delay:0.06s]">
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <button
@@ -256,10 +233,7 @@ export default function ProfilePage() {
             min={0}
             className="dashboard-input"
             value={exp}
-            onChange={(e) => {
-              const v = e.target.value
-              setExp(v === '' ? 0 : Number(v))
-            }}
+            onChange={(e) => setExp(e.target.value)}
           />
         </div>
       </div>
@@ -308,7 +282,7 @@ export default function ProfilePage() {
             className="dashboard-input"
             value={clinicAddress}
             onChange={(e) => setClinicAddress(e.target.value)}
-            placeholder="القاهرة، حي ..."
+            placeholder="الرياض، حي ..."
           />
         </div>
       </div>

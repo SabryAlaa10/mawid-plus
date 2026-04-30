@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.mawidplus.patient.ui.components.rememberCrossfadeImageRequest
 import com.mawidplus.patient.ui.theme.Manrope
 import com.mawidplus.patient.ui.theme.OnPrimary
 import com.mawidplus.patient.ui.theme.OnSurfaceVariant
@@ -53,10 +52,9 @@ fun SplashScreen(
         onFinished()
     }
 
-    val splashBgReq = rememberCrossfadeImageRequest(SPLASH_BG_IMAGE)
     Box(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
-            model = splashBgReq ?: SPLASH_BG_IMAGE,
+            model = SPLASH_BG_IMAGE,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()

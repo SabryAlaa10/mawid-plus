@@ -21,10 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import com.mawidplus.patient.ui.theme.Manrope
 import com.mawidplus.patient.ui.theme.Primary
 import com.mawidplus.patient.ui.theme.PrimaryContainer
@@ -52,13 +50,7 @@ fun DoctorPhotoDisplay(
     shape: Shape = CircleShape,
     initialsSize: TextUnit = 20.sp,
 ) {
-    val context = LocalContext.current
     val initials = remember(name) { initialsFromDisplayName(name) }
-    val imageRequest = remember(photoUrl, context) {
-        val u = photoUrl?.trim()
-        if (u.isNullOrEmpty()) null
-        else ImageRequest.Builder(context).data(u).crossfade(300).build()
-    }
     val gradient = remember {
         Brush.linearGradient(
             colors = listOf(Primary, PrimaryContainer),
@@ -83,7 +75,7 @@ fun DoctorPhotoDisplay(
             )
         } else {
             SubcomposeAsyncImage(
-                model = imageRequest ?: photoUrl,
+                model = photoUrl,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>دليل مذاكرة — Hanin: شاشات 5 و8 و9 و11 و14</title>
+  <style>
+    :root {
+      --bg: #0d1117; --bg-card: #161b22; --bg-elevated: #21262d; --border: #30363d;
+      --text: #e6edf3; --text-muted: #8b949e; --accent: #fb923c; --accent-soft: rgba(251, 146, 60, 0.15);
+      --code-bg: #010409; --font-sans: system-ui, "Segoe UI", Tahoma, sans-serif;
+      --font-mono: ui-monospace, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; }
+    a { color: #fdba74; text-decoration: none; } a:hover { text-decoration: underline; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+    h1 { font-size: 1.6rem; margin: 0 0 0.4rem; }
+    .subtitle { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+    h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; color: #c9d1d9; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin: 0.9rem 0; }
+    ul { padding-right: 1.2rem; } li { margin: 0.3rem 0; }
+    code, .path { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); padding: 0.12em 0.4em; border-radius: 5px; border: 1px solid var(--border); color: #fdba74; }
+    .path { display: block; word-break: break-all; margin: 0.25rem 0; }
+    .badge { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.2em 0.5em; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-inline-start: 0.35rem; }
+    .note { border: 1px solid rgba(251, 146, 60, 0.35); background: var(--accent-soft); border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.95rem; }
+    .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
+    footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>دليل مذاكرة — Hanin (حنين)</h1>
+      <p class="subtitle">5 شاشات: <strong>5 · 8 · 9 · 11 · 14</strong> — بحث، طابور، إشعارات، فلاتر، حجز <span class="badge">Dark</span></p>
+    </header>
+
+    <p><a href="Mawid-Team-Study-Guides-Index.html">← فهرس أدلية الفريق</a> · <a href="Mawid-Android-Screens-Team-Split.html">تقسيم الشاشات الكامل</a></p>
+
+    <div class="note">
+      <strong>نطاقك:</strong> اكتشاف الأطباء والفلاتر، إدارة الطابور، الإشعارات، وتأكيد الحجز. يتقاطع مع <strong>إسراء</strong> (12/13/10) و<strong>صبري</strong> (6 مواعيد) عبر <code>AppointmentRepository</code> و<code>AppNavGraph</code>.
+    </div>
+
+    <nav class="toc" aria-label="فهرس">
+      <strong>فهرس</strong>
+      <ol>
+        <li><a href="#base">جذر الحزمة</a></li>
+        <li><a href="#s5">5 — Search (تبويب البحث)</a></li>
+        <li><a href="#s8">8 — My Queue (طابوري)</a></li>
+        <li><a href="#s9">9 — Notifications</a></li>
+        <li><a href="#s11">11 — Search Filters</a></li>
+        <li><a href="#s14">14 — Booking</a></li>
+        <li><a href="#repos">مستودعات مرتبطة</a></li>
+        <li><a href="#shared">ملفات مشتركة</a></li>
+        <li><a href="#check">Checklist</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="base">جذر الحزمة</h2>
+    <p class="path">Mawid-Android/app/src/main/java/com/mawidplus/patient/</p>
+
+    <h2 id="s5">الشاشة 5 — Search</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/search/SearchScreen.kt</span>
+      <span class="path">.../ui/screens/search/SearchViewModel.kt</span>
+      <span class="path">.../ui/screens/search/SearchModels.kt</span>
+      <p><strong>ماذا تذاكر:</strong> استعلام البحث، <code>Routes.searchRoute(query)</code>، الانتقال لـ <code>SEARCH_FILTERS</code>، <code>doctor_detail</code>، <code>map_view</code>.</p>
+      <p><strong>بيانات:</strong> <code>DoctorRepository</code> لقوائم الأطباء حسب الاستيراد في الـ ViewModel.</p>
+    </div>
+
+    <h2 id="s8">الشاشة 8 — My Queue (طابوري)</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/queue/MyQueueScreen.kt</span>
+      <span class="path">.../ui/screens/queue/MyQueueViewModel.kt</span>
+      <p><strong>مستودع:</strong> <span class="path">.../data/repository/QueueRepository.kt</span> — <code>queue_settings</code>، تحديثات الطابور (مع الـ RLS في Supabase).</p>
+      <p><strong>ماذا تذاكر:</strong> المسار <code>my_queue/{doctorId}/{appointmentFocus}</code>، Realtime إن وُجد في المشروع.</p>
+    </div>
+
+    <h2 id="s9">الشاشة 9 — الإشعارات</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/notifications/NotificationsScreen.kt</span>
+      <p><strong>دعم:</strong> <span class="path">.../core/notifications/NotificationHelper.kt</span> — قنوات، أذونات، جدولة تذكيرات مواعيد إن وُجدت.</p>
+      <p><strong>ماذا تذاكر:</strong> عرض القائمة، التنقّل من إشعار لشاشة مرتبطة.</p>
+    </div>
+
+    <h2 id="s11">الشاشة 11 — Search Filters</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/search/SearchFlowScreens.kt</span> — <code>SearchFiltersScreen</code>
+      <p><strong>ماذا تذاكر:</strong> نفس الملف يضم <code>MapViewScreen</code> (إسراء) — نسّق التعديلات عبر الـ PR.</p>
+    </div>
+
+    <h2 id="s14">الشاشة 14 — Booking (الحجز)</h2>
+    <div class="card">
+      <span class="path">.../ui/screens/booking/BookingScreen.kt</span>
+      <span class="path">.../ui/screens/booking/BookingViewModel.kt</span>
+      <p><strong>مستودع:</strong> <span class="path">.../data/repository/AppointmentRepository.kt</span> — إنشاء/عرض/إلغاء مواعيد، RPCs إن وُجدت.</p>
+      <p><strong>ماذا تذاكر:</strong> <code>booking/{doctorId}</code>، اختيار الوقت، أخطاء الحجز المزدوج، التكامل مع <code>MyQueue</code> بعد الحجز.</p>
+    </div>
+
+    <h2 id="repos">مستودعات مرتبطة بشاشتك</h2>
+    <div class="card">
+      <ul>
+        <li><code>DoctorRepository.kt</code> — بحث وتفاصيل أطباء (مع Search/Detail).</li>
+        <li><code>AppointmentRepository.kt</code> — جدول <code>appointments</code>، جلسة المستخدم.</li>
+        <li><code>QueueRepository.kt</code> — إعدادات الطابور.</li>
+      </ul>
+    </div>
+
+    <h2 id="shared">ملفات مشتركة (تعديل بحذر)</h2>
+    <div class="card">
+      <span class="path">.../ui/navigation/AppNavGraph.kt</span>
+      <span class="path">.../ui/navigation/Routes.kt</span>
+      <span class="path">.../ui/components/BottomNavigationBar.kt</span>
+      <span class="path">.../core/network/SupabaseProvider.kt</span>
+    </div>
+
+    <h2 id="check">Checklist</h2>
+    <ol>
+      <li>تبويب <code>search</code> ومسارات <code>search?query=</code> و<code>search_filters</code> متسقة.</li>
+      <li>بعد الحجز 14: يظهر في 6 (مواعيد) وقد يتصل بـ 8 (طابور) — اختبر التدفق.</li>
+      <li>لا تسرب <code>service role</code> — التطبيق يستخدم anon + JWT المستخدم.</li>
+      <li>راجع migrations الحديثة لـ <code>appointments</code> / <code>queue_settings</code> عند تغيير السلوك.</li>
+    </ol>
+
+    <footer>مستند مرجعي لمشروع Mawid+ — يتماشى مع <code>Mawid-Android-Screens-Team-Split.html</code>.</footer>
+  </div>
+</body>
+</html>

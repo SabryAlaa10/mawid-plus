@@ -8,11 +8,6 @@ object Routes {
     // Auth
     const val LOGIN = "login"
     const val REGISTER = "register"
-    /** وسيط اختياري: أرقام محلية 10 (بدون +20) */
-    const val REGISTER_WITH_PHONE_PATTERN = "register?phone={phone}"
-
-    fun registerRoute(phoneLocalDigits: String = ""): String =
-        if (phoneLocalDigits.isEmpty()) "register?phone=" else "register?phone=$phoneLocalDigits"
     // Main container
     const val MAIN = "main"
     // Tabs
@@ -26,8 +21,7 @@ object Routes {
     const val APPOINTMENTS = "appointments"
     const val PROFILE = "profile"
     // Others
-    /** [appointmentFocus] = `all` (أي موعد نشط) أو [uuid] لصف حجز محدد (بما فيه done/cancelled). */
-    const val MY_QUEUE_PATTERN = "my_queue/{doctorId}/{appointmentFocus}"
+    const val MY_QUEUE_PATTERN = "my_queue/{doctorId}"
     const val NOTIFICATIONS = "notifications"
     /** نتائج البحث — شاشات فرعية */
     const val MAP_VIEW = "map_view"
@@ -36,14 +30,9 @@ object Routes {
     const val DOCTOR_DETAIL_PATTERN = "doctor_detail/{doctorId}"
     const val BOOKING_PATTERN = "booking/{doctorId}"
 
-    /** مساعد الذكاء الاصطناعي (FastAPI) */
-    const val AI_ASSISTANT = "ai_assistant"
-
     fun doctorDetailRoute(id: String) = "doctor_detail/$id"
     fun bookingRoute(id: String) = "booking/$id"
-    fun myQueueRoute(doctorId: String, appointmentId: String? = null) =
-        if (appointmentId.isNullOrBlank()) "my_queue/$doctorId/all"
-        else "my_queue/$doctorId/${appointmentId.trim()}"
+    fun myQueueRoute(doctorId: String) = "my_queue/$doctorId"
 
     fun doctorMapRoute(doctorId: String) = "doctor_map/$doctorId"
 

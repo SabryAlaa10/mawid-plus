@@ -20,51 +20,34 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(null)
 
-  const loadStats = useCallback(
-    async (options = {}) => {
-      const silent = options.silent === true
-      if (!doctor?.id) {
-        if (!silent) setLoading(false)
-        return
-      }
-      if (!silent) {
-        setLoading(true)
-        setFetchError(null)
-      }
-      try {
-        const today = format(new Date(), 'yyyy-MM-dd')
-        const [s, c] = await Promise.all([
-          appointmentService.fetchAppointmentStatsForDay(doctor.id, today),
-          appointmentService.fetchAppointmentsLast7Days(doctor.id),
-        ])
-        setStats(s)
-        setChartByDay(c)
-        if (!silent) setFetchError(null)
-      } catch (e) {
-        const msg = e.message || 'تعذر تحميل الإحصائيات'
-        if (!silent) {
-          setFetchError(msg)
-          setStats({ today: 0, waiting: 0, in_progress: 0, done: 0, cancelled: 0 })
-          showToast(msg, 'error')
-        }
-      } finally {
-        if (!silent) setLoading(false)
-      }
-    },
-    [doctor?.id, showToast]
-  )
+  const loadStats = useCallback(async () => {
+    if (!doctor?.id) {
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    setFetchError(null)
+    try {
+      const today = format(new Date(), 'yyyy-MM-dd')
+      const [s, c] = await Promise.all([
+        appointmentService.fetchAppointmentStatsForDay(doctor.id, today),
+        appointmentService.fetchAppointmentsLast7Days(doctor.id),
+      ])
+      setStats(s)
+      setChartByDay(c)
+    } catch (e) {
+      const msg = e.message || 'تعذر تحميل الإحصائيات'
+      setFetchError(msg)
+      setStats({ today: 0, waiting: 0, in_progress: 0, done: 0, cancelled: 0 })
+      showToast(msg, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }, [doctor?.id, showToast])
 
   useEffect(() => {
     loadStats()
   }, [loadStats])
-
-  /** تحديث البطاقات فوراً عند أي تغيير على مواعيد هذا الطبيب (إلغاء، إنهاء، حجز جديد…) */
-  useEffect(() => {
-    if (!doctor?.id) return undefined
-    return appointmentService.subscribeToAppointments(doctor.id, () => {
-      loadStats({ silent: true })
-    }, 'dashboard')
-  }, [doctor?.id, loadStats])
 
   if (doctorLoading && !doctor) {
     return <DashboardSkeleton />

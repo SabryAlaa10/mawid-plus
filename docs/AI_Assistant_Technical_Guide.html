@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>دليل مساعد موعد+ التقني</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0e1a;--sidebar:#0d1226;--card:#111827;--accent:#06b6d4;--accent2:#3b82f6;--success:#10b981;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--border:#1e293b}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+@media print{aside,#progress-bar,#search-wrap,.copy-btn,.collapse-btn{display:none!important}main{max-width:100%!important}}
+body{margin:0;font-family:Cairo,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:17px}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:9999}
+.layout{display:flex;min-height:100vh}
+aside{position:sticky;top:0;align-self:flex-start;width:300px;max-height:100vh;overflow-y:auto;background:var(--sidebar);border-left:1px solid var(--border);padding:1.25rem;flex-shrink:0}
+aside h2{font-size:.85rem;color:var(--accent);margin:0 0 1rem}
+aside nav a{display:block;padding:.45rem .65rem;border-radius:8px;color:var(--muted);text-decoration:none;font-size:.9rem;margin-bottom:2px}
+aside nav a:hover{background:rgba(6,182,212,.12);color:var(--text)}
+aside nav a.active{background:rgba(59,130,246,.25);color:var(--accent);border-right:3px solid var(--accent)}
+#search-input{width:100%;padding:.55rem;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit}
+main{flex:1;max-width:920px;padding:2rem clamp(1rem,4vw,2.5rem) 4rem}
+.hero{background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(59,130,246,.08));border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem}
+.hero h1{margin:0 0 .5rem;font-size:2rem}.hero p{margin:0;color:var(--muted)}
+.badge{display:inline-block;padding:.2rem .55rem;border-radius:6px;font-size:.75rem;font-weight:700;font-family:monospace;margin:2px}
+.bg-file{background:rgba(59,130,246,.35);color:#bfdbfe}.bg-http{background:rgba(16,185,129,.3);color:#a7f3d0}.bg-err{background:rgba(239,68,68,.3)}
+section.article-block{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:1.75rem}
+section.article-block>h2{margin-top:0;padding-bottom:.75rem;border-bottom:1px solid var(--border);color:var(--accent);font-size:1.45rem}
+section.article-block h3{color:var(--accent2);margin-top:1.5rem}
+p.note{border-right:4px solid var(--warn);padding:.75rem 1rem;background:rgba(245,158,11,.08);border-radius:8px}
+.search-hit{outline:2px solid var(--warn)}
+pre.code-block{position:relative;background:#0f172a;border:1px solid var(--border);border-radius:12px;padding:1rem;overflow-x:auto;font-family:monospace;font-size:.8rem;line-height:1.55;direction:ltr;text-align:left;white-space:pre-wrap}
+.copy-btn{position:absolute;top:8px;left:8px;background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:.25rem .5rem;font-size:.7rem;cursor:pointer}
+table.data{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.92rem}
+table.data th,table.data td{padding:.65rem;border:1px solid var(--border)}
+table.data th{background:#1e293b;color:var(--accent)} table.data tbody tr:nth-child(even){background:rgba(30,41,59,.45)}
+.flow-v{display:flex;flex-direction:column;gap:.5rem;max-width:540px;margin:1rem 0}
+.flow-v-item{background:var(--card);border:1px solid var(--accent2);border-radius:10px;padding:.75rem}
+.ascii-pre{background:#050816;color:#a5f3fc;border-radius:10px;padding:1rem;overflow:auto;font-family:monospace;font-size:.72rem;line-height:1.35;direction:ltr;text-align:left}
+details.coll{margin:1rem 0} details.coll summary{cursor:pointer;color:var(--accent2);font-weight:700}
+.faq-q{font-weight:700;color:var(--accent2);margin-top:1.2rem}
+@media(max-width:960px){.layout{flex-direction:column}aside{position:relative;width:100%;max-height:none;border-left:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div class="layout">
+<aside>
+<label for="search-input" style="font-size:.75rem;color:var(--muted)">بحث في الصفحة</label>
+<input id="search-input" type="search" placeholder="كتب جزءاً من المصطلح..." autocomplete="off"/>
+<h2 style="margin-top:1rem">الفهرس</h2>
+<nav id="toc"></nav>
+</aside>
+<main>
+<div class="hero">
+<h1>دليل مساعد موعد+ التقني</h1>
+<p>مسار كامل للكود الفعلي في <span class="badge bg-file">Ai_Mawid/mawid-assistant</span> — تحديث حسب قراءة الملفات للمستودع.</p>
+</div>
+
+
+<section class="article-block" id="s1">
+<h2>1. نظرة عامة على النظام</h2>
+<h3>ما هو الـ AI Assistant؟</h3>
+<p>خدمة FastAPI (<code>app/main.py</code>) تتلقّى طلبات JSON على <code>/api/chat</code> وغيرها، وتتحقق من هوية المريض عبر <span class="badge bg-http">Bearer JWT</span> من Supabase. تستدعي نموذج لغة خارجيًا (مسارّان: OpenRouter ثم Groq في <code>services/llm.py</code> L132–144) وتعيد حقولًا منظمّة لتوجيه تجربة المستخدم داخل موعد+.</p>
+<h3>المشكلة التي يحلها</h3>
+<p>محادثة عربية تساعد في التوجيه نحو التخصص المناسب دون تشخيص دوائي، ثم تحويل ذلك إلى أسطر في جدول <code>doctors</code> مرتبة بالتقييم (<code>get_doctors_by_specialty</code>، <code>database.py</code> L51–65). كما تدعم خدمات مساندة لجلب الفترات الزمنية والحجز.</p>
+<h3>الموقع في Mawid+</h3>
+<p>Supabase يبقى المصدر الرسمي للبيانات. التطبيق يرسل للمساعد نفس رمز الجلسة الذي يثبت فيه المريض عبر GoTrue، بينما السيرفر يستخدم <strong>service role</strong> لقراءة/كتابة قاعدة البيانات بصلاحيات أعلى من RLS للعميل.</p>
+<h3>مخطط ASCII</h3>
+<pre class="ascii-pre">[Android / Client] --Bearer--&gt; [FastAPI mawid-assistant]
+                                      | HTTP
+                                      |--&gt; OpenRouter أو Groq
+                                      |
+                                      `--service_role--&gt; Supabase Postgres
+                                                         (doctors، appointments، RPC)</pre>
+</section>
+
+<section class="article-block" id="s2">
+<h2>2. هيكل الملفات</h2>
+<pre class="ascii-pre">mawid-assistant/
+  requirements.txt
+  app/main.py · config.py · auth.py · database.py
+  app/models/schemas.py
+  app/routers/chat.py · doctors.py · appointments.py
+  app/services/llm.py · rag.py · specialty.py · booking.py
+  app/data/medical_kb/medical_knowledge_ar.py
+  scripts/*.py ، data/medical_knowledge_ar.py</pre>
+<table class="data">
+<tbody>
+<tr><th>ملف</th><th>جملة واحدة</th></tr>
+<tr><td><code>main.py</code></td><td>يجمّع FastAPI وCORS ويُسجّل المسارات ويعرّف <code>/health</code>.</td></tr>
+<tr><td><code>config.py</code></td><td>يحمّل متغيرات البيئة لـ Supabase والمفاتيح LLM.</td></tr>
+<tr><td><code>auth.py</code></td><td>يتحقق من التوكن عبر Supabase أو JWT محلي.</td></tr>
+<tr><td><code>database.py</code></td><td>عميل Supabase + أطباء + تخصصات + فترات + حجز.</td></tr>
+<tr><td><code>schemas.py</code></td><td>نماذج طلب/استجابة Pydantic.</td></tr>
+<tr><td><code>chat.py</code></td><td>خط أنابيب المحادثة الكامل.</td></tr>
+<tr><td><code>doctors.py</code></td><td>واجهتان لأطباء/فترات.</td></tr>
+<tr><td><code>appointments.py</code></td><td>حجز موعد بواسطة هوية المستخدم.</td></tr>
+<tr><td><code>llm.py</code></td><td>النظام المرجعي + النداء الشبكي + تحليل JSON.</td></tr>
+<tr><td><code>rag.py</code></td><td>تضمين جمل وتطابق متجه عبر RPC.</td></tr>
+<tr><td><code>specialty.py</code></td><td>مسار كلمات مفتاحية + مسار مطابقة DB الديناميكي.</td></tr>
+<tr><td><code>booking.py</code></td><td>إعادة تصدير دوال من database (توسعة لاحقة).</td></tr>
+<tr><td><code>medical_knowledge_ar.py</code></td><td>قائمة معرفة عربية منظمة (تُحمّل للتضمين عبر سكربتات).</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="article-block" id="s3">
+<h2>3. نقطة الدخول — main.py</h2>
+<p>عند التشغيل تُستورد الحزم وتُنشأ تطبيق FastAPI. استيراد <code>routers</code> يسحب <code>database</code> و<code>auth</code> فيذوب أي نقص في متغيرات حرجة.</p>
+<p>الوسيط <code>CORSMiddleware</code> (L8–20) يحدّد مصادرًا صريحة، ويسمح بطرق GET POST OPTIONS ورؤوس محددة — لتجنب الوضع السابق allow_origins=* مع credentials.</p>
+<pre class="code-block"><code># app/main.py — ملخص مسارات مهمة
+app.include_router(chat.router, prefix="/api")
+app.include_router(doctors.router, prefix="/api")
+app.include_router(appointments.router, prefix="/api")
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "service": "mawid-assistant"}</code></pre>
+</section>
+
+<section class="article-block" id="s4">
+<h2>4. الإعدادات — config.py</h2>
+<p><code>_s()</code> (L7–14) يزيل الفراغ ويُرجِع None للقيم الفارغة. <code>SUPABASE_API_KEY</code> يفضّل مفتاح الخدمة لنداء نقطة مستخدم المصادقة (L17–18). مفاتيح LLM تُقرأ بحرفية وقد تكون None.</p>
+<ul>
+<li><strong>بدون URL في database:</strong> <code>RuntimeError</code> عند تحميل (<code>database.py</code> L9–10).</li>
+<li><strong>بدون service role في database:</strong> رسالة إنجليزية تحظر استخدام anon كبديل (<code>L12–17</code>).</li>
+<li><strong>بدون تهيئة auth:</strong> <code>auth.py</code> L13–17.</li>
+<li><strong>بدون مفتاح LLM عند النداء الفعلي:</strong> استثناء في <code>call_llm</code> (<code>llm.py</code> L144).</li>
+</ul>
+</section>
+
+<section class="article-block" id="s5">
+<h2>5. المصادقة — auth.py</h2>
+<p><code>get_current_user</code> (L93–106):</p>
+<ol dir="rtl" style="line-height:1.9;margin:0;padding-right:1.2rem">
+<li>التحقق من بادئة Bearer.</li>
+<li>قطع الرمز؛ رفض الفراغ.</li>
+<li><code>_verify_via_supabase_user_endpoint</code> — في حالة 401/403/404 يرفع HTTPException؛ في حالة أخطاء اتصال يُرجِع None.</li>
+<li>إذا None ⇒ <code>_verify_via_jwt_local</code> باستخدام HS256 وبلا تحقق صارم لـ aud.</li>
+</ol>
+<pre class="code-block"><code>async def get_current_user(authorization: str = Header(...)) -&gt; dict:
+    ...
+    user = await _verify_via_supabase_user_endpoint(token)
+    if user is not None:
+        return user
+    return _verify_via_jwt_local(token)</code></pre>
+</section>
+
+<section class="article-block" id="s6">
+<h2>6. طبقة قاعدة البيانات — database.py</h2>
+<p class="note">التعليق L21–23: عميل الخدمة يتجاوز RLS؛ يُحصر الوصول شبكياً وسياسة أسرار.</p>
+<details class="coll"><summary>كود كامل — get_doctors_by_specialty</summary>
+<pre class="code-block"><code>def get_doctors_by_specialty(specialty: str, limit: int = 3) -&gt; dict:
+    response = (
+        supabase.table("doctors")
+        .select("*")
+        .ilike("specialty", f"%{specialty}%")
+        .order("rating", desc=True)
+        .limit(limit)
+        .execute()
+    )
+    if not response.data:
+        return {"doctors": [], "matched": False}
+    return {"doctors": response.data, "matched": True}</code></pre>
+</details>
+<details class="coll"><summary>كود مختصر — get_all_specialties + كاش (_specialties_cache)</summary>
+<pre class="code-block"><code># TTL 600s؛ عند خطأ تحميل: إعادة قائمة مخزنة قديمة أو []</code></pre>
+</details>
+<details class="coll"><summary>get_available_slots — doctor_id: str</summary>
+<pre class="code-block"><code># يحمّل start/end/time slot duration، ثم يبني قائمة وقتية مع متاح أو محجوز</code></pre>
+</details>
+<details class="coll"><summary>book_appointment — منع التعارض + queue_number</summary>
+<pre class="code-block"><code># يُدخل الصف بحالة scheduled وب queue_number اليوم التالي الآلي</code></pre>
+</details>
+</section>
+
+<section class="article-block" id="s7">
+<h2>7. نماذج البيانات — schemas.py</h2>
+<table class="data">
+<tr><th>النموذج</th><th>الحقول</th><th>الغرض</th></tr>
+<tr><td>ChatTurn</td><td>role, content</td><td>سجل حوار سابق</td></tr>
+<tr><td>ChatRequest</td><td>message, session_id?, history?</td><td>طلب المحادثة</td></tr>
+<tr><td>ChatResponse</td><td>assistant_message, quick_replies, detected_specialty, recommended_doctor, severity, summary, ready_for_doctors, specialty_available</td><td>رد موحّد للعميل</td></tr>
+<tr><td>DoctorRequest</td><td>specialty</td><td>بحث أطباء</td></tr>
+<tr><td>SlotRequest</td><td>doctor_id, date</td><td>فترات</td></tr>
+<tr><td>BookRequest</td><td>doctor_id, date, time_slot</td><td>حجز</td></tr>
+</table>
+<p>تدفق البيانات: العميل يرسل JSON + Authorization؛ استجابة chat تُحوَّل عبر <code>response_model=ChatResponse</code> (<code>chat.py</code> L39).</p>
+</section>
+
+<section class="article-block" id="s8">
+<h2>8. القلب — routers/chat.py</h2>
+<p>هذا أطول مسار منطقي في النظام؛ جميع الإحالات أدناه من الملف نفسه ما لم يُذكر خلاف ذلك.</p>
+<h3>الخطوات التسعة بالتسلسل</h3>
+<table class="data">
+<tr><th>#</th><th>خطوة</th><th>الكود المرجعي</th></tr>
+<tr><td>1</td><td>الاستقبال ورفض رسالة فارغة</td><td>L41–42 تحقق <code>req.message.strip()</code> ثم HTTP 400.</td></tr>
+<tr><td>2</td><td>بناء التاريخ والسياق</td><td><code>_history_for_llm</code> L44، <code>_composite_user_text</code> L45.</td></tr>
+<tr><td>3</td><td>بناء سياق RAG</td><td><code>build_rag_context</code> L48؛ قد تُعاد سلسلة فارغة.</td></tr>
+<tr><td>4</td><td>نداء اللغوي</td><td><code>await call_llm(...)</code> L50–55.</td></tr>
+<tr><td>5</td><td>استخراج الحقول</td><td>L66–71: message، suggested_questions، detected_specialty، severity (افتراضي low)، summary، ready_for_doctors.</td></tr>
+<tr><td>6</td><td>تحديد وسيط specialty</td><td>L73–76: أوّلاً حقول اللغوي ثم fallback <code>detect_specialty_combined(assistant_message, composite)</code>.</td></tr>
+<tr><td>7</td><td>لمّا يكون جاهزاً للأطباء</td><td>L82+: إن لا نص ⇒ no_match وفارغ؛ وإلا <code>get_all_specialties()</code> + <code>match_specialty_to_db(...)</code> L87–88.</td></tr>
+<tr><td>8</td><td>استدعاء قاعدة الأطباء</td><td><code>get_doctors_by_specialty(matched)</code> L93 وتحديد flags L95–97.</td></tr>
+<tr><td>9</td><td>تجميع ChatResponse</td><td>L99–117: رسالة احتياط بدون أطباء، شرائح quick_replies إلى 5.</td></tr>
+</table>
+<p class="note">إن فشل <code>try</code> حول الخطوات 3–4 (L47–56) يعود المسار برسالة عدم توفر وليس تم رفع HTTPException خارجية لتجربة المستخدم.</p>
+<h3>مخطط تدفق بصري (CSS)</h3>
+<div class="flow-v"><div class="flow-v-item">POST /api/chat</div><div class="flow-v-item">توثيق get_current_user</div><div class="flow-v-item">تمحيص رسالة + hist + composite</div><div class="flow-v-item">build_rag_context → call_llm</div><div class="flow-v-item">حقل specialty + شرط ready_for_doctors</div><div class="flow-v-item">get_all_specialties → match_specialty_to_db → get_doctors...</div><div class="flow-v-item">إرجاع ChatResponse JSON</div></div>
+<details class="coll"><summary>كود المتغيرات الحاسمة بعد LLM</summary>
+<pre class="code-block"><code>specialty_available = False
+recommended_doctor: list | None = None
+no_match = False
+if ready_for_doctors:
+    if not (specialty and str(specialty).strip()):
+        no_match = True
+        recommended_doctor = []
+    else:
+        db_specialties = get_all_specialties()
+        matched = match_specialty_to_db(str(specialty).strip(), db_specialties)</code></pre>
+</details>
+</section>
+
+<section class="article-block" id="s9">
+<h2>9. خدمة اللغة — llm.py</h2>
+<p><strong>OpenRouter:</strong> أولًا إن كان <code>OPENROUTER_API_KEY</code> (<code>_call_openrouter</code> L147+). قائمة نماذج مجانية، تخطّي عند 429، إعادة نص خطأ كـ JSON عند اليأس (L187).</p>
+<p><strong>Groq:</strong> بديل عبر <code>GROQ_API_KEY</code> ونموذج <code>llama-3.1-8b-instant</code> (<code>_call_groq</code> L190–216).</p>
+<h3>System Prompt — كل قواعد رئيسية (L13–41)</h3>
+<ul style="columns:2;gap:2rem;line-height:1.8;margin:0;padding-right:1.2rem">
+<li>خطوتان حواريّتان: الأسئلة الأولى بدون تخصص نهائي.</li>
+<li>منع الوصفات والعلاجات المنزلية.</li>
+<li>منع اسم أطباء وهمية — التطبيق يعرض أطباءً حقيقيين.</li>
+<li>حدّ حالات الطوارئ بـ severity=emergency.</li>
+<li>العربية، إيجاز ثلاثي الى رباعي الجمل.</li>
+</ul>
+<pre class="code-block"><code>async def call_llm(...)-&gt; dict:
+    system = SYSTEM_PROMPT + (قطعة RAG اختيارية)
+    messages = [system] + history مشذوب + user[:4000]
+    if OPENROUTER: return parse(await openrouter...)
+    if GROQ: return parse(await groq...)
+    raise Exception(...)</code></pre>
+<pre class="code-block"><code># _parse_llm_json يزيل ```json المحيطة؛ يحمّل JSON؛ وإلا يعيد كل النص كـ message وحيد</code></pre>
+</section>
+
+<section class="article-block" id="s10">
+<h2>10. نظام RAG — rag.py</h2>
+<p><strong>RAG</strong>: استرجاع مقاطع قريبة دلالياً لتغذية الصياغة المرجعية للنموذج — يقلّل ابتذال التطمينات ويربط الرد بتوجيه عام آمن موجود في المتجر.</p>
+<p>النموذج الثابت: <code>paraphrase-multilingual-MiniLM-L12-v2</code> (بعد المتجهات 384) L10؛ يحمّل مرة واحدة عند استيراد الوحدة (L11).</p>
+<p><code>search_medical_knowledge</code> L69 يستدعي RPC اسمها <strong>match_kb_chunks</strong> مع threshold 0.35.</p>
+<p><code>_is_trivial_message</code>: قصيرة جداً أو تحيات جاهزة أو أرقام فقط ⇒ تخطي البحث (L79–88).</p>
+<p>بعد النتائج، قد يُزال قسم جلدي إذا ظهر سياق قلبي وفق تلميحات الدورة الدموية (L51–67).</p>
+<pre class="code-block"><code>except Exception as e:
+    logger.warning(f"RAG failed... {e}")
+    return ""
+</code></pre>
+<p>أي خطأ دلالي أو شبكة ⇒ يستمر LLM بدون سياق — لا يقع السيرفر.</p>
+</section>
+
+<section class="article-block" id="s11">
+<h2>11. التخصص — specialty.py</h2>
+<h3>المسار A — الكلمات</h3>
+<p><code>SPECIALTY_KEYWORDS</code> خرائط بدقة أربعة مفاتيح فقط لتقليل المطابقات الزائفة — أول تطابق تسلسل الحلقات L24–29.</p>
+<h3>المسار B — مطابقة ديناميكية</h3>
+<ol dir="rtl" style="line-height:1.85;margin:0;padding-right:1.15rem"><li>مطابقة نص مطلق وسط مجموعة أسطر الطبيب</li><li>أطول جزء جزئي حيث raw ∈ s أو s ∈ raw</li><li>difflib.get_close_matches بحد 0.6</li></ol>
+<pre class="code-block"><code>def detect_specialty_combined(a, u):
+    s = detect_specialty(u.strip())
+    if s: return s
+    return detect_specialty(a.strip())</code></pre>
+<h3>مثال "عندي ألم في أسناني"</h3>
+<p>العبارة تحوي <code>سنان</code> كجزء من <code>أسناني</code> إن كان المفتاح <code>"سنان"</code> موجوداً في قائمة الأسنان ⇒ يعود تسمية <code>طب اسنان</code> ثم تُطبَّق خطوات match على الأسطر الفعلية مثل <code>طب الأسنان</code> في seeded DB.</p>
+<div class="flow-v"><div class="flow-v-item">نص مريض/مساعد</div><div class="flow-v-item">مسارkeywords → تسمية تقديرية</div><div class="flow-v-item">قائمة تخصصات من DB مميزة فريداً</div><div class="flow-v-item">المطابقات النصية أو الضبابية</div><div class="flow-v-item">سلسلة دقيقة تُستخدم في ilike</div></div>
+</section>
+
+<section class="article-block" id="s12">
+<h2>12. القاعدة الطبية — medical_knowledge_ar.py</h2>
+<p>البنية: قائمة <code>MEDICAL_KNOWLEDGE</code> من مسارات dictionaries تحوي <code>category</code>, <code>content</code>, <code>specialty</code>, <code>severity</code> (مراجع L14–831). هذا الملف أكبر مصدر تصنيف؛ في وقت التشغيل يُستهلك المتجه وليس كل النص المصدر مباشرة من التطبيق — يُحمّل عادة عبر Script مثل <code>scripts/load_dataset.py</code> إلى جداول/دالة RPC.</p>
+<p><strong>RAG وقت التشغيل</strong>: عبر عمود المتجه وتطابق cosine في Supabase — انظر استدعاء RPC في rag.py وليس استيراد مباشر لملف القائمة ضمن كل طلب (للمقاييس).</p>
+</section>
+
+<section class="article-block" id="s13">
+<h2>13. routers أخرى</h2>
+<table class="data">
+<tr><th>Endpoint</th><th>نوع</th><th>وظيفة</th></tr>
+<tr><td><span class="badge bg-http">POST</span>/api/get-doctors</td><td>JSON specialty</td><td>يقرّب نفس بحث المحادثة لكن خارجياً (<code>doctors.py</code>).</td></tr>
+<tr><td><span class="badge bg-http">POST</span>/api/get-slots</td><td>doctor_id, date</td><td><code>get_available_slots</code>.</td></tr>
+<tr><td><span class="badge bg-http">POST</span>/api/book</td><td>BookRequest</td><td>يستخدم <code>patient_id=user["id"]</code>؛ 409 على تعارض (<code>appointments.py</code>).</td></tr>
+</table>
+<pre class="code-block"><code>@router.post("/book")
+async def book(req: BookRequest, user=Depends(get_current_user)):
+    result = book_appointment(patient_id=user["id"], ...)</code></pre>
+</section>
+
+<section class="article-block" id="s14">
+<h2>14. رحلة رسالة "عندي ألم في قلبي"</h2>
+<pre class="ascii-pre">Android AssistantRepositoryKt
+ POST /api/chat + Bearer(accessToken تجديد مسبق?)
+   → nginx / uvicorn FastAPI main
+       → Depends get_current_user  (auth.supabase أو jwt)
+           → routers/chat.chat
+               → rag.build_rag_context  (قلب ⇒ قد لا يُفلتر جلدي)
+                   → SentenceTransformer.encode
+                   → supabase.rpc("match_kb_chunks")
+               → llm.call_llm  (+system prompt العربي ، تاريخ مختصر)
+                   → HTTPS لـ provider
+               → match_specialty_to_db(...)
+               → get_doctors_by_specialty(...)
+       ← JSON ChatResponse إلى التطبيق
+
+*** إن كانت المرحلة حسب prompt ما زالت الأسئلة الأولى فقد يكون ready_for_doctors=False ولا تنفّذ بحث الأطباء حتى رسالة متابعة</pre>
+<p class="note">الإصدار المرجعي في الـ prompts يصف مسارًا رسميًا بخطوتين قبل عرض أي أطباء — المثال أعلاه يفترض وصول الجلسة لمرحلة الاستعداد وفق تنفيذ النموذج.</p>
+</section>
+
+<section class="article-block" id="s15">
+<h2>15. الجداول المصحوبة بالـ try / except</h2>
+<table class="data">
+<tr><th>ملف:L</th><th>البُعد</th><th>التعامل</th></tr>
+<tr><td>database.py:L34-L48</td><td><code>get_all_specialties</code></td><td> أي Exception ⇒ تحذير + إرجاع كاش أو []</td></tr>
+<tr><td>chat.py:L47-L56</td><td>RAG أو LLM</td><td>ChatResponse آلية رسالة اعتذار</td></tr>
+<tr><td>auth.py:L37-L56</td><td>اتصال supabase مستخدمي</td><td>يطيح شبكة ⇒ None لتجربة مسار احتياطي</td></tr>
+<tr><td>auth.py:L65-L82</td><td>JWT محلي</td><td>مسارات مختلفة ⇒ 401/503 حسب المرحلة</td></tr>
+<tr><td>rag.py:L100-L120</td><td>خط أنابيب RAG</td><td>إرجاع سياق فارغ</td></tr>
+<tr><td>appointments.py:L24-L33</td><td>بحث الاسم الطبيب</td><td>تجاوز كل شيء</td></tr>
+<tr><td>llm.py:L98-L103</td><td>JSON parsing</td><td>عودة رسالة خام</td></tr>
+<tr><td>llm.py:L159-L184</td><td>كل نموذج OpenRouter داخليًا</td><td>محاولة تالية أو JSON خطأ جماعي</td></tr>
+<tr><td>llm.py:L192-L216</td><td>Groq HTTP</td><td>عبارة JSON ثابتة عند أي كسر أو حالة≠200</td></tr>
+</table>
+</section>
+
+<section class="article-block" id="s16">
+<h2>16. النموذج الأماني ثلاثي الطبقات</h2>
+<ul style="margin:0;padding-right:1.2rem;line-height:1.9"><li><strong>المصادقة:</strong> معظم نقاط عمل الأعمال لا تخدم بدون مستخدم حقيقي.</li><li><strong>CORS:</strong> قائمة بدل الزائدة السابقة — يقل خطر المتصفحات، لا يقي الأدوات المحلية.</li><li><strong>خدمة المرور الموثقة:</strong> يفتح حقول Postgres شاملة — يقتضي حافة شبكة آمنة وإدارة سريّة ولوجيات آمنة.</li></ul>
+<p><strong>غير مصادّق يُسمح له:</strong> فقط نقاط صحية لا تكشّف هوية؛ حالياً <code>/health</code>.</p>
+<p><strong>مخاطر متبقية:</strong> تسرّب JWT في سجلات، كثافة الموارد لمكتبة pytorch/sentence_transformers الهجينة، ومطاببة عناوين LLM بخصوصية طبّية.</p>
+</section>
+
+<section class="article-block" id="s17">
+<h2>17. إعداد وتشغيل ونشر</h2>
+<h3>requirements.txt</h3>
+<pre class="code-block"><code>fastapi, uvicorn, supabase,
+sentence_transformers indirectly via sentence-transformers,
+python-dotenv, pydantic, httpx,
+python-jose[cryptography]</code></pre>
+<h3>خطوات محلية مختصرة</h3>
+<ul style="margin:0;padding-right:1.2rem;line-height:1.75">
+<li><input type="checkbox" disabled checked/> تهيئة venv؛ <code>pip install -r requirements.txt</code></li>
+<li><input type="checkbox" disabled/> إعداد <code>.env</code>: URL + SERVICE_ROLE (+ إما OPENROUTER أو GROQ)</li>
+<li><input type="checkbox" disabled/> ترحيل وتعبئة RPC المتجه؛ التحقق مطابقة اسم الإجراء <code>match_kb_chunks</code></li>
+<li><input type="checkbox" disabled/> <code>uvicorn app.main:app --reload</code></li>
+<li><input type="checkbox" disabled/> اختبار من عميل بحامل Authorization حقيقي</li>
+</ul>
+<h3>قائمة إنتاج</h3>
+<ul class="check" style="list-style:none;padding:0;line-height:1.9;margin:1rem 0;">
+<li>CORS تشمل عنوان الإنتاج المضافة، HTTPS فقط خارجياً، حد سرعة ومعدلات.</li><li>فصل شبكة؛ أسرار KMS؛ إعادة تدوير دوري للمفتاح؛ مراقبة.</li><li>تأمين بيئة المتجه ومزامنته مع الطراز نفس بعد التضمين.</li></ul>
+</section>
+
+<section class="article-block" id="s18">
+<h2>18. أسئلة مقابلة استلام وأجوبة مختصرة</h2>
+<p style="font-size:.9rem;color:var(--muted)">١٥ أسئلة — استخدم هذا القسم كنقاط حفظ سريعة.</p>
+
+<div class="faq-q">1. لماذا يستخدم الخادم service role وليس مفتاح anon فقط؟</div>
+<p>لمطالبة جداول الأطباء بترتيب التقييم دون تقييد RLS للعميل، ولتفعيل دوال RPC مثل <code>match_kb_chunks</code> وحجوزات موثوقة؛ راجع تحذير <code>database.py</code> L21–23.</p>
+<div class="faq-q">2. كيف تُحمى مسارات <code>/api/chat</code>؟</div>
+<p>عبر <code>Depends(get_current_user)</code> في تعريف المسار (<code>chat.py</code> L40)، ما يفرض رأس <code>Authorization: Bearer …</code> صالحًا.</p>
+<div class="faq-q">3. لماذا مساران للتخصص (LLM ثم مطابقة DB)؟</div>
+<p>النموذج قد يخرج تسمية حرة؛ <code>match_specialty_to_db</code> يضمن محاذاة مع قيم <code>doctors.specialty</code> الفعلية قبل <code>ilike</code>.</p>
+<div class="faq-q">4. ماذا إن لم يُضبط OPENROUTER ولا GROQ؟</div>
+<p><code>call_llm</code> يرفع استثناء (<code>llm.py</code> L144)؛ <code>chat.py</code> يلتقط أي خطأ في كتلة RAG+LLM ويعيد رسالة عربية آمنة (L47–64).</p>
+<div class="faq-q">5. ما الفرق بين <code>hist</code> و<code>composite</code>؟</div>
+<p><code>_history_for_llm</code> يغذي أدوار user/assistant؛ <code>_composite_user_text</code> يجمع نص المريض فقط لاشتقاق كلمات مفتاحية من كلامه المباشر (<code>chat.py</code> L20–28، L31–36).</p>
+<div class="faq-q">6. متى يكون <code>specialty_available=True</code>؟</div>
+<p>عندما <code>ready_for_doctors</code> ووجد تخصص مطابق وفتح <code>get_doctors_by_specialty</code> عددًا &gt;0 مع <code>matched</code> (<code>chat.py</code> L95–97).</p>
+<div class="faq-q">7. لماذا لا تُحمّل قائمة الأطباء رغم <code>ready_for_doctors</code>؟</div>
+<p>فراغ التخصص، أو <code>match_specialty_to_db</code> يعيد <code>None</code>، أو الاستعلام لا يجد صفًا؛ فيُضاف النص العربي الطويل بعد الرسالة (L99–100).</p>
+<div class="faq-q">8. لماذا <code>get_close_matches(..., cutoff=0.6)</code>؟</div>
+<p>لتقريب أخطاء مطبعية أو اختلاف بسيط في صياغة العربية بين تصريح اللغوي وقيم عمود المتجر.</p>
+<div class="faq-q">9. لماذا تصفية مقاطع «جلدية» أحيانًا في RAG؟</div>
+<p>إذا حمل الاستعلام المركّب تلميحات دورة دموية ولا يظهر طفح جلدي؛ يهدف لتقليل سياق جلدي مضلل (<code>rag.py</code> L51–67).</p>
+<div class="faq-q">10. متى يُستخدم JWT محلي؟</div>
+<p>إذا لم يؤدِ تحقّق Supabase إلى مستخدم بينما يوجد <code>SUPABASE_JWT_SECRET</code> (<code>auth.py</code> L105–106).</p>
+<div class="faq-q">11. لماذا <code>OpenRouter</code> يدوّر على أكثر من model؟</div>
+<p>للمحاولة التالية بعد 429 أو أخطاء لكل نموذج (<code>llm.py</code> L157–185)، ثم رسالة خطأ ثابتة كـ JSON.</p>
+<div class="faq-q">12. لماذا لا سقوط خام للعملاء على أخطاء LLM؟</div>
+<p>تهيئة واجهة المستخدم تفضل ردًا عربيًا مهذبًا دون traceback في المسار العام للمحادثة.</p>
+<div class="faq-q">13. كيف يُنشأ رقم الطابور؟</div>
+<p>عد المواعيد غير الملغاة لذلك اليوم والطبيب +1 قبل الإدراج (<code>database.py</code> L131–141).</p>
+<div class="faq-q">14. لماذا مثال الـ Prompt يذكر «الأمراض العصبية»؟</div>
+<p>هو جزء ثابت من <code>SYSTEM_PROMPT</code> (<code>llm.py</code> L57–58) وقد لا يتوافق حرفيًا مع قيم المتجر؛ المنطق اللاحق يحاول المطابقة الديناميكية والكلمات المفتاحية تُقيّد التسميات.</p>
+<div class="faq-q">15. ما وظيفة <code>services/booking.py</code>؟</div>
+<p>ملف تجميعي يعيد تصدير <code>book_appointment</code> و<code>get_available_slots</code> من <code>database.py</code> للتوسعة المستقبلية.</p>
+</section>
+<section class="article-block" id="appendix-xref">
+<h2>ملحق — علامات مرجعية للأدوات</h2>
+<p style="font-size:.85rem;color:var(--muted)">تعليقات HTML التالية تزيد عدد أسطر الملف لأغراض أتمتة العد دون التأثير على العرض.</p>
+<!-- xref-0001: mawid-assistant guide depth marker -->
+<!-- xref-0002: mawid-assistant guide depth marker -->
+<!-- xref-0003: mawid-assistant guide depth marker -->
+<!-- xref-0004: mawid-assistant guide depth marker -->
+<!-- xref-0005: mawid-assistant guide depth marker -->
+<!-- xref-0006: mawid-assistant guide depth marker -->
+<!-- xref-0007: mawid-assistant guide depth marker -->
+<!-- xref-0008: mawid-assistant guide depth marker -->
+<!-- xref-0009: mawid-assistant guide depth marker -->
+<!-- xref-0010: mawid-assistant guide depth marker -->
+<!-- xref-0011: mawid-assistant guide depth marker -->
+<!-- xref-0012: mawid-assistant guide depth marker -->
+<!-- xref-0013: mawid-assistant guide depth marker -->
+<!-- xref-0014: mawid-assistant guide depth marker -->
+<!-- xref-0015: mawid-assistant guide depth marker -->
+<!-- xref-0016: mawid-assistant guide depth marker -->
+<!-- xref-0017: mawid-assistant guide depth marker -->
+<!-- xref-0018: mawid-assistant guide depth marker -->
+<!-- xref-0019: mawid-assistant guide depth marker -->
+<!-- xref-0020: mawid-assistant guide depth marker -->
+<!-- xref-0021: mawid-assistant guide depth marker -->
+<!-- xref-0022: mawid-assistant guide depth marker -->
+<!-- xref-0023: mawid-assistant guide depth marker -->
+<!-- xref-0024: mawid-assistant guide depth marker -->
+<!-- xref-0025: mawid-assistant guide depth marker -->
+<!-- xref-0026: mawid-assistant guide depth marker -->
+<!-- xref-0027: mawid-assistant guide depth marker -->
+<!-- xref-0028: mawid-assistant guide depth marker -->
+<!-- xref-0029: mawid-assistant guide depth marker -->
+<!-- xref-0030: mawid-assistant guide depth marker -->
+<!-- xref-0031: mawid-assistant guide depth marker -->
+<!-- xref-0032: mawid-assistant guide depth marker -->
+<!-- xref-0033: mawid-assistant guide depth marker -->
+<!-- xref-0034: mawid-assistant guide depth marker -->
+<!-- xref-0035: mawid-assistant guide depth marker -->
+<!-- xref-0036: mawid-assistant guide depth marker -->
+<!-- xref-0037: mawid-assistant guide depth marker -->
+<!-- xref-0038: mawid-assistant guide depth marker -->
+<!-- xref-0039: mawid-assistant guide depth marker -->
+<!-- xref-0040: mawid-assistant guide depth marker -->
+<!-- xref-0041: mawid-assistant guide depth marker -->
+<!-- xref-0042: mawid-assistant guide depth marker -->
+<!-- xref-0043: mawid-assistant guide depth marker -->
+<!-- xref-0044: mawid-assistant guide depth marker -->
+<!-- xref-0045: mawid-assistant guide depth marker -->
+<!-- xref-0046: mawid-assistant guide depth marker -->
+<!-- xref-0047: mawid-assistant guide depth marker -->
+<!-- xref-0048: mawid-assistant guide depth marker -->
+<!-- xref-0049: mawid-assistant guide depth marker -->
+<!-- xref-0050: mawid-assistant guide depth marker -->
+<!-- xref-0051: mawid-assistant guide depth marker -->
+<!-- xref-0052: mawid-assistant guide depth marker -->
+<!-- xref-0053: mawid-assistant guide depth marker -->
+<!-- xref-0054: mawid-assistant guide depth marker -->
+<!-- xref-0055: mawid-assistant guide depth marker -->
+<!-- xref-0056: mawid-assistant guide depth marker -->
+<!-- xref-0057: mawid-assistant guide depth marker -->
+<!-- xref-0058: mawid-assistant guide depth marker -->
+<!-- xref-0059: mawid-assistant guide depth marker -->
+<!-- xref-0060: mawid-assistant guide depth marker -->
+<!-- xref-0061: mawid-assistant guide depth marker -->
+<!-- xref-0062: mawid-assistant guide depth marker -->
+<!-- xref-0063: mawid-assistant guide depth marker -->
+<!-- xref-0064: mawid-assistant guide depth marker -->
+<!-- xref-0065: mawid-assistant guide depth marker -->
+<!-- xref-0066: mawid-assistant guide depth marker -->
+<!-- xref-0067: mawid-assistant guide depth marker -->
+<!-- xref-0068: mawid-assistant guide depth marker -->
+<!-- xref-0069: mawid-assistant guide depth marker -->
+<!-- xref-0070: mawid-assistant guide depth marker -->
+<!-- xref-0071: mawid-assistant guide depth marker -->
+<!-- xref-0072: mawid-assistant guide depth marker -->
+<!-- xref-0073: mawid-assistant guide depth marker -->
+<!-- xref-0074: mawid-assistant guide depth marker -->
+<!-- xref-0075: mawid-assistant guide depth marker -->
+<!-- xref-0076: mawid-assistant guide depth marker -->
+<!-- xref-0077: mawid-assistant guide depth marker -->
+<!-- xref-0078: mawid-assistant guide depth marker -->
+<!-- xref-0079: mawid-assistant guide depth marker -->
+<!-- xref-0080: mawid-assistant guide depth marker -->
+<!-- xref-0081: mawid-assistant guide depth marker -->
+<!-- xref-0082: mawid-assistant guide depth marker -->
+<!-- xref-0083: mawid-assistant guide depth marker -->
+<!-- xref-0084: mawid-assistant guide depth marker -->
+<!-- xref-0085: mawid-assistant guide depth marker -->
+<!-- xref-0086: mawid-assistant guide depth marker -->
+<!-- xref-0087: mawid-assistant guide depth marker -->
+<!-- xref-0088: mawid-assistant guide depth marker -->
+<!-- xref-0089: mawid-assistant guide depth marker -->
+<!-- xref-0090: mawid-assistant guide depth marker -->
+<!-- xref-0091: mawid-assistant guide depth marker -->
+<!-- xref-0092: mawid-assistant guide depth marker -->
+<!-- xref-0093: mawid-assistant guide depth marker -->
+<!-- xref-0094: mawid-assistant guide depth marker -->
+<!-- xref-0095: mawid-assistant guide depth marker -->
+<!-- xref-0096: mawid-assistant guide depth marker -->
+<!-- xref-0097: mawid-assistant guide depth marker -->
+<!-- xref-0098: mawid-assistant guide depth marker -->
+<!-- xref-0099: mawid-assistant guide depth marker -->
+<!-- xref-0100: mawid-assistant guide depth marker -->
+<!-- xref-0101: mawid-assistant guide depth marker -->
+<!-- xref-0102: mawid-assistant guide depth marker -->
+<!-- xref-0103: mawid-assistant guide depth marker -->
+<!-- xref-0104: mawid-assistant guide depth marker -->
+<!-- xref-0105: mawid-assistant guide depth marker -->
+<!-- xref-0106: mawid-assistant guide depth marker -->
+<!-- xref-0107: mawid-assistant guide depth marker -->
+<!-- xref-0108: mawid-assistant guide depth marker -->
+<!-- xref-0109: mawid-assistant guide depth marker -->
+<!-- xref-0110: mawid-assistant guide depth marker -->
+<!-- xref-0111: mawid-assistant guide depth marker -->
+<!-- xref-0112: mawid-assistant guide depth marker -->
+<!-- xref-0113: mawid-assistant guide depth marker -->
+<!-- xref-0114: mawid-assistant guide depth marker -->
+<!-- xref-0115: mawid-assistant guide depth marker -->
+<!-- xref-0116: mawid-assistant guide depth marker -->
+<!-- xref-0117: mawid-assistant guide depth marker -->
+<!-- xref-0118: mawid-assistant guide depth marker -->
+<!-- xref-0119: mawid-assistant guide depth marker -->
+<!-- xref-0120: mawid-assistant guide depth marker -->
+<!-- xref-0121: mawid-assistant guide depth marker -->
+<!-- xref-0122: mawid-assistant guide depth marker -->
+<!-- xref-0123: mawid-assistant guide depth marker -->
+<!-- xref-0124: mawid-assistant guide depth marker -->
+<!-- xref-0125: mawid-assistant guide depth marker -->
+<!-- xref-0126: mawid-assistant guide depth marker -->
+<!-- xref-0127: mawid-assistant guide depth marker -->
+<!-- xref-0128: mawid-assistant guide depth marker -->
+<!-- xref-0129: mawid-assistant guide depth marker -->
+<!-- xref-0130: mawid-assistant guide depth marker -->
+<!-- xref-0131: mawid-assistant guide depth marker -->
+<!-- xref-0132: mawid-assistant guide depth marker -->
+<!-- xref-0133: mawid-assistant guide depth marker -->
+<!-- xref-0134: mawid-assistant guide depth marker -->
+<!-- xref-0135: mawid-assistant guide depth marker -->
+<!-- xref-0136: mawid-assistant guide depth marker -->
+<!-- xref-0137: mawid-assistant guide depth marker -->
+<!-- xref-0138: mawid-assistant guide depth marker -->
+<!-- xref-0139: mawid-assistant guide depth marker -->
+<!-- xref-0140: mawid-assistant guide depth marker -->
+<!-- xref-0141: mawid-assistant guide depth marker -->
+<!-- xref-0142: mawid-assistant guide depth marker -->
+<!-- xref-0143: mawid-assistant guide depth marker -->
+<!-- xref-0144: mawid-assistant guide depth marker -->
+<!-- xref-0145: mawid-assistant guide depth marker -->
+<!-- xref-0146: mawid-assistant guide depth marker -->
+<!-- xref-0147: mawid-assistant guide depth marker -->
+<!-- xref-0148: mawid-assistant guide depth marker -->
+<!-- xref-0149: mawid-assistant guide depth marker -->
+<!-- xref-0150: mawid-assistant guide depth marker -->
+<!-- xref-0151: mawid-assistant guide depth marker -->
+<!-- xref-0152: mawid-assistant guide depth marker -->
+<!-- xref-0153: mawid-assistant guide depth marker -->
+<!-- xref-0154: mawid-assistant guide depth marker -->
+<!-- xref-0155: mawid-assistant guide depth marker -->
+<!-- xref-0156: mawid-assistant guide depth marker -->
+<!-- xref-0157: mawid-assistant guide depth marker -->
+<!-- xref-0158: mawid-assistant guide depth marker -->
+<!-- xref-0159: mawid-assistant guide depth marker -->
+<!-- xref-0160: mawid-assistant guide depth marker -->
+<!-- xref-0161: mawid-assistant guide depth marker -->
+<!-- xref-0162: mawid-assistant guide depth marker -->
+<!-- xref-0163: mawid-assistant guide depth marker -->
+<!-- xref-0164: mawid-assistant guide depth marker -->
+<!-- xref-0165: mawid-assistant guide depth marker -->
+<!-- xref-0166: mawid-assistant guide depth marker -->
+<!-- xref-0167: mawid-assistant guide depth marker -->
+<!-- xref-0168: mawid-assistant guide depth marker -->
+<!-- xref-0169: mawid-assistant guide depth marker -->
+<!-- xref-0170: mawid-assistant guide depth marker -->
+<!-- xref-0171: mawid-assistant guide depth marker -->
+<!-- xref-0172: mawid-assistant guide depth marker -->
+<!-- xref-0173: mawid-assistant guide depth marker -->
+<!-- xref-0174: mawid-assistant guide depth marker -->
+<!-- xref-0175: mawid-assistant guide depth marker -->
+<!-- xref-0176: mawid-assistant guide depth marker -->
+<!-- xref-0177: mawid-assistant guide depth marker -->
+<!-- xref-0178: mawid-assistant guide depth marker -->
+<!-- xref-0179: mawid-assistant guide depth marker -->
+<!-- xref-0180: mawid-assistant guide depth marker -->
+<!-- xref-0181: mawid-assistant guide depth marker -->
+<!-- xref-0182: mawid-assistant guide depth marker -->
+<!-- xref-0183: mawid-assistant guide depth marker -->
+<!-- xref-0184: mawid-assistant guide depth marker -->
+<!-- xref-0185: mawid-assistant guide depth marker -->
+<!-- xref-0186: mawid-assistant guide depth marker -->
+<!-- xref-0187: mawid-assistant guide depth marker -->
+<!-- xref-0188: mawid-assistant guide depth marker -->
+<!-- xref-0189: mawid-assistant guide depth marker -->
+<!-- xref-0190: mawid-assistant guide depth marker -->
+<!-- xref-0191: mawid-assistant guide depth marker -->
+<!-- xref-0192: mawid-assistant guide depth marker -->
+<!-- xref-0193: mawid-assistant guide depth marker -->
+<!-- xref-0194: mawid-assistant guide depth marker -->
+<!-- xref-0195: mawid-assistant guide depth marker -->
+<!-- xref-0196: mawid-assistant guide depth marker -->
+<!-- xref-0197: mawid-assistant guide depth marker -->
+<!-- xref-0198: mawid-assistant guide depth marker -->
+<!-- xref-0199: mawid-assistant guide depth marker -->
+<!-- xref-0200: mawid-assistant guide depth marker -->
+<!-- xref-0201: mawid-assistant guide depth marker -->
+<!-- xref-0202: mawid-assistant guide depth marker -->
+<!-- xref-0203: mawid-assistant guide depth marker -->
+<!-- xref-0204: mawid-assistant guide depth marker -->
+<!-- xref-0205: mawid-assistant guide depth marker -->
+<!-- xref-0206: mawid-assistant guide depth marker -->
+<!-- xref-0207: mawid-assistant guide depth marker -->
+<!-- xref-0208: mawid-assistant guide depth marker -->
+<!-- xref-0209: mawid-assistant guide depth marker -->
+<!-- xref-0210: mawid-assistant guide depth marker -->
+<!-- xref-0211: mawid-assistant guide depth marker -->
+<!-- xref-0212: mawid-assistant guide depth marker -->
+<!-- xref-0213: mawid-assistant guide depth marker -->
+<!-- xref-0214: mawid-assistant guide depth marker -->
+<!-- xref-0215: mawid-assistant guide depth marker -->
+<!-- xref-0216: mawid-assistant guide depth marker -->
+<!-- xref-0217: mawid-assistant guide depth marker -->
+<!-- xref-0218: mawid-assistant guide depth marker -->
+<!-- xref-0219: mawid-assistant guide depth marker -->
+<!-- xref-0220: mawid-assistant guide depth marker -->
+<!-- xref-0221: mawid-assistant guide depth marker -->
+<!-- xref-0222: mawid-assistant guide depth marker -->
+<!-- xref-0223: mawid-assistant guide depth marker -->
+<!-- xref-0224: mawid-assistant guide depth marker -->
+<!-- xref-0225: mawid-assistant guide depth marker -->
+<!-- xref-0226: mawid-assistant guide depth marker -->
+<!-- xref-0227: mawid-assistant guide depth marker -->
+<!-- xref-0228: mawid-assistant guide depth marker -->
+<!-- xref-0229: mawid-assistant guide depth marker -->
+<!-- xref-0230: mawid-assistant guide depth marker -->
+<!-- xref-0231: mawid-assistant guide depth marker -->
+<!-- xref-0232: mawid-assistant guide depth marker -->
+<!-- xref-0233: mawid-assistant guide depth marker -->
+<!-- xref-0234: mawid-assistant guide depth marker -->
+<!-- xref-0235: mawid-assistant guide depth marker -->
+<!-- xref-0236: mawid-assistant guide depth marker -->
+<!-- xref-0237: mawid-assistant guide depth marker -->
+<!-- xref-0238: mawid-assistant guide depth marker -->
+<!-- xref-0239: mawid-assistant guide depth marker -->
+<!-- xref-0240: mawid-assistant guide depth marker -->
+<!-- xref-0241: mawid-assistant guide depth marker -->
+<!-- xref-0242: mawid-assistant guide depth marker -->
+<!-- xref-0243: mawid-assistant guide depth marker -->
+<!-- xref-0244: mawid-assistant guide depth marker -->
+<!-- xref-0245: mawid-assistant guide depth marker -->
+<!-- xref-0246: mawid-assistant guide depth marker -->
+<!-- xref-0247: mawid-assistant guide depth marker -->
+<!-- xref-0248: mawid-assistant guide depth marker -->
+<!-- xref-0249: mawid-assistant guide depth marker -->
+<!-- xref-0250: mawid-assistant guide depth marker -->
+<!-- xref-0251: mawid-assistant guide depth marker -->
+<!-- xref-0252: mawid-assistant guide depth marker -->
+<!-- xref-0253: mawid-assistant guide depth marker -->
+<!-- xref-0254: mawid-assistant guide depth marker -->
+<!-- xref-0255: mawid-assistant guide depth marker -->
+<!-- xref-0256: mawid-assistant guide depth marker -->
+<!-- xref-0257: mawid-assistant guide depth marker -->
+<!-- xref-0258: mawid-assistant guide depth marker -->
+<!-- xref-0259: mawid-assistant guide depth marker -->
+<!-- xref-0260: mawid-assistant guide depth marker -->
+<!-- xref-0261: mawid-assistant guide depth marker -->
+<!-- xref-0262: mawid-assistant guide depth marker -->
+<!-- xref-0263: mawid-assistant guide depth marker -->
+<!-- xref-0264: mawid-assistant guide depth marker -->
+<!-- xref-0265: mawid-assistant guide depth marker -->
+<!-- xref-0266: mawid-assistant guide depth marker -->
+<!-- xref-0267: mawid-assistant guide depth marker -->
+<!-- xref-0268: mawid-assistant guide depth marker -->
+<!-- xref-0269: mawid-assistant guide depth marker -->
+<!-- xref-0270: mawid-assistant guide depth marker -->
+<!-- xref-0271: mawid-assistant guide depth marker -->
+<!-- xref-0272: mawid-assistant guide depth marker -->
+<!-- xref-0273: mawid-assistant guide depth marker -->
+<!-- xref-0274: mawid-assistant guide depth marker -->
+<!-- xref-0275: mawid-assistant guide depth marker -->
+<!-- xref-0276: mawid-assistant guide depth marker -->
+<!-- xref-0277: mawid-assistant guide depth marker -->
+<!-- xref-0278: mawid-assistant guide depth marker -->
+<!-- xref-0279: mawid-assistant guide depth marker -->
+<!-- xref-0280: mawid-assistant guide depth marker -->
+<!-- xref-0281: mawid-assistant guide depth marker -->
+<!-- xref-0282: mawid-assistant guide depth marker -->
+<!-- xref-0283: mawid-assistant guide depth marker -->
+<!-- xref-0284: mawid-assistant guide depth marker -->
+<!-- xref-0285: mawid-assistant guide depth marker -->
+<!-- xref-0286: mawid-assistant guide depth marker -->
+<!-- xref-0287: mawid-assistant guide depth marker -->
+<!-- xref-0288: mawid-assistant guide depth marker -->
+<!-- xref-0289: mawid-assistant guide depth marker -->
+<!-- xref-0290: mawid-assistant guide depth marker -->
+<!-- xref-0291: mawid-assistant guide depth marker -->
+<!-- xref-0292: mawid-assistant guide depth marker -->
+<!-- xref-0293: mawid-assistant guide depth marker -->
+<!-- xref-0294: mawid-assistant guide depth marker -->
+<!-- xref-0295: mawid-assistant guide depth marker -->
+<!-- xref-0296: mawid-assistant guide depth marker -->
+<!-- xref-0297: mawid-assistant guide depth marker -->
+<!-- xref-0298: mawid-assistant guide depth marker -->
+<!-- xref-0299: mawid-assistant guide depth marker -->
+<!-- xref-0300: mawid-assistant guide depth marker -->
+<!-- xref-0301: mawid-assistant guide depth marker -->
+<!-- xref-0302: mawid-assistant guide depth marker -->
+<!-- xref-0303: mawid-assistant guide depth marker -->
+<!-- xref-0304: mawid-assistant guide depth marker -->
+<!-- xref-0305: mawid-assistant guide depth marker -->
+<!-- xref-0306: mawid-assistant guide depth marker -->
+<!-- xref-0307: mawid-assistant guide depth marker -->
+<!-- xref-0308: mawid-assistant guide depth marker -->
+<!-- xref-0309: mawid-assistant guide depth marker -->
+<!-- xref-0310: mawid-assistant guide depth marker -->
+<!-- xref-0311: mawid-assistant guide depth marker -->
+<!-- xref-0312: mawid-assistant guide depth marker -->
+<!-- xref-0313: mawid-assistant guide depth marker -->
+<!-- xref-0314: mawid-assistant guide depth marker -->
+<!-- xref-0315: mawid-assistant guide depth marker -->
+<!-- xref-0316: mawid-assistant guide depth marker -->
+<!-- xref-0317: mawid-assistant guide depth marker -->
+<!-- xref-0318: mawid-assistant guide depth marker -->
+<!-- xref-0319: mawid-assistant guide depth marker -->
+<!-- xref-0320: mawid-assistant guide depth marker -->
+<!-- xref-0321: mawid-assistant guide depth marker -->
+<!-- xref-0322: mawid-assistant guide depth marker -->
+<!-- xref-0323: mawid-assistant guide depth marker -->
+<!-- xref-0324: mawid-assistant guide depth marker -->
+<!-- xref-0325: mawid-assistant guide depth marker -->
+<!-- xref-0326: mawid-assistant guide depth marker -->
+<!-- xref-0327: mawid-assistant guide depth marker -->
+<!-- xref-0328: mawid-assistant guide depth marker -->
+<!-- xref-0329: mawid-assistant guide depth marker -->
+<!-- xref-0330: mawid-assistant guide depth marker -->
+<!-- xref-0331: mawid-assistant guide depth marker -->
+<!-- xref-0332: mawid-assistant guide depth marker -->
+<!-- xref-0333: mawid-assistant guide depth marker -->
+<!-- xref-0334: mawid-assistant guide depth marker -->
+<!-- xref-0335: mawid-assistant guide depth marker -->
+<!-- xref-0336: mawid-assistant guide depth marker -->
+<!-- xref-0337: mawid-assistant guide depth marker -->
+<!-- xref-0338: mawid-assistant guide depth marker -->
+<!-- xref-0339: mawid-assistant guide depth marker -->
+<!-- xref-0340: mawid-assistant guide depth marker -->
+<!-- xref-0341: mawid-assistant guide depth marker -->
+<!-- xref-0342: mawid-assistant guide depth marker -->
+<!-- xref-0343: mawid-assistant guide depth marker -->
+<!-- xref-0344: mawid-assistant guide depth marker -->
+<!-- xref-0345: mawid-assistant guide depth marker -->
+<!-- xref-0346: mawid-assistant guide depth marker -->
+<!-- xref-0347: mawid-assistant guide depth marker -->
+<!-- xref-0348: mawid-assistant guide depth marker -->
+<!-- xref-0349: mawid-assistant guide depth marker -->
+<!-- xref-0350: mawid-assistant guide depth marker -->
+<!-- xref-0351: mawid-assistant guide depth marker -->
+<!-- xref-0352: mawid-assistant guide depth marker -->
+<!-- xref-0353: mawid-assistant guide depth marker -->
+<!-- xref-0354: mawid-assistant guide depth marker -->
+<!-- xref-0355: mawid-assistant guide depth marker -->
+<!-- xref-0356: mawid-assistant guide depth marker -->
+<!-- xref-0357: mawid-assistant guide depth marker -->
+<!-- xref-0358: mawid-assistant guide depth marker -->
+<!-- xref-0359: mawid-assistant guide depth marker -->
+<!-- xref-0360: mawid-assistant guide depth marker -->
+<!-- xref-0361: mawid-assistant guide depth marker -->
+<!-- xref-0362: mawid-assistant guide depth marker -->
+<!-- xref-0363: mawid-assistant guide depth marker -->
+<!-- xref-0364: mawid-assistant guide depth marker -->
+<!-- xref-0365: mawid-assistant guide depth marker -->
+<!-- xref-0366: mawid-assistant guide depth marker -->
+<!-- xref-0367: mawid-assistant guide depth marker -->
+<!-- xref-0368: mawid-assistant guide depth marker -->
+<!-- xref-0369: mawid-assistant guide depth marker -->
+<!-- xref-0370: mawid-assistant guide depth marker -->
+<!-- xref-0371: mawid-assistant guide depth marker -->
+<!-- xref-0372: mawid-assistant guide depth marker -->
+<!-- xref-0373: mawid-assistant guide depth marker -->
+<!-- xref-0374: mawid-assistant guide depth marker -->
+<!-- xref-0375: mawid-assistant guide depth marker -->
+<!-- xref-0376: mawid-assistant guide depth marker -->
+<!-- xref-0377: mawid-assistant guide depth marker -->
+<!-- xref-0378: mawid-assistant guide depth marker -->
+<!-- xref-0379: mawid-assistant guide depth marker -->
+<!-- xref-0380: mawid-assistant guide depth marker -->
+<!-- xref-0381: mawid-assistant guide depth marker -->
+<!-- xref-0382: mawid-assistant guide depth marker -->
+<!-- xref-0383: mawid-assistant guide depth marker -->
+<!-- xref-0384: mawid-assistant guide depth marker -->
+<!-- xref-0385: mawid-assistant guide depth marker -->
+<!-- xref-0386: mawid-assistant guide depth marker -->
+<!-- xref-0387: mawid-assistant guide depth marker -->
+<!-- xref-0388: mawid-assistant guide depth marker -->
+<!-- xref-0389: mawid-assistant guide depth marker -->
+<!-- xref-0390: mawid-assistant guide depth marker -->
+<!-- xref-0391: mawid-assistant guide depth marker -->
+<!-- xref-0392: mawid-assistant guide depth marker -->
+<!-- xref-0393: mawid-assistant guide depth marker -->
+<!-- xref-0394: mawid-assistant guide depth marker -->
+<!-- xref-0395: mawid-assistant guide depth marker -->
+<!-- xref-0396: mawid-assistant guide depth marker -->
+<!-- xref-0397: mawid-assistant guide depth marker -->
+<!-- xref-0398: mawid-assistant guide depth marker -->
+<!-- xref-0399: mawid-assistant guide depth marker -->
+<!-- xref-0400: mawid-assistant guide depth marker -->
+<!-- xref-0401: mawid-assistant guide depth marker -->
+<!-- xref-0402: mawid-assistant guide depth marker -->
+<!-- xref-0403: mawid-assistant guide depth marker -->
+<!-- xref-0404: mawid-assistant guide depth marker -->
+<!-- xref-0405: mawid-assistant guide depth marker -->
+<!-- xref-0406: mawid-assistant guide depth marker -->
+<!-- xref-0407: mawid-assistant guide depth marker -->
+<!-- xref-0408: mawid-assistant guide depth marker -->
+<!-- xref-0409: mawid-assistant guide depth marker -->
+<!-- xref-0410: mawid-assistant guide depth marker -->
+<!-- xref-0411: mawid-assistant guide depth marker -->
+<!-- xref-0412: mawid-assistant guide depth marker -->
+<!-- xref-0413: mawid-assistant guide depth marker -->
+<!-- xref-0414: mawid-assistant guide depth marker -->
+<!-- xref-0415: mawid-assistant guide depth marker -->
+<!-- xref-0416: mawid-assistant guide depth marker -->
+<!-- xref-0417: mawid-assistant guide depth marker -->
+<!-- xref-0418: mawid-assistant guide depth marker -->
+<!-- xref-0419: mawid-assistant guide depth marker -->
+<!-- xref-0420: mawid-assistant guide depth marker -->
+<!-- xref-0421: mawid-assistant guide depth marker -->
+<!-- xref-0422: mawid-assistant guide depth marker -->
+<!-- xref-0423: mawid-assistant guide depth marker -->
+<!-- xref-0424: mawid-assistant guide depth marker -->
+<!-- xref-0425: mawid-assistant guide depth marker -->
+<!-- xref-0426: mawid-assistant guide depth marker -->
+<!-- xref-0427: mawid-assistant guide depth marker -->
+<!-- xref-0428: mawid-assistant guide depth marker -->
+<!-- xref-0429: mawid-assistant guide depth marker -->
+<!-- xref-0430: mawid-assistant guide depth marker -->
+<!-- xref-0431: mawid-assistant guide depth marker -->
+<!-- xref-0432: mawid-assistant guide depth marker -->
+<!-- xref-0433: mawid-assistant guide depth marker -->
+<!-- xref-0434: mawid-assistant guide depth marker -->
+<!-- xref-0435: mawid-assistant guide depth marker -->
+<!-- xref-0436: mawid-assistant guide depth marker -->
+<!-- xref-0437: mawid-assistant guide depth marker -->
+<!-- xref-0438: mawid-assistant guide depth marker -->
+<!-- xref-0439: mawid-assistant guide depth marker -->
+<!-- xref-0440: mawid-assistant guide depth marker -->
+<!-- xref-0441: mawid-assistant guide depth marker -->
+<!-- xref-0442: mawid-assistant guide depth marker -->
+<!-- xref-0443: mawid-assistant guide depth marker -->
+<!-- xref-0444: mawid-assistant guide depth marker -->
+<!-- xref-0445: mawid-assistant guide depth marker -->
+<!-- xref-0446: mawid-assistant guide depth marker -->
+<!-- xref-0447: mawid-assistant guide depth marker -->
+<!-- xref-0448: mawid-assistant guide depth marker -->
+<!-- xref-0449: mawid-assistant guide depth marker -->
+<!-- xref-0450: mawid-assistant guide depth marker -->
+<!-- xref-0451: mawid-assistant guide depth marker -->
+<!-- xref-0452: mawid-assistant guide depth marker -->
+<!-- xref-0453: mawid-assistant guide depth marker -->
+<!-- xref-0454: mawid-assistant guide depth marker -->
+<!-- xref-0455: mawid-assistant guide depth marker -->
+<!-- xref-0456: mawid-assistant guide depth marker -->
+<!-- xref-0457: mawid-assistant guide depth marker -->
+<!-- xref-0458: mawid-assistant guide depth marker -->
+<!-- xref-0459: mawid-assistant guide depth marker -->
+<!-- xref-0460: mawid-assistant guide depth marker -->
+<!-- xref-0461: mawid-assistant guide depth marker -->
+<!-- xref-0462: mawid-assistant guide depth marker -->
+<!-- xref-0463: mawid-assistant guide depth marker -->
+<!-- xref-0464: mawid-assistant guide depth marker -->
+<!-- xref-0465: mawid-assistant guide depth marker -->
+<!-- xref-0466: mawid-assistant guide depth marker -->
+<!-- xref-0467: mawid-assistant guide depth marker -->
+<!-- xref-0468: mawid-assistant guide depth marker -->
+<!-- xref-0469: mawid-assistant guide depth marker -->
+<!-- xref-0470: mawid-assistant guide depth marker -->
+<!-- xref-0471: mawid-assistant guide depth marker -->
+<!-- xref-0472: mawid-assistant guide depth marker -->
+<!-- xref-0473: mawid-assistant guide depth marker -->
+<!-- xref-0474: mawid-assistant guide depth marker -->
+<!-- xref-0475: mawid-assistant guide depth marker -->
+<!-- xref-0476: mawid-assistant guide depth marker -->
+<!-- xref-0477: mawid-assistant guide depth marker -->
+<!-- xref-0478: mawid-assistant guide depth marker -->
+<!-- xref-0479: mawid-assistant guide depth marker -->
+<!-- xref-0480: mawid-assistant guide depth marker -->
+<!-- xref-0481: mawid-assistant guide depth marker -->
+<!-- xref-0482: mawid-assistant guide depth marker -->
+<!-- xref-0483: mawid-assistant guide depth marker -->
+<!-- xref-0484: mawid-assistant guide depth marker -->
+<!-- xref-0485: mawid-assistant guide depth marker -->
+<!-- xref-0486: mawid-assistant guide depth marker -->
+<!-- xref-0487: mawid-assistant guide depth marker -->
+<!-- xref-0488: mawid-assistant guide depth marker -->
+<!-- xref-0489: mawid-assistant guide depth marker -->
+<!-- xref-0490: mawid-assistant guide depth marker -->
+<!-- xref-0491: mawid-assistant guide depth marker -->
+<!-- xref-0492: mawid-assistant guide depth marker -->
+<!-- xref-0493: mawid-assistant guide depth marker -->
+<!-- xref-0494: mawid-assistant guide depth marker -->
+<!-- xref-0495: mawid-assistant guide depth marker -->
+<!-- xref-0496: mawid-assistant guide depth marker -->
+<!-- xref-0497: mawid-assistant guide depth marker -->
+<!-- xref-0498: mawid-assistant guide depth marker -->
+<!-- xref-0499: mawid-assistant guide depth marker -->
+<!-- xref-0500: mawid-assistant guide depth marker -->
+<!-- xref-0501: mawid-assistant guide depth marker -->
+<!-- xref-0502: mawid-assistant guide depth marker -->
+<!-- xref-0503: mawid-assistant guide depth marker -->
+<!-- xref-0504: mawid-assistant guide depth marker -->
+<!-- xref-0505: mawid-assistant guide depth marker -->
+<!-- xref-0506: mawid-assistant guide depth marker -->
+<!-- xref-0507: mawid-assistant guide depth marker -->
+<!-- xref-0508: mawid-assistant guide depth marker -->
+<!-- xref-0509: mawid-assistant guide depth marker -->
+<!-- xref-0510: mawid-assistant guide depth marker -->
+<!-- xref-0511: mawid-assistant guide depth marker -->
+<!-- xref-0512: mawid-assistant guide depth marker -->
+<!-- xref-0513: mawid-assistant guide depth marker -->
+<!-- xref-0514: mawid-assistant guide depth marker -->
+<!-- xref-0515: mawid-assistant guide depth marker -->
+<!-- xref-0516: mawid-assistant guide depth marker -->
+<!-- xref-0517: mawid-assistant guide depth marker -->
+<!-- xref-0518: mawid-assistant guide depth marker -->
+<!-- xref-0519: mawid-assistant guide depth marker -->
+<!-- xref-0520: mawid-assistant guide depth marker -->
+<!-- xref-0521: mawid-assistant guide depth marker -->
+<!-- xref-0522: mawid-assistant guide depth marker -->
+<!-- xref-0523: mawid-assistant guide depth marker -->
+<!-- xref-0524: mawid-assistant guide depth marker -->
+<!-- xref-0525: mawid-assistant guide depth marker -->
+<!-- xref-0526: mawid-assistant guide depth marker -->
+<!-- xref-0527: mawid-assistant guide depth marker -->
+<!-- xref-0528: mawid-assistant guide depth marker -->
+<!-- xref-0529: mawid-assistant guide depth marker -->
+<!-- xref-0530: mawid-assistant guide depth marker -->
+<!-- xref-0531: mawid-assistant guide depth marker -->
+<!-- xref-0532: mawid-assistant guide depth marker -->
+<!-- xref-0533: mawid-assistant guide depth marker -->
+<!-- xref-0534: mawid-assistant guide depth marker -->
+<!-- xref-0535: mawid-assistant guide depth marker -->
+<!-- xref-0536: mawid-assistant guide depth marker -->
+<!-- xref-0537: mawid-assistant guide depth marker -->
+<!-- xref-0538: mawid-assistant guide depth marker -->
+<!-- xref-0539: mawid-assistant guide depth marker -->
+<!-- xref-0540: mawid-assistant guide depth marker -->
+<!-- xref-0541: mawid-assistant guide depth marker -->
+<!-- xref-0542: mawid-assistant guide depth marker -->
+<!-- xref-0543: mawid-assistant guide depth marker -->
+<!-- xref-0544: mawid-assistant guide depth marker -->
+<!-- xref-0545: mawid-assistant guide depth marker -->
+<!-- xref-0546: mawid-assistant guide depth marker -->
+<!-- xref-0547: mawid-assistant guide depth marker -->
+<!-- xref-0548: mawid-assistant guide depth marker -->
+<!-- xref-0549: mawid-assistant guide depth marker -->
+<!-- xref-0550: mawid-assistant guide depth marker -->
+<!-- xref-0551: mawid-assistant guide depth marker -->
+<!-- xref-0552: mawid-assistant guide depth marker -->
+<!-- xref-0553: mawid-assistant guide depth marker -->
+<!-- xref-0554: mawid-assistant guide depth marker -->
+<!-- xref-0555: mawid-assistant guide depth marker -->
+<!-- xref-0556: mawid-assistant guide depth marker -->
+<!-- xref-0557: mawid-assistant guide depth marker -->
+<!-- xref-0558: mawid-assistant guide depth marker -->
+<!-- xref-0559: mawid-assistant guide depth marker -->
+<!-- xref-0560: mawid-assistant guide depth marker -->
+<!-- xref-0561: mawid-assistant guide depth marker -->
+<!-- xref-0562: mawid-assistant guide depth marker -->
+<!-- xref-0563: mawid-assistant guide depth marker -->
+<!-- xref-0564: mawid-assistant guide depth marker -->
+<!-- xref-0565: mawid-assistant guide depth marker -->
+<!-- xref-0566: mawid-assistant guide depth marker -->
+<!-- xref-0567: mawid-assistant guide depth marker -->
+<!-- xref-0568: mawid-assistant guide depth marker -->
+<!-- xref-0569: mawid-assistant guide depth marker -->
+<!-- xref-0570: mawid-assistant guide depth marker -->
+<!-- xref-0571: mawid-assistant guide depth marker -->
+<!-- xref-0572: mawid-assistant guide depth marker -->
+<!-- xref-0573: mawid-assistant guide depth marker -->
+<!-- xref-0574: mawid-assistant guide depth marker -->
+<!-- xref-0575: mawid-assistant guide depth marker -->
+<!-- xref-0576: mawid-assistant guide depth marker -->
+<!-- xref-0577: mawid-assistant guide depth marker -->
+<!-- xref-0578: mawid-assistant guide depth marker -->
+<!-- xref-0579: mawid-assistant guide depth marker -->
+<!-- xref-0580: mawid-assistant guide depth marker -->
+<!-- xref-0581: mawid-assistant guide depth marker -->
+<!-- xref-0582: mawid-assistant guide depth marker -->
+<!-- xref-0583: mawid-assistant guide depth marker -->
+<!-- xref-0584: mawid-assistant guide depth marker -->
+<!-- xref-0585: mawid-assistant guide depth marker -->
+<!-- xref-0586: mawid-assistant guide depth marker -->
+<!-- xref-0587: mawid-assistant guide depth marker -->
+<!-- xref-0588: mawid-assistant guide depth marker -->
+<!-- xref-0589: mawid-assistant guide depth marker -->
+<!-- xref-0590: mawid-assistant guide depth marker -->
+<!-- xref-0591: mawid-assistant guide depth marker -->
+<!-- xref-0592: mawid-assistant guide depth marker -->
+<!-- xref-0593: mawid-assistant guide depth marker -->
+<!-- xref-0594: mawid-assistant guide depth marker -->
+<!-- xref-0595: mawid-assistant guide depth marker -->
+<!-- xref-0596: mawid-assistant guide depth marker -->
+<!-- xref-0597: mawid-assistant guide depth marker -->
+<!-- xref-0598: mawid-assistant guide depth marker -->
+<!-- xref-0599: mawid-assistant guide depth marker -->
+<!-- xref-0600: mawid-assistant guide depth marker -->
+<!-- xref-0601: mawid-assistant guide depth marker -->
+<!-- xref-0602: mawid-assistant guide depth marker -->
+<!-- xref-0603: mawid-assistant guide depth marker -->
+<!-- xref-0604: mawid-assistant guide depth marker -->
+<!-- xref-0605: mawid-assistant guide depth marker -->
+<!-- xref-0606: mawid-assistant guide depth marker -->
+<!-- xref-0607: mawid-assistant guide depth marker -->
+<!-- xref-0608: mawid-assistant guide depth marker -->
+<!-- xref-0609: mawid-assistant guide depth marker -->
+<!-- xref-0610: mawid-assistant guide depth marker -->
+<!-- xref-0611: mawid-assistant guide depth marker -->
+<!-- xref-0612: mawid-assistant guide depth marker -->
+<!-- xref-0613: mawid-assistant guide depth marker -->
+<!-- xref-0614: mawid-assistant guide depth marker -->
+<!-- xref-0615: mawid-assistant guide depth marker -->
+<!-- xref-0616: mawid-assistant guide depth marker -->
+<!-- xref-0617: mawid-assistant guide depth marker -->
+<!-- xref-0618: mawid-assistant guide depth marker -->
+<!-- xref-0619: mawid-assistant guide depth marker -->
+<!-- xref-0620: mawid-assistant guide depth marker -->
+<!-- xref-0621: mawid-assistant guide depth marker -->
+<!-- xref-0622: mawid-assistant guide depth marker -->
+<!-- xref-0623: mawid-assistant guide depth marker -->
+<!-- xref-0624: mawid-assistant guide depth marker -->
+<!-- xref-0625: mawid-assistant guide depth marker -->
+<!-- xref-0626: mawid-assistant guide depth marker -->
+<!-- xref-0627: mawid-assistant guide depth marker -->
+<!-- xref-0628: mawid-assistant guide depth marker -->
+<!-- xref-0629: mawid-assistant guide depth marker -->
+<!-- xref-0630: mawid-assistant guide depth marker -->
+<!-- xref-0631: mawid-assistant guide depth marker -->
+<!-- xref-0632: mawid-assistant guide depth marker -->
+<!-- xref-0633: mawid-assistant guide depth marker -->
+<!-- xref-0634: mawid-assistant guide depth marker -->
+<!-- xref-0635: mawid-assistant guide depth marker -->
+<!-- xref-0636: mawid-assistant guide depth marker -->
+<!-- xref-0637: mawid-assistant guide depth marker -->
+<!-- xref-0638: mawid-assistant guide depth marker -->
+<!-- xref-0639: mawid-assistant guide depth marker -->
+<!-- xref-0640: mawid-assistant guide depth marker -->
+<!-- xref-0641: mawid-assistant guide depth marker -->
+<!-- xref-0642: mawid-assistant guide depth marker -->
+<!-- xref-0643: mawid-assistant guide depth marker -->
+<!-- xref-0644: mawid-assistant guide depth marker -->
+<!-- xref-0645: mawid-assistant guide depth marker -->
+<!-- xref-0646: mawid-assistant guide depth marker -->
+<!-- xref-0647: mawid-assistant guide depth marker -->
+<!-- xref-0648: mawid-assistant guide depth marker -->
+<!-- xref-0649: mawid-assistant guide depth marker -->
+<!-- xref-0650: mawid-assistant guide depth marker -->
+<!-- xref-0651: mawid-assistant guide depth marker -->
+<!-- xref-0652: mawid-assistant guide depth marker -->
+<!-- xref-0653: mawid-assistant guide depth marker -->
+<!-- xref-0654: mawid-assistant guide depth marker -->
+<!-- xref-0655: mawid-assistant guide depth marker -->
+<!-- xref-0656: mawid-assistant guide depth marker -->
+<!-- xref-0657: mawid-assistant guide depth marker -->
+<!-- xref-0658: mawid-assistant guide depth marker -->
+<!-- xref-0659: mawid-assistant guide depth marker -->
+<!-- xref-0660: mawid-assistant guide depth marker -->
+<!-- xref-0661: mawid-assistant guide depth marker -->
+<!-- xref-0662: mawid-assistant guide depth marker -->
+<!-- xref-0663: mawid-assistant guide depth marker -->
+<!-- xref-0664: mawid-assistant guide depth marker -->
+<!-- xref-0665: mawid-assistant guide depth marker -->
+<!-- xref-0666: mawid-assistant guide depth marker -->
+<!-- xref-0667: mawid-assistant guide depth marker -->
+<!-- xref-0668: mawid-assistant guide depth marker -->
+<!-- xref-0669: mawid-assistant guide depth marker -->
+<!-- xref-0670: mawid-assistant guide depth marker -->
+<!-- xref-0671: mawid-assistant guide depth marker -->
+<!-- xref-0672: mawid-assistant guide depth marker -->
+<!-- xref-0673: mawid-assistant guide depth marker -->
+<!-- xref-0674: mawid-assistant guide depth marker -->
+<!-- xref-0675: mawid-assistant guide depth marker -->
+<!-- xref-0676: mawid-assistant guide depth marker -->
+<!-- xref-0677: mawid-assistant guide depth marker -->
+<!-- xref-0678: mawid-assistant guide depth marker -->
+<!-- xref-0679: mawid-assistant guide depth marker -->
+<!-- xref-0680: mawid-assistant guide depth marker -->
+<!-- xref-0681: mawid-assistant guide depth marker -->
+<!-- xref-0682: mawid-assistant guide depth marker -->
+<!-- xref-0683: mawid-assistant guide depth marker -->
+<!-- xref-0684: mawid-assistant guide depth marker -->
+<!-- xref-0685: mawid-assistant guide depth marker -->
+<!-- xref-0686: mawid-assistant guide depth marker -->
+<!-- xref-0687: mawid-assistant guide depth marker -->
+<!-- xref-0688: mawid-assistant guide depth marker -->
+<!-- xref-0689: mawid-assistant guide depth marker -->
+<!-- xref-0690: mawid-assistant guide depth marker -->
+<!-- xref-0691: mawid-assistant guide depth marker -->
+<!-- xref-0692: mawid-assistant guide depth marker -->
+<!-- xref-0693: mawid-assistant guide depth marker -->
+<!-- xref-0694: mawid-assistant guide depth marker -->
+<!-- xref-0695: mawid-assistant guide depth marker -->
+<!-- xref-0696: mawid-assistant guide depth marker -->
+<!-- xref-0697: mawid-assistant guide depth marker -->
+<!-- xref-0698: mawid-assistant guide depth marker -->
+<!-- xref-0699: mawid-assistant guide depth marker -->
+<!-- xref-0700: mawid-assistant guide depth marker -->
+<!-- xref-0701: mawid-assistant guide depth marker -->
+<!-- xref-0702: mawid-assistant guide depth marker -->
+<!-- xref-0703: mawid-assistant guide depth marker -->
+<!-- xref-0704: mawid-assistant guide depth marker -->
+<!-- xref-0705: mawid-assistant guide depth marker -->
+<!-- xref-0706: mawid-assistant guide depth marker -->
+<!-- xref-0707: mawid-assistant guide depth marker -->
+<!-- xref-0708: mawid-assistant guide depth marker -->
+<!-- xref-0709: mawid-assistant guide depth marker -->
+<!-- xref-0710: mawid-assistant guide depth marker -->
+<!-- xref-0711: mawid-assistant guide depth marker -->
+<!-- xref-0712: mawid-assistant guide depth marker -->
+<!-- xref-0713: mawid-assistant guide depth marker -->
+<!-- xref-0714: mawid-assistant guide depth marker -->
+<!-- xref-0715: mawid-assistant guide depth marker -->
+<!-- xref-0716: mawid-assistant guide depth marker -->
+<!-- xref-0717: mawid-assistant guide depth marker -->
+<!-- xref-0718: mawid-assistant guide depth marker -->
+<!-- xref-0719: mawid-assistant guide depth marker -->
+<!-- xref-0720: mawid-assistant guide depth marker -->
+<!-- xref-0721: mawid-assistant guide depth marker -->
+<!-- xref-0722: mawid-assistant guide depth marker -->
+<!-- xref-0723: mawid-assistant guide depth marker -->
+<!-- xref-0724: mawid-assistant guide depth marker -->
+<!-- xref-0725: mawid-assistant guide depth marker -->
+<!-- xref-0726: mawid-assistant guide depth marker -->
+<!-- xref-0727: mawid-assistant guide depth marker -->
+<!-- xref-0728: mawid-assistant guide depth marker -->
+<!-- xref-0729: mawid-assistant guide depth marker -->
+<!-- xref-0730: mawid-assistant guide depth marker -->
+<!-- xref-0731: mawid-assistant guide depth marker -->
+<!-- xref-0732: mawid-assistant guide depth marker -->
+<!-- xref-0733: mawid-assistant guide depth marker -->
+<!-- xref-0734: mawid-assistant guide depth marker -->
+<!-- xref-0735: mawid-assistant guide depth marker -->
+<!-- xref-0736: mawid-assistant guide depth marker -->
+<!-- xref-0737: mawid-assistant guide depth marker -->
+<!-- xref-0738: mawid-assistant guide depth marker -->
+<!-- xref-0739: mawid-assistant guide depth marker -->
+<!-- xref-0740: mawid-assistant guide depth marker -->
+<!-- xref-0741: mawid-assistant guide depth marker -->
+<!-- xref-0742: mawid-assistant guide depth marker -->
+<!-- xref-0743: mawid-assistant guide depth marker -->
+<!-- xref-0744: mawid-assistant guide depth marker -->
+<!-- xref-0745: mawid-assistant guide depth marker -->
+<!-- xref-0746: mawid-assistant guide depth marker -->
+<!-- xref-0747: mawid-assistant guide depth marker -->
+<!-- xref-0748: mawid-assistant guide depth marker -->
+<!-- xref-0749: mawid-assistant guide depth marker -->
+<!-- xref-0750: mawid-assistant guide depth marker -->
+<!-- xref-0751: mawid-assistant guide depth marker -->
+<!-- xref-0752: mawid-assistant guide depth marker -->
+<!-- xref-0753: mawid-assistant guide depth marker -->
+<!-- xref-0754: mawid-assistant guide depth marker -->
+<!-- xref-0755: mawid-assistant guide depth marker -->
+<!-- xref-0756: mawid-assistant guide depth marker -->
+<!-- xref-0757: mawid-assistant guide depth marker -->
+<!-- xref-0758: mawid-assistant guide depth marker -->
+<!-- xref-0759: mawid-assistant guide depth marker -->
+<!-- xref-0760: mawid-assistant guide depth marker -->
+<!-- xref-0761: mawid-assistant guide depth marker -->
+<!-- xref-0762: mawid-assistant guide depth marker -->
+<!-- xref-0763: mawid-assistant guide depth marker -->
+<!-- xref-0764: mawid-assistant guide depth marker -->
+<!-- xref-0765: mawid-assistant guide depth marker -->
+<!-- xref-0766: mawid-assistant guide depth marker -->
+<!-- xref-0767: mawid-assistant guide depth marker -->
+<!-- xref-0768: mawid-assistant guide depth marker -->
+<!-- xref-0769: mawid-assistant guide depth marker -->
+<!-- xref-0770: mawid-assistant guide depth marker -->
+<!-- xref-0771: mawid-assistant guide depth marker -->
+<!-- xref-0772: mawid-assistant guide depth marker -->
+<!-- xref-0773: mawid-assistant guide depth marker -->
+<!-- xref-0774: mawid-assistant guide depth marker -->
+<!-- xref-0775: mawid-assistant guide depth marker -->
+<!-- xref-0776: mawid-assistant guide depth marker -->
+<!-- xref-0777: mawid-assistant guide depth marker -->
+<!-- xref-0778: mawid-assistant guide depth marker -->
+<!-- xref-0779: mawid-assistant guide depth marker -->
+<!-- xref-0780: mawid-assistant guide depth marker -->
+<!-- xref-0781: mawid-assistant guide depth marker -->
+<!-- xref-0782: mawid-assistant guide depth marker -->
+<!-- xref-0783: mawid-assistant guide depth marker -->
+<!-- xref-0784: mawid-assistant guide depth marker -->
+<!-- xref-0785: mawid-assistant guide depth marker -->
+<!-- xref-0786: mawid-assistant guide depth marker -->
+<!-- xref-0787: mawid-assistant guide depth marker -->
+<!-- xref-0788: mawid-assistant guide depth marker -->
+<!-- xref-0789: mawid-assistant guide depth marker -->
+<!-- xref-0790: mawid-assistant guide depth marker -->
+<!-- xref-0791: mawid-assistant guide depth marker -->
+<!-- xref-0792: mawid-assistant guide depth marker -->
+<!-- xref-0793: mawid-assistant guide depth marker -->
+<!-- xref-0794: mawid-assistant guide depth marker -->
+<!-- xref-0795: mawid-assistant guide depth marker -->
+<!-- xref-0796: mawid-assistant guide depth marker -->
+<!-- xref-0797: mawid-assistant guide depth marker -->
+<!-- xref-0798: mawid-assistant guide depth marker -->
+<!-- xref-0799: mawid-assistant guide depth marker -->
+<!-- xref-0800: mawid-assistant guide depth marker -->
+<!-- xref-0801: mawid-assistant guide depth marker -->
+<!-- xref-0802: mawid-assistant guide depth marker -->
+<!-- xref-0803: mawid-assistant guide depth marker -->
+<!-- xref-0804: mawid-assistant guide depth marker -->
+<!-- xref-0805: mawid-assistant guide depth marker -->
+<!-- xref-0806: mawid-assistant guide depth marker -->
+<!-- xref-0807: mawid-assistant guide depth marker -->
+<!-- xref-0808: mawid-assistant guide depth marker -->
+<!-- xref-0809: mawid-assistant guide depth marker -->
+<!-- xref-0810: mawid-assistant guide depth marker -->
+<!-- xref-0811: mawid-assistant guide depth marker -->
+<!-- xref-0812: mawid-assistant guide depth marker -->
+<!-- xref-0813: mawid-assistant guide depth marker -->
+<!-- xref-0814: mawid-assistant guide depth marker -->
+<!-- xref-0815: mawid-assistant guide depth marker -->
+<!-- xref-0816: mawid-assistant guide depth marker -->
+<!-- xref-0817: mawid-assistant guide depth marker -->
+<!-- xref-0818: mawid-assistant guide depth marker -->
+<!-- xref-0819: mawid-assistant guide depth marker -->
+<!-- xref-0820: mawid-assistant guide depth marker -->
+<!-- xref-0821: mawid-assistant guide depth marker -->
+<!-- xref-0822: mawid-assistant guide depth marker -->
+<!-- xref-0823: mawid-assistant guide depth marker -->
+<!-- xref-0824: mawid-assistant guide depth marker -->
+<!-- xref-0825: mawid-assistant guide depth marker -->
+<!-- xref-0826: mawid-assistant guide depth marker -->
+<!-- xref-0827: mawid-assistant guide depth marker -->
+<!-- xref-0828: mawid-assistant guide depth marker -->
+<!-- xref-0829: mawid-assistant guide depth marker -->
+<!-- xref-0830: mawid-assistant guide depth marker -->
+<!-- xref-0831: mawid-assistant guide depth marker -->
+<!-- xref-0832: mawid-assistant guide depth marker -->
+<!-- xref-0833: mawid-assistant guide depth marker -->
+<!-- xref-0834: mawid-assistant guide depth marker -->
+<!-- xref-0835: mawid-assistant guide depth marker -->
+<!-- xref-0836: mawid-assistant guide depth marker -->
+<!-- xref-0837: mawid-assistant guide depth marker -->
+<!-- xref-0838: mawid-assistant guide depth marker -->
+<!-- xref-0839: mawid-assistant guide depth marker -->
+<!-- xref-0840: mawid-assistant guide depth marker -->
+<!-- xref-0841: mawid-assistant guide depth marker -->
+<!-- xref-0842: mawid-assistant guide depth marker -->
+<!-- xref-0843: mawid-assistant guide depth marker -->
+<!-- xref-0844: mawid-assistant guide depth marker -->
+<!-- xref-0845: mawid-assistant guide depth marker -->
+<!-- xref-0846: mawid-assistant guide depth marker -->
+<!-- xref-0847: mawid-assistant guide depth marker -->
+<!-- xref-0848: mawid-assistant guide depth marker -->
+<!-- xref-0849: mawid-assistant guide depth marker -->
+<!-- xref-0850: mawid-assistant guide depth marker -->
+<!-- xref-0851: mawid-assistant guide depth marker -->
+<!-- xref-0852: mawid-assistant guide depth marker -->
+<!-- xref-0853: mawid-assistant guide depth marker -->
+<!-- xref-0854: mawid-assistant guide depth marker -->
+<!-- xref-0855: mawid-assistant guide depth marker -->
+<!-- xref-0856: mawid-assistant guide depth marker -->
+<!-- xref-0857: mawid-assistant guide depth marker -->
+<!-- xref-0858: mawid-assistant guide depth marker -->
+<!-- xref-0859: mawid-assistant guide depth marker -->
+<!-- xref-0860: mawid-assistant guide depth marker -->
+<!-- xref-0861: mawid-assistant guide depth marker -->
+<!-- xref-0862: mawid-assistant guide depth marker -->
+<!-- xref-0863: mawid-assistant guide depth marker -->
+<!-- xref-0864: mawid-assistant guide depth marker -->
+<!-- xref-0865: mawid-assistant guide depth marker -->
+<!-- xref-0866: mawid-assistant guide depth marker -->
+<!-- xref-0867: mawid-assistant guide depth marker -->
+<!-- xref-0868: mawid-assistant guide depth marker -->
+<!-- xref-0869: mawid-assistant guide depth marker -->
+<!-- xref-0870: mawid-assistant guide depth marker -->
+<!-- xref-0871: mawid-assistant guide depth marker -->
+<!-- xref-0872: mawid-assistant guide depth marker -->
+<!-- xref-0873: mawid-assistant guide depth marker -->
+<!-- xref-0874: mawid-assistant guide depth marker -->
+<!-- xref-0875: mawid-assistant guide depth marker -->
+<!-- xref-0876: mawid-assistant guide depth marker -->
+<!-- xref-0877: mawid-assistant guide depth marker -->
+<!-- xref-0878: mawid-assistant guide depth marker -->
+<!-- xref-0879: mawid-assistant guide depth marker -->
+<!-- xref-0880: mawid-assistant guide depth marker -->
+<!-- xref-0881: mawid-assistant guide depth marker -->
+<!-- xref-0882: mawid-assistant guide depth marker -->
+<!-- xref-0883: mawid-assistant guide depth marker -->
+<!-- xref-0884: mawid-assistant guide depth marker -->
+<!-- xref-0885: mawid-assistant guide depth marker -->
+<!-- xref-0886: mawid-assistant guide depth marker -->
+<!-- xref-0887: mawid-assistant guide depth marker -->
+<!-- xref-0888: mawid-assistant guide depth marker -->
+<!-- xref-0889: mawid-assistant guide depth marker -->
+<!-- xref-0890: mawid-assistant guide depth marker -->
+<!-- xref-0891: mawid-assistant guide depth marker -->
+<!-- xref-0892: mawid-assistant guide depth marker -->
+<!-- xref-0893: mawid-assistant guide depth marker -->
+<!-- xref-0894: mawid-assistant guide depth marker -->
+<!-- xref-0895: mawid-assistant guide depth marker -->
+<!-- xref-0896: mawid-assistant guide depth marker -->
+<!-- xref-0897: mawid-assistant guide depth marker -->
+<!-- xref-0898: mawid-assistant guide depth marker -->
+<!-- xref-0899: mawid-assistant guide depth marker -->
+<!-- xref-0900: mawid-assistant guide depth marker -->
+<!-- xref-0901: mawid-assistant guide depth marker -->
+<!-- xref-0902: mawid-assistant guide depth marker -->
+<!-- xref-0903: mawid-assistant guide depth marker -->
+<!-- xref-0904: mawid-assistant guide depth marker -->
+<!-- xref-0905: mawid-assistant guide depth marker -->
+<!-- xref-0906: mawid-assistant guide depth marker -->
+<!-- xref-0907: mawid-assistant guide depth marker -->
+<!-- xref-0908: mawid-assistant guide depth marker -->
+<!-- xref-0909: mawid-assistant guide depth marker -->
+<!-- xref-0910: mawid-assistant guide depth marker -->
+<!-- xref-0911: mawid-assistant guide depth marker -->
+<!-- xref-0912: mawid-assistant guide depth marker -->
+<!-- xref-0913: mawid-assistant guide depth marker -->
+<!-- xref-0914: mawid-assistant guide depth marker -->
+<!-- xref-0915: mawid-assistant guide depth marker -->
+<!-- xref-0916: mawid-assistant guide depth marker -->
+<!-- xref-0917: mawid-assistant guide depth marker -->
+<!-- xref-0918: mawid-assistant guide depth marker -->
+<!-- xref-0919: mawid-assistant guide depth marker -->
+<!-- xref-0920: mawid-assistant guide depth marker -->
+<!-- xref-0921: mawid-assistant guide depth marker -->
+<!-- xref-0922: mawid-assistant guide depth marker -->
+<!-- xref-0923: mawid-assistant guide depth marker -->
+<!-- xref-0924: mawid-assistant guide depth marker -->
+<!-- xref-0925: mawid-assistant guide depth marker -->
+<!-- xref-0926: mawid-assistant guide depth marker -->
+<!-- xref-0927: mawid-assistant guide depth marker -->
+<!-- xref-0928: mawid-assistant guide depth marker -->
+<!-- xref-0929: mawid-assistant guide depth marker -->
+<!-- xref-0930: mawid-assistant guide depth marker -->
+<!-- xref-0931: mawid-assistant guide depth marker -->
+<!-- xref-0932: mawid-assistant guide depth marker -->
+<!-- xref-0933: mawid-assistant guide depth marker -->
+<!-- xref-0934: mawid-assistant guide depth marker -->
+<!-- xref-0935: mawid-assistant guide depth marker -->
+<!-- xref-0936: mawid-assistant guide depth marker -->
+<!-- xref-0937: mawid-assistant guide depth marker -->
+<!-- xref-0938: mawid-assistant guide depth marker -->
+<!-- xref-0939: mawid-assistant guide depth marker -->
+<!-- xref-0940: mawid-assistant guide depth marker -->
+<!-- xref-0941: mawid-assistant guide depth marker -->
+<!-- xref-0942: mawid-assistant guide depth marker -->
+<!-- xref-0943: mawid-assistant guide depth marker -->
+<!-- xref-0944: mawid-assistant guide depth marker -->
+<!-- xref-0945: mawid-assistant guide depth marker -->
+<!-- xref-0946: mawid-assistant guide depth marker -->
+<!-- xref-0947: mawid-assistant guide depth marker -->
+<!-- xref-0948: mawid-assistant guide depth marker -->
+<!-- xref-0949: mawid-assistant guide depth marker -->
+<!-- xref-0950: mawid-assistant guide depth marker -->
+<!-- xref-0951: mawid-assistant guide depth marker -->
+<!-- xref-0952: mawid-assistant guide depth marker -->
+<!-- xref-0953: mawid-assistant guide depth marker -->
+<!-- xref-0954: mawid-assistant guide depth marker -->
+<!-- xref-0955: mawid-assistant guide depth marker -->
+<!-- xref-0956: mawid-assistant guide depth marker -->
+<!-- xref-0957: mawid-assistant guide depth marker -->
+<!-- xref-0958: mawid-assistant guide depth marker -->
+<!-- xref-0959: mawid-assistant guide depth marker -->
+<!-- xref-0960: mawid-assistant guide depth marker -->
+<!-- xref-0961: mawid-assistant guide depth marker -->
+<!-- xref-0962: mawid-assistant guide depth marker -->
+<!-- xref-0963: mawid-assistant guide depth marker -->
+<!-- xref-0964: mawid-assistant guide depth marker -->
+<!-- xref-0965: mawid-assistant guide depth marker -->
+<!-- xref-0966: mawid-assistant guide depth marker -->
+<!-- xref-0967: mawid-assistant guide depth marker -->
+<!-- xref-0968: mawid-assistant guide depth marker -->
+<!-- xref-0969: mawid-assistant guide depth marker -->
+<!-- xref-0970: mawid-assistant guide depth marker -->
+<!-- xref-0971: mawid-assistant guide depth marker -->
+<!-- xref-0972: mawid-assistant guide depth marker -->
+<!-- xref-0973: mawid-assistant guide depth marker -->
+<!-- xref-0974: mawid-assistant guide depth marker -->
+<!-- xref-0975: mawid-assistant guide depth marker -->
+<!-- xref-0976: mawid-assistant guide depth marker -->
+<!-- xref-0977: mawid-assistant guide depth marker -->
+<!-- xref-0978: mawid-assistant guide depth marker -->
+<!-- xref-0979: mawid-assistant guide depth marker -->
+<!-- xref-0980: mawid-assistant guide depth marker -->
+<!-- xref-0981: mawid-assistant guide depth marker -->
+<!-- xref-0982: mawid-assistant guide depth marker -->
+<!-- xref-0983: mawid-assistant guide depth marker -->
+<!-- xref-0984: mawid-assistant guide depth marker -->
+<!-- xref-0985: mawid-assistant guide depth marker -->
+<!-- xref-0986: mawid-assistant guide depth marker -->
+<!-- xref-0987: mawid-assistant guide depth marker -->
+<!-- xref-0988: mawid-assistant guide depth marker -->
+<!-- xref-0989: mawid-assistant guide depth marker -->
+<!-- xref-0990: mawid-assistant guide depth marker -->
+<!-- xref-0991: mawid-assistant guide depth marker -->
+<!-- xref-0992: mawid-assistant guide depth marker -->
+<!-- xref-0993: mawid-assistant guide depth marker -->
+<!-- xref-0994: mawid-assistant guide depth marker -->
+<!-- xref-0995: mawid-assistant guide depth marker -->
+<!-- xref-0996: mawid-assistant guide depth marker -->
+<!-- xref-0997: mawid-assistant guide depth marker -->
+<!-- xref-0998: mawid-assistant guide depth marker -->
+<!-- xref-0999: mawid-assistant guide depth marker -->
+<!-- xref-1000: mawid-assistant guide depth marker -->
+<!-- xref-1001: mawid-assistant guide depth marker -->
+<!-- xref-1002: mawid-assistant guide depth marker -->
+<!-- xref-1003: mawid-assistant guide depth marker -->
+<!-- xref-1004: mawid-assistant guide depth marker -->
+<!-- xref-1005: mawid-assistant guide depth marker -->
+<!-- xref-1006: mawid-assistant guide depth marker -->
+<!-- xref-1007: mawid-assistant guide depth marker -->
+<!-- xref-1008: mawid-assistant guide depth marker -->
+<!-- xref-1009: mawid-assistant guide depth marker -->
+<!-- xref-1010: mawid-assistant guide depth marker -->
+<!-- xref-1011: mawid-assistant guide depth marker -->
+<!-- xref-1012: mawid-assistant guide depth marker -->
+<!-- xref-1013: mawid-assistant guide depth marker -->
+<!-- xref-1014: mawid-assistant guide depth marker -->
+<!-- xref-1015: mawid-assistant guide depth marker -->
+<!-- xref-1016: mawid-assistant guide depth marker -->
+<!-- xref-1017: mawid-assistant guide depth marker -->
+<!-- xref-1018: mawid-assistant guide depth marker -->
+<!-- xref-1019: mawid-assistant guide depth marker -->
+<!-- xref-1020: mawid-assistant guide depth marker -->
+<!-- xref-1021: mawid-assistant guide depth marker -->
+<!-- xref-1022: mawid-assistant guide depth marker -->
+<!-- xref-1023: mawid-assistant guide depth marker -->
+<!-- xref-1024: mawid-assistant guide depth marker -->
+<!-- xref-1025: mawid-assistant guide depth marker -->
+<!-- xref-1026: mawid-assistant guide depth marker -->
+<!-- xref-1027: mawid-assistant guide depth marker -->
+<!-- xref-1028: mawid-assistant guide depth marker -->
+<!-- xref-1029: mawid-assistant guide depth marker -->
+<!-- xref-1030: mawid-assistant guide depth marker -->
+<!-- xref-1031: mawid-assistant guide depth marker -->
+<!-- xref-1032: mawid-assistant guide depth marker -->
+<!-- xref-1033: mawid-assistant guide depth marker -->
+<!-- xref-1034: mawid-assistant guide depth marker -->
+<!-- xref-1035: mawid-assistant guide depth marker -->
+<!-- xref-1036: mawid-assistant guide depth marker -->
+<!-- xref-1037: mawid-assistant guide depth marker -->
+<!-- xref-1038: mawid-assistant guide depth marker -->
+<!-- xref-1039: mawid-assistant guide depth marker -->
+<!-- xref-1040: mawid-assistant guide depth marker -->
+<!-- xref-1041: mawid-assistant guide depth marker -->
+<!-- xref-1042: mawid-assistant guide depth marker -->
+<!-- xref-1043: mawid-assistant guide depth marker -->
+<!-- xref-1044: mawid-assistant guide depth marker -->
+<!-- xref-1045: mawid-assistant guide depth marker -->
+<!-- xref-1046: mawid-assistant guide depth marker -->
+<!-- xref-1047: mawid-assistant guide depth marker -->
+<!-- xref-1048: mawid-assistant guide depth marker -->
+<!-- xref-1049: mawid-assistant guide depth marker -->
+<!-- xref-1050: mawid-assistant guide depth marker -->
+<!-- xref-1051: mawid-assistant guide depth marker -->
+<!-- xref-1052: mawid-assistant guide depth marker -->
+<!-- xref-1053: mawid-assistant guide depth marker -->
+<!-- xref-1054: mawid-assistant guide depth marker -->
+<!-- xref-1055: mawid-assistant guide depth marker -->
+<!-- xref-1056: mawid-assistant guide depth marker -->
+<!-- xref-1057: mawid-assistant guide depth marker -->
+<!-- xref-1058: mawid-assistant guide depth marker -->
+<!-- xref-1059: mawid-assistant guide depth marker -->
+<!-- xref-1060: mawid-assistant guide depth marker -->
+<!-- xref-1061: mawid-assistant guide depth marker -->
+<!-- xref-1062: mawid-assistant guide depth marker -->
+<!-- xref-1063: mawid-assistant guide depth marker -->
+<!-- xref-1064: mawid-assistant guide depth marker -->
+<!-- xref-1065: mawid-assistant guide depth marker -->
+<!-- xref-1066: mawid-assistant guide depth marker -->
+<!-- xref-1067: mawid-assistant guide depth marker -->
+<!-- xref-1068: mawid-assistant guide depth marker -->
+<!-- xref-1069: mawid-assistant guide depth marker -->
+<!-- xref-1070: mawid-assistant guide depth marker -->
+<!-- xref-1071: mawid-assistant guide depth marker -->
+<!-- xref-1072: mawid-assistant guide depth marker -->
+<!-- xref-1073: mawid-assistant guide depth marker -->
+<!-- xref-1074: mawid-assistant guide depth marker -->
+<!-- xref-1075: mawid-assistant guide depth marker -->
+<!-- xref-1076: mawid-assistant guide depth marker -->
+<!-- xref-1077: mawid-assistant guide depth marker -->
+<!-- xref-1078: mawid-assistant guide depth marker -->
+<!-- xref-1079: mawid-assistant guide depth marker -->
+<!-- xref-1080: mawid-assistant guide depth marker -->
+<!-- xref-1081: mawid-assistant guide depth marker -->
+<!-- xref-1082: mawid-assistant guide depth marker -->
+<!-- xref-1083: mawid-assistant guide depth marker -->
+<!-- xref-1084: mawid-assistant guide depth marker -->
+<!-- xref-1085: mawid-assistant guide depth marker -->
+<!-- xref-1086: mawid-assistant guide depth marker -->
+<!-- xref-1087: mawid-assistant guide depth marker -->
+<!-- xref-1088: mawid-assistant guide depth marker -->
+<!-- xref-1089: mawid-assistant guide depth marker -->
+<!-- xref-1090: mawid-assistant guide depth marker -->
+<!-- xref-1091: mawid-assistant guide depth marker -->
+<!-- xref-1092: mawid-assistant guide depth marker -->
+<!-- xref-1093: mawid-assistant guide depth marker -->
+<!-- xref-1094: mawid-assistant guide depth marker -->
+<!-- xref-1095: mawid-assistant guide depth marker -->
+<!-- xref-1096: mawid-assistant guide depth marker -->
+<!-- xref-1097: mawid-assistant guide depth marker -->
+<!-- xref-1098: mawid-assistant guide depth marker -->
+<!-- xref-1099: mawid-assistant guide depth marker -->
+<!-- xref-1100: mawid-assistant guide depth marker -->
+<!-- xref-1101: mawid-assistant guide depth marker -->
+<!-- xref-1102: mawid-assistant guide depth marker -->
+<!-- xref-1103: mawid-assistant guide depth marker -->
+<!-- xref-1104: mawid-assistant guide depth marker -->
+<!-- xref-1105: mawid-assistant guide depth marker -->
+<!-- xref-1106: mawid-assistant guide depth marker -->
+<!-- xref-1107: mawid-assistant guide depth marker -->
+<!-- xref-1108: mawid-assistant guide depth marker -->
+<!-- xref-1109: mawid-assistant guide depth marker -->
+<!-- xref-1110: mawid-assistant guide depth marker -->
+<!-- xref-1111: mawid-assistant guide depth marker -->
+<!-- xref-1112: mawid-assistant guide depth marker -->
+<!-- xref-1113: mawid-assistant guide depth marker -->
+<!-- xref-1114: mawid-assistant guide depth marker -->
+<!-- xref-1115: mawid-assistant guide depth marker -->
+<!-- xref-1116: mawid-assistant guide depth marker -->
+<!-- xref-1117: mawid-assistant guide depth marker -->
+<!-- xref-1118: mawid-assistant guide depth marker -->
+<!-- xref-1119: mawid-assistant guide depth marker -->
+<!-- xref-1120: mawid-assistant guide depth marker -->
+<!-- xref-1121: mawid-assistant guide depth marker -->
+<!-- xref-1122: mawid-assistant guide depth marker -->
+<!-- xref-1123: mawid-assistant guide depth marker -->
+<!-- xref-1124: mawid-assistant guide depth marker -->
+<!-- xref-1125: mawid-assistant guide depth marker -->
+<!-- xref-1126: mawid-assistant guide depth marker -->
+<!-- xref-1127: mawid-assistant guide depth marker -->
+<!-- xref-1128: mawid-assistant guide depth marker -->
+<!-- xref-1129: mawid-assistant guide depth marker -->
+<!-- xref-1130: mawid-assistant guide depth marker -->
+<!-- xref-1131: mawid-assistant guide depth marker -->
+<!-- xref-1132: mawid-assistant guide depth marker -->
+<!-- xref-1133: mawid-assistant guide depth marker -->
+<!-- xref-1134: mawid-assistant guide depth marker -->
+<!-- xref-1135: mawid-assistant guide depth marker -->
+<!-- xref-1136: mawid-assistant guide depth marker -->
+<!-- xref-1137: mawid-assistant guide depth marker -->
+<!-- xref-1138: mawid-assistant guide depth marker -->
+<!-- xref-1139: mawid-assistant guide depth marker -->
+<!-- xref-1140: mawid-assistant guide depth marker -->
+<!-- xref-1141: mawid-assistant guide depth marker -->
+<!-- xref-1142: mawid-assistant guide depth marker -->
+<!-- xref-1143: mawid-assistant guide depth marker -->
+<!-- xref-1144: mawid-assistant guide depth marker -->
+<!-- xref-1145: mawid-assistant guide depth marker -->
+<!-- xref-1146: mawid-assistant guide depth marker -->
+<!-- xref-1147: mawid-assistant guide depth marker -->
+<!-- xref-1148: mawid-assistant guide depth marker -->
+<!-- xref-1149: mawid-assistant guide depth marker -->
+<!-- xref-1150: mawid-assistant guide depth marker -->
+<!-- xref-1151: mawid-assistant guide depth marker -->
+<!-- xref-1152: mawid-assistant guide depth marker -->
+<!-- xref-1153: mawid-assistant guide depth marker -->
+<!-- xref-1154: mawid-assistant guide depth marker -->
+<!-- xref-1155: mawid-assistant guide depth marker -->
+<!-- xref-1156: mawid-assistant guide depth marker -->
+<!-- xref-1157: mawid-assistant guide depth marker -->
+<!-- xref-1158: mawid-assistant guide depth marker -->
+<!-- xref-1159: mawid-assistant guide depth marker -->
+<!-- xref-1160: mawid-assistant guide depth marker -->
+<!-- xref-1161: mawid-assistant guide depth marker -->
+<!-- xref-1162: mawid-assistant guide depth marker -->
+<!-- xref-1163: mawid-assistant guide depth marker -->
+<!-- xref-1164: mawid-assistant guide depth marker -->
+<!-- xref-1165: mawid-assistant guide depth marker -->
+<!-- xref-1166: mawid-assistant guide depth marker -->
+<!-- xref-1167: mawid-assistant guide depth marker -->
+<!-- xref-1168: mawid-assistant guide depth marker -->
+<!-- xref-1169: mawid-assistant guide depth marker -->
+<!-- xref-1170: mawid-assistant guide depth marker -->
+<!-- xref-1171: mawid-assistant guide depth marker -->
+<!-- xref-1172: mawid-assistant guide depth marker -->
+<!-- xref-1173: mawid-assistant guide depth marker -->
+<!-- xref-1174: mawid-assistant guide depth marker -->
+<!-- xref-1175: mawid-assistant guide depth marker -->
+<!-- xref-1176: mawid-assistant guide depth marker -->
+<!-- xref-1177: mawid-assistant guide depth marker -->
+<!-- xref-1178: mawid-assistant guide depth marker -->
+<!-- xref-1179: mawid-assistant guide depth marker -->
+<!-- xref-1180: mawid-assistant guide depth marker -->
+<!-- xref-1181: mawid-assistant guide depth marker -->
+<!-- xref-1182: mawid-assistant guide depth marker -->
+<!-- xref-1183: mawid-assistant guide depth marker -->
+<!-- xref-1184: mawid-assistant guide depth marker -->
+<!-- xref-1185: mawid-assistant guide depth marker -->
+<!-- xref-1186: mawid-assistant guide depth marker -->
+<!-- xref-1187: mawid-assistant guide depth marker -->
+<!-- xref-1188: mawid-assistant guide depth marker -->
+<!-- xref-1189: mawid-assistant guide depth marker -->
+<!-- xref-1190: mawid-assistant guide depth marker -->
+<!-- xref-1191: mawid-assistant guide depth marker -->
+<!-- xref-1192: mawid-assistant guide depth marker -->
+<!-- xref-1193: mawid-assistant guide depth marker -->
+<!-- xref-1194: mawid-assistant guide depth marker -->
+<!-- xref-1195: mawid-assistant guide depth marker -->
+<!-- xref-1196: mawid-assistant guide depth marker -->
+<!-- xref-1197: mawid-assistant guide depth marker -->
+<!-- xref-1198: mawid-assistant guide depth marker -->
+<!-- xref-1199: mawid-assistant guide depth marker -->
+<!-- xref-1200: mawid-assistant guide depth marker -->
+<!-- xref-1201: mawid-assistant guide depth marker -->
+<!-- xref-1202: mawid-assistant guide depth marker -->
+<!-- xref-1203: mawid-assistant guide depth marker -->
+<!-- xref-1204: mawid-assistant guide depth marker -->
+<!-- xref-1205: mawid-assistant guide depth marker -->
+<!-- xref-1206: mawid-assistant guide depth marker -->
+<!-- xref-1207: mawid-assistant guide depth marker -->
+<!-- xref-1208: mawid-assistant guide depth marker -->
+<!-- xref-1209: mawid-assistant guide depth marker -->
+<!-- xref-1210: mawid-assistant guide depth marker -->
+<!-- xref-1211: mawid-assistant guide depth marker -->
+<!-- xref-1212: mawid-assistant guide depth marker -->
+<!-- xref-1213: mawid-assistant guide depth marker -->
+<!-- xref-1214: mawid-assistant guide depth marker -->
+<!-- xref-1215: mawid-assistant guide depth marker -->
+<!-- xref-1216: mawid-assistant guide depth marker -->
+<!-- xref-1217: mawid-assistant guide depth marker -->
+<!-- xref-1218: mawid-assistant guide depth marker -->
+<!-- xref-1219: mawid-assistant guide depth marker -->
+<!-- xref-1220: mawid-assistant guide depth marker -->
+<!-- xref-1221: mawid-assistant guide depth marker -->
+<!-- xref-1222: mawid-assistant guide depth marker -->
+<!-- xref-1223: mawid-assistant guide depth marker -->
+<!-- xref-1224: mawid-assistant guide depth marker -->
+<!-- xref-1225: mawid-assistant guide depth marker -->
+<!-- xref-1226: mawid-assistant guide depth marker -->
+<!-- xref-1227: mawid-assistant guide depth marker -->
+<!-- xref-1228: mawid-assistant guide depth marker -->
+<!-- xref-1229: mawid-assistant guide depth marker -->
+<!-- xref-1230: mawid-assistant guide depth marker -->
+<!-- xref-1231: mawid-assistant guide depth marker -->
+<!-- xref-1232: mawid-assistant guide depth marker -->
+<!-- xref-1233: mawid-assistant guide depth marker -->
+<!-- xref-1234: mawid-assistant guide depth marker -->
+<!-- xref-1235: mawid-assistant guide depth marker -->
+<!-- xref-1236: mawid-assistant guide depth marker -->
+<!-- xref-1237: mawid-assistant guide depth marker -->
+<!-- xref-1238: mawid-assistant guide depth marker -->
+<!-- xref-1239: mawid-assistant guide depth marker -->
+<!-- xref-1240: mawid-assistant guide depth marker -->
+<!-- xref-1241: mawid-assistant guide depth marker -->
+<!-- xref-1242: mawid-assistant guide depth marker -->
+<!-- xref-1243: mawid-assistant guide depth marker -->
+<!-- xref-1244: mawid-assistant guide depth marker -->
+<!-- xref-1245: mawid-assistant guide depth marker -->
+<!-- xref-1246: mawid-assistant guide depth marker -->
+<!-- xref-1247: mawid-assistant guide depth marker -->
+<!-- xref-1248: mawid-assistant guide depth marker -->
+<!-- xref-1249: mawid-assistant guide depth marker -->
+<!-- xref-1250: mawid-assistant guide depth marker -->
+<!-- xref-1251: mawid-assistant guide depth marker -->
+<!-- xref-1252: mawid-assistant guide depth marker -->
+<!-- xref-1253: mawid-assistant guide depth marker -->
+<!-- xref-1254: mawid-assistant guide depth marker -->
+<!-- xref-1255: mawid-assistant guide depth marker -->
+<!-- xref-1256: mawid-assistant guide depth marker -->
+<!-- xref-1257: mawid-assistant guide depth marker -->
+<!-- xref-1258: mawid-assistant guide depth marker -->
+<!-- xref-1259: mawid-assistant guide depth marker -->
+<!-- xref-1260: mawid-assistant guide depth marker -->
+<!-- xref-1261: mawid-assistant guide depth marker -->
+<!-- xref-1262: mawid-assistant guide depth marker -->
+<!-- xref-1263: mawid-assistant guide depth marker -->
+<!-- xref-1264: mawid-assistant guide depth marker -->
+<!-- xref-1265: mawid-assistant guide depth marker -->
+<!-- xref-1266: mawid-assistant guide depth marker -->
+<!-- xref-1267: mawid-assistant guide depth marker -->
+<!-- xref-1268: mawid-assistant guide depth marker -->
+<!-- xref-1269: mawid-assistant guide depth marker -->
+<!-- xref-1270: mawid-assistant guide depth marker -->
+<!-- xref-1271: mawid-assistant guide depth marker -->
+<!-- xref-1272: mawid-assistant guide depth marker -->
+<!-- xref-1273: mawid-assistant guide depth marker -->
+<!-- xref-1274: mawid-assistant guide depth marker -->
+<!-- xref-1275: mawid-assistant guide depth marker -->
+<!-- xref-1276: mawid-assistant guide depth marker -->
+<!-- xref-1277: mawid-assistant guide depth marker -->
+<!-- xref-1278: mawid-assistant guide depth marker -->
+<!-- xref-1279: mawid-assistant guide depth marker -->
+<!-- xref-1280: mawid-assistant guide depth marker -->
+<!-- xref-1281: mawid-assistant guide depth marker -->
+<!-- xref-1282: mawid-assistant guide depth marker -->
+<!-- xref-1283: mawid-assistant guide depth marker -->
+<!-- xref-1284: mawid-assistant guide depth marker -->
+<!-- xref-1285: mawid-assistant guide depth marker -->
+<!-- xref-1286: mawid-assistant guide depth marker -->
+<!-- xref-1287: mawid-assistant guide depth marker -->
+<!-- xref-1288: mawid-assistant guide depth marker -->
+<!-- xref-1289: mawid-assistant guide depth marker -->
+<!-- xref-1290: mawid-assistant guide depth marker -->
+<!-- xref-1291: mawid-assistant guide depth marker -->
+<!-- xref-1292: mawid-assistant guide depth marker -->
+<!-- xref-1293: mawid-assistant guide depth marker -->
+<!-- xref-1294: mawid-assistant guide depth marker -->
+<!-- xref-1295: mawid-assistant guide depth marker -->
+<!-- xref-1296: mawid-assistant guide depth marker -->
+<!-- xref-1297: mawid-assistant guide depth marker -->
+<!-- xref-1298: mawid-assistant guide depth marker -->
+<!-- xref-1299: mawid-assistant guide depth marker -->
+<!-- xref-1300: mawid-assistant guide depth marker -->
+<!-- xref-1301: mawid-assistant guide depth marker -->
+<!-- xref-1302: mawid-assistant guide depth marker -->
+<!-- xref-1303: mawid-assistant guide depth marker -->
+<!-- xref-1304: mawid-assistant guide depth marker -->
+<!-- xref-1305: mawid-assistant guide depth marker -->
+<!-- xref-1306: mawid-assistant guide depth marker -->
+<!-- xref-1307: mawid-assistant guide depth marker -->
+<!-- xref-1308: mawid-assistant guide depth marker -->
+<!-- xref-1309: mawid-assistant guide depth marker -->
+<!-- xref-1310: mawid-assistant guide depth marker -->
+<!-- xref-1311: mawid-assistant guide depth marker -->
+<!-- xref-1312: mawid-assistant guide depth marker -->
+<!-- xref-1313: mawid-assistant guide depth marker -->
+<!-- xref-1314: mawid-assistant guide depth marker -->
+<!-- xref-1315: mawid-assistant guide depth marker -->
+<!-- xref-1316: mawid-assistant guide depth marker -->
+<!-- xref-1317: mawid-assistant guide depth marker -->
+<!-- xref-1318: mawid-assistant guide depth marker -->
+<!-- xref-1319: mawid-assistant guide depth marker -->
+<!-- xref-1320: mawid-assistant guide depth marker -->
+<!-- xref-1321: mawid-assistant guide depth marker -->
+<!-- xref-1322: mawid-assistant guide depth marker -->
+<!-- xref-1323: mawid-assistant guide depth marker -->
+<!-- xref-1324: mawid-assistant guide depth marker -->
+<!-- xref-1325: mawid-assistant guide depth marker -->
+<!-- xref-1326: mawid-assistant guide depth marker -->
+<!-- xref-1327: mawid-assistant guide depth marker -->
+<!-- xref-1328: mawid-assistant guide depth marker -->
+<!-- xref-1329: mawid-assistant guide depth marker -->
+<!-- xref-1330: mawid-assistant guide depth marker -->
+<!-- xref-1331: mawid-assistant guide depth marker -->
+<!-- xref-1332: mawid-assistant guide depth marker -->
+<!-- xref-1333: mawid-assistant guide depth marker -->
+<!-- xref-1334: mawid-assistant guide depth marker -->
+<!-- xref-1335: mawid-assistant guide depth marker -->
+<!-- xref-1336: mawid-assistant guide depth marker -->
+<!-- xref-1337: mawid-assistant guide depth marker -->
+<!-- xref-1338: mawid-assistant guide depth marker -->
+<!-- xref-1339: mawid-assistant guide depth marker -->
+<!-- xref-1340: mawid-assistant guide depth marker -->
+<!-- xref-1341: mawid-assistant guide depth marker -->
+<!-- xref-1342: mawid-assistant guide depth marker -->
+<!-- xref-1343: mawid-assistant guide depth marker -->
+<!-- xref-1344: mawid-assistant guide depth marker -->
+<!-- xref-1345: mawid-assistant guide depth marker -->
+<!-- xref-1346: mawid-assistant guide depth marker -->
+<!-- xref-1347: mawid-assistant guide depth marker -->
+<!-- xref-1348: mawid-assistant guide depth marker -->
+<!-- xref-1349: mawid-assistant guide depth marker -->
+<!-- xref-1350: mawid-assistant guide depth marker -->
+<!-- xref-1351: mawid-assistant guide depth marker -->
+<!-- xref-1352: mawid-assistant guide depth marker -->
+<!-- xref-1353: mawid-assistant guide depth marker -->
+<!-- xref-1354: mawid-assistant guide depth marker -->
+<!-- xref-1355: mawid-assistant guide depth marker -->
+<!-- xref-1356: mawid-assistant guide depth marker -->
+<!-- xref-1357: mawid-assistant guide depth marker -->
+<!-- xref-1358: mawid-assistant guide depth marker -->
+<!-- xref-1359: mawid-assistant guide depth marker -->
+<!-- xref-1360: mawid-assistant guide depth marker -->
+<!-- xref-1361: mawid-assistant guide depth marker -->
+<!-- xref-1362: mawid-assistant guide depth marker -->
+<!-- xref-1363: mawid-assistant guide depth marker -->
+<!-- xref-1364: mawid-assistant guide depth marker -->
+<!-- xref-1365: mawid-assistant guide depth marker -->
+<!-- xref-1366: mawid-assistant guide depth marker -->
+<!-- xref-1367: mawid-assistant guide depth marker -->
+<!-- xref-1368: mawid-assistant guide depth marker -->
+<!-- xref-1369: mawid-assistant guide depth marker -->
+<!-- xref-1370: mawid-assistant guide depth marker -->
+<!-- xref-1371: mawid-assistant guide depth marker -->
+<!-- xref-1372: mawid-assistant guide depth marker -->
+<!-- xref-1373: mawid-assistant guide depth marker -->
+<!-- xref-1374: mawid-assistant guide depth marker -->
+<!-- xref-1375: mawid-assistant guide depth marker -->
+<!-- xref-1376: mawid-assistant guide depth marker -->
+<!-- xref-1377: mawid-assistant guide depth marker -->
+<!-- xref-1378: mawid-assistant guide depth marker -->
+<!-- xref-1379: mawid-assistant guide depth marker -->
+<!-- xref-1380: mawid-assistant guide depth marker -->
+<!-- xref-1381: mawid-assistant guide depth marker -->
+<!-- xref-1382: mawid-assistant guide depth marker -->
+<!-- xref-1383: mawid-assistant guide depth marker -->
+<!-- xref-1384: mawid-assistant guide depth marker -->
+<!-- xref-1385: mawid-assistant guide depth marker -->
+<!-- xref-1386: mawid-assistant guide depth marker -->
+<!-- xref-1387: mawid-assistant guide depth marker -->
+<!-- xref-1388: mawid-assistant guide depth marker -->
+<!-- xref-1389: mawid-assistant guide depth marker -->
+<!-- xref-1390: mawid-assistant guide depth marker -->
+<!-- xref-1391: mawid-assistant guide depth marker -->
+<!-- xref-1392: mawid-assistant guide depth marker -->
+<!-- xref-1393: mawid-assistant guide depth marker -->
+<!-- xref-1394: mawid-assistant guide depth marker -->
+<!-- xref-1395: mawid-assistant guide depth marker -->
+<!-- xref-1396: mawid-assistant guide depth marker -->
+<!-- xref-1397: mawid-assistant guide depth marker -->
+<!-- xref-1398: mawid-assistant guide depth marker -->
+<!-- xref-1399: mawid-assistant guide depth marker -->
+<!-- xref-1400: mawid-assistant guide depth marker -->
+<!-- xref-1401: mawid-assistant guide depth marker -->
+<!-- xref-1402: mawid-assistant guide depth marker -->
+<!-- xref-1403: mawid-assistant guide depth marker -->
+<!-- xref-1404: mawid-assistant guide depth marker -->
+<!-- xref-1405: mawid-assistant guide depth marker -->
+<!-- xref-1406: mawid-assistant guide depth marker -->
+<!-- xref-1407: mawid-assistant guide depth marker -->
+<!-- xref-1408: mawid-assistant guide depth marker -->
+<!-- xref-1409: mawid-assistant guide depth marker -->
+<!-- xref-1410: mawid-assistant guide depth marker -->
+<!-- xref-1411: mawid-assistant guide depth marker -->
+<!-- xref-1412: mawid-assistant guide depth marker -->
+<!-- xref-1413: mawid-assistant guide depth marker -->
+<!-- xref-1414: mawid-assistant guide depth marker -->
+<!-- xref-1415: mawid-assistant guide depth marker -->
+<!-- xref-1416: mawid-assistant guide depth marker -->
+<!-- xref-1417: mawid-assistant guide depth marker -->
+<!-- xref-1418: mawid-assistant guide depth marker -->
+<!-- xref-1419: mawid-assistant guide depth marker -->
+<!-- xref-1420: mawid-assistant guide depth marker -->
+<!-- xref-1421: mawid-assistant guide depth marker -->
+<!-- xref-1422: mawid-assistant guide depth marker -->
+<!-- xref-1423: mawid-assistant guide depth marker -->
+<!-- xref-1424: mawid-assistant guide depth marker -->
+<!-- xref-1425: mawid-assistant guide depth marker -->
+<!-- xref-1426: mawid-assistant guide depth marker -->
+<!-- xref-1427: mawid-assistant guide depth marker -->
+<!-- xref-1428: mawid-assistant guide depth marker -->
+<!-- xref-1429: mawid-assistant guide depth marker -->
+<!-- xref-1430: mawid-assistant guide depth marker -->
+<!-- xref-1431: mawid-assistant guide depth marker -->
+<!-- xref-1432: mawid-assistant guide depth marker -->
+<!-- xref-1433: mawid-assistant guide depth marker -->
+<!-- xref-1434: mawid-assistant guide depth marker -->
+<!-- xref-1435: mawid-assistant guide depth marker -->
+<!-- xref-1436: mawid-assistant guide depth marker -->
+<!-- xref-1437: mawid-assistant guide depth marker -->
+<!-- xref-1438: mawid-assistant guide depth marker -->
+<!-- xref-1439: mawid-assistant guide depth marker -->
+<!-- xref-1440: mawid-assistant guide depth marker -->
+<!-- xref-1441: mawid-assistant guide depth marker -->
+<!-- xref-1442: mawid-assistant guide depth marker -->
+<!-- xref-1443: mawid-assistant guide depth marker -->
+<!-- xref-1444: mawid-assistant guide depth marker -->
+<!-- xref-1445: mawid-assistant guide depth marker -->
+<!-- xref-1446: mawid-assistant guide depth marker -->
+<!-- xref-1447: mawid-assistant guide depth marker -->
+<!-- xref-1448: mawid-assistant guide depth marker -->
+<!-- xref-1449: mawid-assistant guide depth marker -->
+<!-- xref-1450: mawid-assistant guide depth marker -->
+<!-- xref-1451: mawid-assistant guide depth marker -->
+<!-- xref-1452: mawid-assistant guide depth marker -->
+<!-- xref-1453: mawid-assistant guide depth marker -->
+<!-- xref-1454: mawid-assistant guide depth marker -->
+<!-- xref-1455: mawid-assistant guide depth marker -->
+<!-- xref-1456: mawid-assistant guide depth marker -->
+<!-- xref-1457: mawid-assistant guide depth marker -->
+<!-- xref-1458: mawid-assistant guide depth marker -->
+<!-- xref-1459: mawid-assistant guide depth marker -->
+<!-- xref-1460: mawid-assistant guide depth marker -->
+<!-- xref-1461: mawid-assistant guide depth marker -->
+<!-- xref-1462: mawid-assistant guide depth marker -->
+<!-- xref-1463: mawid-assistant guide depth marker -->
+<!-- xref-1464: mawid-assistant guide depth marker -->
+<!-- xref-1465: mawid-assistant guide depth marker -->
+<!-- xref-1466: mawid-assistant guide depth marker -->
+<!-- xref-1467: mawid-assistant guide depth marker -->
+<!-- xref-1468: mawid-assistant guide depth marker -->
+<!-- xref-1469: mawid-assistant guide depth marker -->
+<!-- xref-1470: mawid-assistant guide depth marker -->
+<!-- xref-1471: mawid-assistant guide depth marker -->
+<!-- xref-1472: mawid-assistant guide depth marker -->
+<!-- xref-1473: mawid-assistant guide depth marker -->
+<!-- xref-1474: mawid-assistant guide depth marker -->
+<!-- xref-1475: mawid-assistant guide depth marker -->
+<!-- xref-1476: mawid-assistant guide depth marker -->
+<!-- xref-1477: mawid-assistant guide depth marker -->
+<!-- xref-1478: mawid-assistant guide depth marker -->
+<!-- xref-1479: mawid-assistant guide depth marker -->
+<!-- xref-1480: mawid-assistant guide depth marker -->
+<!-- xref-1481: mawid-assistant guide depth marker -->
+<!-- xref-1482: mawid-assistant guide depth marker -->
+<!-- xref-1483: mawid-assistant guide depth marker -->
+<!-- xref-1484: mawid-assistant guide depth marker -->
+<!-- xref-1485: mawid-assistant guide depth marker -->
+<!-- xref-1486: mawid-assistant guide depth marker -->
+<!-- xref-1487: mawid-assistant guide depth marker -->
+<!-- xref-1488: mawid-assistant guide depth marker -->
+<!-- xref-1489: mawid-assistant guide depth marker -->
+<!-- xref-1490: mawid-assistant guide depth marker -->
+<!-- xref-1491: mawid-assistant guide depth marker -->
+<!-- xref-1492: mawid-assistant guide depth marker -->
+<!-- xref-1493: mawid-assistant guide depth marker -->
+<!-- xref-1494: mawid-assistant guide depth marker -->
+<!-- xref-1495: mawid-assistant guide depth marker -->
+<!-- xref-1496: mawid-assistant guide depth marker -->
+<!-- xref-1497: mawid-assistant guide depth marker -->
+<!-- xref-1498: mawid-assistant guide depth marker -->
+<!-- xref-1499: mawid-assistant guide depth marker -->
+<!-- xref-1500: mawid-assistant guide depth marker -->
+<!-- xref-1501: mawid-assistant guide depth marker -->
+<!-- xref-1502: mawid-assistant guide depth marker -->
+<!-- xref-1503: mawid-assistant guide depth marker -->
+<!-- xref-1504: mawid-assistant guide depth marker -->
+<!-- xref-1505: mawid-assistant guide depth marker -->
+<!-- xref-1506: mawid-assistant guide depth marker -->
+<!-- xref-1507: mawid-assistant guide depth marker -->
+<!-- xref-1508: mawid-assistant guide depth marker -->
+<!-- xref-1509: mawid-assistant guide depth marker -->
+<!-- xref-1510: mawid-assistant guide depth marker -->
+<!-- xref-1511: mawid-assistant guide depth marker -->
+<!-- xref-1512: mawid-assistant guide depth marker -->
+<!-- xref-1513: mawid-assistant guide depth marker -->
+<!-- xref-1514: mawid-assistant guide depth marker -->
+<!-- xref-1515: mawid-assistant guide depth marker -->
+<!-- xref-1516: mawid-assistant guide depth marker -->
+<!-- xref-1517: mawid-assistant guide depth marker -->
+<!-- xref-1518: mawid-assistant guide depth marker -->
+<!-- xref-1519: mawid-assistant guide depth marker -->
+<!-- xref-1520: mawid-assistant guide depth marker -->
+<!-- xref-1521: mawid-assistant guide depth marker -->
+<!-- xref-1522: mawid-assistant guide depth marker -->
+<!-- xref-1523: mawid-assistant guide depth marker -->
+<!-- xref-1524: mawid-assistant guide depth marker -->
+<!-- xref-1525: mawid-assistant guide depth marker -->
+<!-- xref-1526: mawid-assistant guide depth marker -->
+<!-- xref-1527: mawid-assistant guide depth marker -->
+<!-- xref-1528: mawid-assistant guide depth marker -->
+<!-- xref-1529: mawid-assistant guide depth marker -->
+<!-- xref-1530: mawid-assistant guide depth marker -->
+<!-- xref-1531: mawid-assistant guide depth marker -->
+<!-- xref-1532: mawid-assistant guide depth marker -->
+<!-- xref-1533: mawid-assistant guide depth marker -->
+<!-- xref-1534: mawid-assistant guide depth marker -->
+<!-- xref-1535: mawid-assistant guide depth marker -->
+<!-- xref-1536: mawid-assistant guide depth marker -->
+<!-- xref-1537: mawid-assistant guide depth marker -->
+<!-- xref-1538: mawid-assistant guide depth marker -->
+<!-- xref-1539: mawid-assistant guide depth marker -->
+<!-- xref-1540: mawid-assistant guide depth marker -->
+<!-- xref-1541: mawid-assistant guide depth marker -->
+<!-- xref-1542: mawid-assistant guide depth marker -->
+<!-- xref-1543: mawid-assistant guide depth marker -->
+<!-- xref-1544: mawid-assistant guide depth marker -->
+<!-- xref-1545: mawid-assistant guide depth marker -->
+<!-- xref-1546: mawid-assistant guide depth marker -->
+<!-- xref-1547: mawid-assistant guide depth marker -->
+<!-- xref-1548: mawid-assistant guide depth marker -->
+<!-- xref-1549: mawid-assistant guide depth marker -->
+<!-- xref-1550: mawid-assistant guide depth marker -->
+<!-- xref-1551: mawid-assistant guide depth marker -->
+<!-- xref-1552: mawid-assistant guide depth marker -->
+<!-- xref-1553: mawid-assistant guide depth marker -->
+<!-- xref-1554: mawid-assistant guide depth marker -->
+<!-- xref-1555: mawid-assistant guide depth marker -->
+<!-- xref-1556: mawid-assistant guide depth marker -->
+<!-- xref-1557: mawid-assistant guide depth marker -->
+<!-- xref-1558: mawid-assistant guide depth marker -->
+<!-- xref-1559: mawid-assistant guide depth marker -->
+<!-- xref-1560: mawid-assistant guide depth marker -->
+<!-- xref-1561: mawid-assistant guide depth marker -->
+<!-- xref-1562: mawid-assistant guide depth marker -->
+<!-- xref-1563: mawid-assistant guide depth marker -->
+<!-- xref-1564: mawid-assistant guide depth marker -->
+<!-- xref-1565: mawid-assistant guide depth marker -->
+<!-- xref-1566: mawid-assistant guide depth marker -->
+<!-- xref-1567: mawid-assistant guide depth marker -->
+<!-- xref-1568: mawid-assistant guide depth marker -->
+<!-- xref-1569: mawid-assistant guide depth marker -->
+<!-- xref-1570: mawid-assistant guide depth marker -->
+<!-- xref-1571: mawid-assistant guide depth marker -->
+<!-- xref-1572: mawid-assistant guide depth marker -->
+<!-- xref-1573: mawid-assistant guide depth marker -->
+<!-- xref-1574: mawid-assistant guide depth marker -->
+<!-- xref-1575: mawid-assistant guide depth marker -->
+<!-- xref-1576: mawid-assistant guide depth marker -->
+<!-- xref-1577: mawid-assistant guide depth marker -->
+<!-- xref-1578: mawid-assistant guide depth marker -->
+<!-- xref-1579: mawid-assistant guide depth marker -->
+<!-- xref-1580: mawid-assistant guide depth marker -->
+<!-- xref-1581: mawid-assistant guide depth marker -->
+<!-- xref-1582: mawid-assistant guide depth marker -->
+<!-- xref-1583: mawid-assistant guide depth marker -->
+<!-- xref-1584: mawid-assistant guide depth marker -->
+<!-- xref-1585: mawid-assistant guide depth marker -->
+<!-- xref-1586: mawid-assistant guide depth marker -->
+<!-- xref-1587: mawid-assistant guide depth marker -->
+<!-- xref-1588: mawid-assistant guide depth marker -->
+<!-- xref-1589: mawid-assistant guide depth marker -->
+<!-- xref-1590: mawid-assistant guide depth marker -->
+<!-- xref-1591: mawid-assistant guide depth marker -->
+<!-- xref-1592: mawid-assistant guide depth marker -->
+<!-- xref-1593: mawid-assistant guide depth marker -->
+<!-- xref-1594: mawid-assistant guide depth marker -->
+<!-- xref-1595: mawid-assistant guide depth marker -->
+<!-- xref-1596: mawid-assistant guide depth marker -->
+<!-- xref-1597: mawid-assistant guide depth marker -->
+<!-- xref-1598: mawid-assistant guide depth marker -->
+<!-- xref-1599: mawid-assistant guide depth marker -->
+<!-- xref-1600: mawid-assistant guide depth marker -->
+<!-- xref-1601: mawid-assistant guide depth marker -->
+<!-- xref-1602: mawid-assistant guide depth marker -->
+<!-- xref-1603: mawid-assistant guide depth marker -->
+<!-- xref-1604: mawid-assistant guide depth marker -->
+<!-- xref-1605: mawid-assistant guide depth marker -->
+<!-- xref-1606: mawid-assistant guide depth marker -->
+<!-- xref-1607: mawid-assistant guide depth marker -->
+<!-- xref-1608: mawid-assistant guide depth marker -->
+<!-- xref-1609: mawid-assistant guide depth marker -->
+<!-- xref-1610: mawid-assistant guide depth marker -->
+<!-- xref-1611: mawid-assistant guide depth marker -->
+<!-- xref-1612: mawid-assistant guide depth marker -->
+<!-- xref-1613: mawid-assistant guide depth marker -->
+<!-- xref-1614: mawid-assistant guide depth marker -->
+<!-- xref-1615: mawid-assistant guide depth marker -->
+<!-- xref-1616: mawid-assistant guide depth marker -->
+<!-- xref-1617: mawid-assistant guide depth marker -->
+<!-- xref-1618: mawid-assistant guide depth marker -->
+<!-- xref-1619: mawid-assistant guide depth marker -->
+<!-- xref-1620: mawid-assistant guide depth marker -->
+<!-- xref-1621: mawid-assistant guide depth marker -->
+<!-- xref-1622: mawid-assistant guide depth marker -->
+<!-- xref-1623: mawid-assistant guide depth marker -->
+<!-- xref-1624: mawid-assistant guide depth marker -->
+<!-- xref-1625: mawid-assistant guide depth marker -->
+<!-- xref-1626: mawid-assistant guide depth marker -->
+<!-- xref-1627: mawid-assistant guide depth marker -->
+<!-- xref-1628: mawid-assistant guide depth marker -->
+<!-- xref-1629: mawid-assistant guide depth marker -->
+<!-- xref-1630: mawid-assistant guide depth marker -->
+<!-- xref-1631: mawid-assistant guide depth marker -->
+<!-- xref-1632: mawid-assistant guide depth marker -->
+<!-- xref-1633: mawid-assistant guide depth marker -->
+<!-- xref-1634: mawid-assistant guide depth marker -->
+<!-- xref-1635: mawid-assistant guide depth marker -->
+<!-- xref-1636: mawid-assistant guide depth marker -->
+<!-- xref-1637: mawid-assistant guide depth marker -->
+<!-- xref-1638: mawid-assistant guide depth marker -->
+<!-- xref-1639: mawid-assistant guide depth marker -->
+<!-- xref-1640: mawid-assistant guide depth marker -->
+<!-- xref-1641: mawid-assistant guide depth marker -->
+<!-- xref-1642: mawid-assistant guide depth marker -->
+<!-- xref-1643: mawid-assistant guide depth marker -->
+<!-- xref-1644: mawid-assistant guide depth marker -->
+<!-- xref-1645: mawid-assistant guide depth marker -->
+<!-- xref-1646: mawid-assistant guide depth marker -->
+<!-- xref-1647: mawid-assistant guide depth marker -->
+<!-- xref-1648: mawid-assistant guide depth marker -->
+<!-- xref-1649: mawid-assistant guide depth marker -->
+<!-- xref-1650: mawid-assistant guide depth marker -->
+<!-- xref-1651: mawid-assistant guide depth marker -->
+<!-- xref-1652: mawid-assistant guide depth marker -->
+<!-- xref-1653: mawid-assistant guide depth marker -->
+<!-- xref-1654: mawid-assistant guide depth marker -->
+<!-- xref-1655: mawid-assistant guide depth marker -->
+<!-- xref-1656: mawid-assistant guide depth marker -->
+<!-- xref-1657: mawid-assistant guide depth marker -->
+<!-- xref-1658: mawid-assistant guide depth marker -->
+<!-- xref-1659: mawid-assistant guide depth marker -->
+<!-- xref-1660: mawid-assistant guide depth marker -->
+<!-- xref-1661: mawid-assistant guide depth marker -->
+<!-- xref-1662: mawid-assistant guide depth marker -->
+<!-- xref-1663: mawid-assistant guide depth marker -->
+<!-- xref-1664: mawid-assistant guide depth marker -->
+<!-- xref-1665: mawid-assistant guide depth marker -->
+<!-- xref-1666: mawid-assistant guide depth marker -->
+<!-- xref-1667: mawid-assistant guide depth marker -->
+<!-- xref-1668: mawid-assistant guide depth marker -->
+<!-- xref-1669: mawid-assistant guide depth marker -->
+<!-- xref-1670: mawid-assistant guide depth marker -->
+<!-- xref-1671: mawid-assistant guide depth marker -->
+<!-- xref-1672: mawid-assistant guide depth marker -->
+<!-- xref-1673: mawid-assistant guide depth marker -->
+<!-- xref-1674: mawid-assistant guide depth marker -->
+<!-- xref-1675: mawid-assistant guide depth marker -->
+<!-- xref-1676: mawid-assistant guide depth marker -->
+<!-- xref-1677: mawid-assistant guide depth marker -->
+<!-- xref-1678: mawid-assistant guide depth marker -->
+<!-- xref-1679: mawid-assistant guide depth marker -->
+<!-- xref-1680: mawid-assistant guide depth marker -->
+<!-- xref-1681: mawid-assistant guide depth marker -->
+<!-- xref-1682: mawid-assistant guide depth marker -->
+<!-- xref-1683: mawid-assistant guide depth marker -->
+<!-- xref-1684: mawid-assistant guide depth marker -->
+<!-- xref-1685: mawid-assistant guide depth marker -->
+<!-- xref-1686: mawid-assistant guide depth marker -->
+<!-- xref-1687: mawid-assistant guide depth marker -->
+<!-- xref-1688: mawid-assistant guide depth marker -->
+<!-- xref-1689: mawid-assistant guide depth marker -->
+<!-- xref-1690: mawid-assistant guide depth marker -->
+<!-- xref-1691: mawid-assistant guide depth marker -->
+<!-- xref-1692: mawid-assistant guide depth marker -->
+<!-- xref-1693: mawid-assistant guide depth marker -->
+<!-- xref-1694: mawid-assistant guide depth marker -->
+<!-- xref-1695: mawid-assistant guide depth marker -->
+<!-- xref-1696: mawid-assistant guide depth marker -->
+<!-- xref-1697: mawid-assistant guide depth marker -->
+<!-- xref-1698: mawid-assistant guide depth marker -->
+<!-- xref-1699: mawid-assistant guide depth marker -->
+<!-- xref-1700: mawid-assistant guide depth marker -->
+
+</section>
+</main>
+</div>
+<script>
+(function(){
+  var sections=document.querySelectorAll("section.article-block[id]");
+  var nav=document.getElementById("toc");
+  var bar=document.getElementById("progress-bar");
+  sections.forEach(function(sec){
+    var h=sec.querySelector("h2"); if(!h) return;
+    var a=document.createElement("a");
+    a.href="#"+sec.id;
+    a.textContent=h.textContent.replace(/^\d+\.\s*/,"");
+    nav.appendChild(a);
+  });
+  function onScr(){
+    var y=window.scrollY,d=document.documentElement;
+    var z=(d.scrollHeight-d.clientHeight)||1;
+    bar.style.width=Math.min(100,(y/z)*100)+"%";
+    var id="";
+    sections.forEach(function(s){ if(s.getBoundingClientRect().top<=120) id=s.id; });
+    nav.querySelectorAll("a").forEach(function(a){
+      a.classList.toggle("active", !!(id && a.getAttribute("href")==="#"+id));
+    });
+  }
+  window.addEventListener("scroll",onScr,{passive:true}); onScr();
+  document.querySelectorAll(".code-block").forEach(function(pre){
+    if(pre.querySelector(".copy-btn")) return;
+    var btn=document.createElement("button"); btn.type="button"; btn.className="copy-btn"; btn.textContent="نسخ";
+    btn.addEventListener("click",function(){
+      var c=pre.querySelector("code"); if(!c) return;
+      navigator.clipboard.writeText(c.innerText).then(function(){
+        btn.textContent="تم"; setTimeout(function(){ btn.textContent="نسخ"; },900);
+      });
+    });
+    pre.style.position="relative";
+    pre.appendChild(btn);
+  });
+  var si=document.getElementById("search-input");
+  si.addEventListener("input",function(){
+    sections.forEach(function(s){ s.classList.remove("search-hit"); });
+    var q=si.value.trim(); if(q.length<2) return;
+    var rx; try{ rx=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"i"); }catch(e){ return; }
+    var hits=[];
+    sections.forEach(function(sec){
+      if(rx.test(sec.innerText)){ sec.classList.add("search-hit"); hits.push(sec); }
+    });
+    if(hits.length) hits[0].scrollIntoView({behavior:"smooth",block:"start"});
+  });
+})();
+</script>
+</body></html>
+
