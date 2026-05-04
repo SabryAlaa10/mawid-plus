@@ -19,10 +19,25 @@
 
 أبسط خيار مجاني لمشروعك على GitHub (المستودع: mawid-plus):
 
-1) تأكد إن مجلد docs (مع yom-elmy-mawid.html و assets/screenshots و index.html)
-   مترفوع على GitHub (commit + push).
+تم رفع مجلد docs وإضافة Workflow ينشر تلقائياً إلى فرع gh-pages عند كل push لـ docs.
 
-2) على GitHub: Repository → Settings → Pages
+أ) صلاحيات Actions (مرة واحدة إن فشل الـ workflow):
+   Repository → Settings → Actions → General → Workflow permissions
+   → اختر «Read and write permissions» → Save.
+
+ب) بعد نجاح الـ workflow (تبويب Actions أخضر):
+   Repository → Settings → Pages
+   → Source: Deploy from a branch
+   → Branch: gh-pages / folder: / (root)
+   → Save
+
+ج) بديل بدون gh-pages: يمكنك بدلاً من ذلك اختيار Branch = rewrite/sabry-web-auth و Folder = /docs
+   (لن تحتاج انتظار الـ workflow إن كان المجلد موجوداً على ذلك الفرع).
+
+1) تأكد إن مجلد docs (مع yom-elmy-mawid.html و assets/screenshots و index.html)
+   مترفوع على GitHub (تم: commit + push).
+
+2) إن لم تستخدم gh-pages: على GitHub: Repository → Settings → Pages
    - Build and deployment: Source = Deploy from a branch
    - Branch = نفس الفرع الذي يحتوي مجلد docs بعد الـ push (مثلاً rewrite/sabry-web-auth أو main)، Folder = /docs
    - Save
