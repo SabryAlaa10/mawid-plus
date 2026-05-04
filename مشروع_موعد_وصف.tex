@@ -1,0 +1,98 @@
+% !TEX TS-program = xelatex
+% تجميع الملف: xelatex مشروع_موعد_وصف.tex
+% يتطلب: توزيع TeX يدعم polyglossia + خط عربي (مثل Amiri أو Noto Naskh Arabic) مثبتاً على النظام
+
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{arabic}
+\setotherlanguage{english}
+
+% اختصار للنصوص الإنجليزية داخل فقرة عربية
+\newcommand{\en}[1]{\foreignlanguage{english}{#1}}
+
+% خط عربي — غيّر إلى Noto Naskh Arabic أو Traditional Arabic إذا لم يُوجد Amiri
+\newfontfamily\arabicfont[Script=Arabic,Scale=1.05]{Amiri}
+\setsansfont{Amiri}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+{\LARGE\bfseries استمارة وصف المشروع}\\[1.2em]
+\rule{\textwidth}{0.6pt}
+\end{center}
+
+\vspace{1em}
+
+\noindent
+\begin{tabular}{@{}p{0.35\textwidth}@{}p{0.6\textwidth}@{}}
+\textbf{الكلية:} & \underline{\hspace{0.55\textwidth}} \\[0.9em]
+\textbf{اسم الطالب / الطلاب:} & \underline{\hspace{0.55\textwidth}} \\[0.9em]
+\textbf{عدد الطلاب في المشروع:} & \underline{\hspace{0.55\textwidth}} \\[0.9em]
+\textbf{عنوان الفكرة:} &
+\en{Mawid+} (موعد+) — تطبيق جوال لخدمات المريض الرقمية (حجز المواعيد، البحث عن الأطباء، الخرائط، الإشعارات) \\[0.9em]
+\textbf{المجال (اختر واحداً):} &
+$\square$ الابتكارات الهندسية والطاقة والسيارات الكهربائية \quad
+$\square$ الشركات الناشئة وريادة الأعمال \quad
+$\square$ الروبوتات والذكاء الاصطناعي وتعليم الآلة
+\\[0.3em]
+& \textit{(يُنصح بتحديد: الشركات الناشئة وريادة الأعمال — منتج برمجي قابل للتوسع.)}
+\end{tabular}
+
+\vspace{1.2em}
+\rule{\textwidth}{0.4pt}
+\section*{أولاً: وصف المشروع (لا يزيد عن 250 كلمة)}
+
+يقدّم مشروع \en{Mawid+} تطبيقاً ذكياً للهواتف يستهدف المرضى ويُسهّل لهم الوصول إلى الأطباء وحجز المواعيد ضمن منظومة رقمية موحّدة. يعتمد التطبيق على واجهة عربية حديثة، ويربط المستخدم بقاعدة بيانات للأطباء والعيادات عبر خادم سحابي، مع إمكانيات البحث والتصفية، وعرض التفاصيل والموقع على الخريطة، وإدارة الحجوزات والمواعيد، واستقبال الإشعارات، ومتابعة الطابور عند الحاجة. يهدف المشروع إلى تقليل الاعتماد على الاتصالات المتكررة والرسائل غير المنظمة، وإبراز معلومات التخصص والتقييم والموقع في مكان واحد، بما يدعم قرار المريض ويختصر الوقت.
+
+\textbf{المشكلة المعالجة:} تشتت قنوات الحجز، وصعوبة مقارنة الخيارات، وتأخر الحصول على موعد مناسب بسبب غياب منصة رقمية موثوقة تربط المريض بالطبيب بسلاسة.
+
+\textbf{الهدف من المشروع:} تمكين المستخدم من إتمام رحلة «البحث — الاختيار — الحجز — المتابعة» عبر التطبيق، مع تحسين تجربة المستخدم ورفع كفاءة استخدام موارد العيادات الرقمية.
+
+\section*{ثانياً: منهجية العمل وتحقيق الأهداف}
+
+\begin{description}[style=nextline,leftmargin=0cm]
+\item[منهجية العمل:]
+اعتماد تطوير تكراري (\en{iterative}) على أساس واجهات \en{Jetpack Compose} ولغة \en{Kotlin} في منصة أندرويد، مع فصل المنطق عن الواجهة (\en{MVVM})، وربط الخلفية عبر واجهات برمجة (\en{Supabase / REST}) لاسترجاع بيانات الأطباء والمستخدم والمواعيد. يتم اختبار المسارات الحرجة (تسجيل الدخول، البحث، الحجز) على محاكيات وأجهزة حقيقية، وتصحيح العيوب بين كل نسخة.
+
+\item[مؤشرات تحقق الأهداف:]
+نجاح تسجيل الدخول واسترجاع القوائم؛ اكتمال مسار حجز تجريبي دون أعطال حرجة؛ زمن استجابة مقبول للشاشات الرئيسية؛ تقييم ذاتي لتجربة الاستخدام (\en{UX}).
+
+\item[المخرجات:]
+تطبيق قابل للتثبيت (\en{APK})، شفرة منظمة، ووثائق وصفية للمشروع.
+
+\item[العوائد:]
+مهارات في تطوير تطبيقات الإنتاج، التعامل مع قواعد البيانات السحابية، وتصميم واجهات متعددة الشاشات، مع قابلية توسيع المنتج لاحقاً (ميزات إضافية أو تكامل مع عيادات).
+\end{description}
+
+\section*{ثالثاً: المخرجات الرئيسية والمستفيد النهائي}
+
+\textbf{المخرجات الرئيسية:} تطبيق أندرويد جاهز للعرض والتجربة؛ وصف تقني للبنية؛ واجهات رئيسية (الرئيسية، البحث، تفاصيل الطبيب، الحجز، المواعيد، الملف الشخصي، الإشعارات حسب النطاق).
+
+\textbf{المستفيد النهائي المحتمل:} المرضى والمستخدمون الباحثون عن مواعيد طبية منظمة؛ ويمكن أن تمتد الفائدة لاحقاً لمقدمي الخدمة (عيادات) عند ربط أنظمة الحجز بشكل أعمق.
+
+\vspace{2em}
+\noindent\rule{\textwidth}{0.4pt}
+
+\begin{english}
+\begin{center}
+\small
+\textit{Abstract (optional summary for bilingual reports)}\\
+Mawid+ is an Android patient app that streamlines doctor discovery, appointment booking, maps, and notifications via a cloud-backed data layer. It addresses fragmented booking channels and information scatter by offering a unified Arabic-first mobile experience. Development follows Kotlin/Compose MVVM with iterative testing; primary deliverables are a deployable APK and documentation. End users are patients seeking structured access to care; the solution aligns with digital health entrepreneurship.
+\end{center}
+\end{english}
+
+\end{document}

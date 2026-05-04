@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>موعد+ — دليل التعاون والأدوات وGit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c1220;
+      --surface: #151d2e;
+      --surface2: #1c2739;
+      --border: #2a3a55;
+      --text: #e8edf5;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --accent-dim: rgba(34, 211, 238, 0.12);
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(42, 58, 85, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 58, 85, 0.12) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow {
+      position: fixed;
+      top: -100px;
+      left: -60px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3.5rem;
+    }
+    header.hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    header .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 0.85rem;
+    }
+    header h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.15rem);
+      font-weight: 700;
+      margin: 0 0 0.65rem;
+    }
+    header .lead {
+      color: var(--muted);
+      max-width: 52ch;
+      margin: 0 auto;
+      font-size: 1.02rem;
+    }
+    h2 {
+      font-size: 1.22rem;
+      font-weight: 600;
+      margin: 2rem 0 0.85rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 600;
+      margin: 1.35rem 0 0.5rem;
+      color: var(--text);
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.25rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow);
+    }
+    .card.recommend {
+      border-right: 4px solid var(--ok);
+      background: linear-gradient(-90deg, rgba(52, 211, 153, 0.08) 0%, var(--surface) 35%);
+    }
+    .card.warn {
+      border-right: 4px solid var(--warn);
+      background: linear-gradient(-90deg, rgba(251, 191, 36, 0.08) 0%, var(--surface) 35%);
+    }
+    p { margin: 0.5rem 0; color: var(--muted); }
+    p strong, li strong { color: var(--text); }
+    ul, ol { margin: 0.4rem 0 0.6rem; padding-right: 1.35rem; color: var(--muted); }
+    li { margin-bottom: 0.35rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    pre, .cmd {
+      direction: ltr;
+      text-align: left;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      line-height: 1.55;
+      color: #cbd5e1;
+      margin: 0.65rem 0;
+    }
+    .cmd { font-family: ui-monospace, Consolas, monospace; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.75rem 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.65rem;
+      text-align: right;
+    }
+    th { background: var(--surface2); color: var(--text); }
+    td { color: var(--muted); }
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      margin-left: 0.35rem;
+    }
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main>
+    <header class="hero">
+      <span class="badge">Mawid+ · Collaboration</span>
+      <h1>دليل التعاون: مجلدات، أدوات، Git، وماذا تشارك مع الفريق</h1>
+      <p class="lead">
+        خطة عملية لـ <strong style="color: var(--text);">صبري · إسراء · حنين</strong> — بدون تكرار مجلدات المشروع، مع ربط واضح بـ
+        <a href="MawidPlus-Team-Flow.html">توزيع الملفات</a>، وتعليم رفع الكود على GitHub للمبتدئين.
+      </p>
+    </header>
+
+    <h2>١) هل أعمل من «مجلد جديد» لمشروع منفصل؟</h2>
+    <div class="card recommend">
+      <p><strong>الأفضل: لا.</strong> لا تنسخ المشروع كاملًا في مجلد جديد لكل شخص — ذلك يُضاعف النسخ ويصعّب الدمج ويخرج عن تاريخ Git.</p>
+      <p>الصحيح في الفريق الواحد:</p>
+      <ul>
+        <li><strong>مستودع واحد على GitHub:</strong> <a href="https://github.com/SabryAlaa10/mawid-plus" target="_blank" rel="noopener">github.com/SabryAlaa10/mawid-plus</a></li>
+        <li>كل عضو <strong>يستنسخ (clone)</strong> المرة الأولى إلى مجلد على جهازه (مثلاً <code class="cmd" style="display:inline;padding:0.1rem 0.35rem">Desktop/mawid-plus</code>).</li>
+        <li>للعمل على ميزة دون الخلط على <code>main</code> مباشرة: أنشئ <strong>فرعًا (branch)</strong> باسم واضح، ثم ارفعه وادمج عند الانتهاء (أو اسحب طلب دمج PR).</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <p><strong>متى يُستخدم مجلد ثانٍ؟</strong> فقط إذا احتجت نسخة تجريبية معزولة لاختبار كاسر — وليس كنسخة رئيسية للتطوير اليومي.</p>
+    </div>
+
+    <h2>٢) ماذا «ترسل» لإسراء وحنين؟ (الأساسيات)</h2>
+    <p>لا تعتمد على إرسال ملفات يدويًا عبر واتساب — المصدر الواحد هو GitHub.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>ما يُشارك</th>
+          <th>الغرض</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>رابط المستودع + صلاحية Collaborator على GitHub</td>
+          <td>كل واحد يسحب ويدفع الكود من نفس المكان</td>
+        </tr>
+        <tr>
+          <td><a href="MawidPlus-Team-Flow.html">MawidPlus-Team-Flow.html</a></td>
+          <td>من يملك أي ملف (صبري / إسراء / حنين) والمراحل</td>
+        </tr>
+        <tr>
+          <td>هذا الملف (<strong>MawidPlus-Collaboration-Guide.html</strong>)</td>
+          <td>Git، الفروع، الـ commit، الأدوات</td>
+        </tr>
+        <tr>
+          <td><code>Mawid-Web/.env.example</code> ونسخة منطقية لـ Android (<code>local.properties</code> بدون رفع المفاتيح)</td>
+          <td>توضيح أسماء المتغيرات فقط — المفاتيح الحقيقية تُمرَّر خارج Git</td>
+        </tr>
+        <tr>
+          <td>قناة واحدة للتنسيق (واتساب / ديسكورد)</td>
+          <td>«من يلمس أي ملف مشترك» قبل الدمج</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>٣) Cursor مقابل Android Studio — أي رأي؟</h2>
+    <div class="card recommend">
+      <h3>الويب (React / Vite)</h3>
+      <p><strong>Cursor</strong> (أو VS Code) مناسب جدًا: تشغيل <code>npm run dev</code>، اختبار، ودمج مع الذكاء الاصطناعي. لا حاجة لـ Android Studio.</p>
+      <h3>أندرويد (Kotlin / Compose)</h3>
+      <ul>
+        <li><strong>Android Studio</strong> <strong>ضروري</strong> لتشغيل المحاكي، Gradle بشكل موثوق، Layout Inspector، وتوقيع الـ APK. استخدمه كمرجع أساسي للبناء والتشغيل على جهاز أو محاكي.</li>
+        <li><strong>Cursor</strong> يمكن استخدامه لقراءة/تعديل ملفات Kotlin إذا كان المشروع يبنى من الطرفية — لكن بدون Android Studio ستواجهون صعوبة في التشغيل والتصحيح لمعظم المطورين.</li>
+      </ul>
+      <p><strong>خلاصة عملية:</strong> <span class="tag">مثالي</span> تطوير أندرويد داخل <strong>Android Studio</strong>، ويمكن فتح نفس المجلد في Cursor لمساعدة الذكاء الاصطناعي على الملفات إن رغبتم — مع عدم حفظ تعارضات بين الأداتين (أغلقوا الملفات أو التزموا بأداة واحدة لنفس الجلسة عند التعديل المكثف).</p>
+    </div>
+
+    <h2>٤) Git وGitHub للمبتدئين — من الصفر إلى الرفع</h2>
+    <h3>تثبيت الأدوات (مرة واحدة على Windows)</h3>
+    <ol style="color: var(--muted);">
+      <li>ثبّت <strong>Git for Windows</strong> من الموقع الرسمي.</li>
+      <li>سجّل دخولك إلى <strong>GitHub</strong> في المتصفح (نفس حساب المستودع أو دعوة Collaborator).</li>
+    </ol>
+
+    <h3>أول مرة: استنساخ المشروع</h3>
+    <pre class="cmd">cd Desktop
+git clone https://github.com/SabryAlaa10/mawid-plus.git
+cd mawid-plus</pre>
+
+    <h3>قبل العمل: تحديث النسخة من الإنترنت</h3>
+    <pre class="cmd">git checkout main
+git pull origin main</pre>
+
+    <h3>فرع خاص بك (مُستحسن)</h3>
+    <pre class="cmd">git checkout -b feature/hanin-android-theme</pre>
+    <p style="font-size:0.9rem;">استبدل الجزء بعد <code>feature/</code> بما يصف مهمتك (إنجليزي أو مختصر واضح).</p>
+
+    <h3>بعد تعديل الملفات: حفظ خطوة في Git</h3>
+    <pre class="cmd">git status
+git add .
+git commit -m "feat(android): تحسين ألوان الثيم في Color.kt"</pre>
+    <p><strong>قاعدة بسيطة لرسالة الـ commit:</strong></p>
+    <ul>
+      <li><code>feat</code> — ميزة جديدة</li>
+      <li><code>fix</code> — إصلاح خطأ</li>
+      <li><code>docs</code> — توثيق فقط</li>
+      <li><code>chore</code> — صيانة (مثلاً CI)</li>
+      <li>ثم نقطتان <code>:</code> ثم نطاق قصير ثم وصف بالعربي أو الإنجليزي.</li>
+    </ul>
+
+    <h3>رفع الفرع إلى GitHub</h3>
+    <pre class="cmd">git push -u origin feature/hanin-android-theme</pre>
+    <p>بعدها يظهر الفرع على GitHub — يمكن فتح <strong>Pull Request</strong> لمراجعة صبري قبل الدمج في <code>main</code>، أو الاتفاق على دمج مباشر للفريق الصغير.</p>
+
+    <h3>إذا رفض الرفع (مصادقة)</h3>
+    <p>استخدم <strong>Personal Access Token</strong> من GitHub → Settings → Developer settings → Tokens، كـ «كلمة مرور» عند الطلب، أو فعّل <strong>Git Credential Manager</strong> مع Windows.</p>
+
+    <h2>٥) ماذا لا ترفع أبدًا؟</h2>
+    <ul>
+      <li><code>Mawid-Android/local.properties</code></li>
+      <li><code>Mawid-Web/.env</code></li>
+      <li>أي ملف يحتوي مفاتيح Supabase أو خرائط Google كاملة</li>
+    </ul>
+    <p>هذه مذكورة في <code>.gitignore</code> في المستودع — التزموا بها.</p>
+
+    <h2>٦) تذكير سريع: من يلمس ماذا؟</h2>
+    <p>ارجعوا دائمًا إلى <a href="MawidPlus-Team-Flow.html"><strong>MawidPlus-Team-Flow.html</strong></a> لقائمة الملفات حسب الصبري / إسراء / حنين وتجنّبوا تعديل نفس الملفين دون تنسيق في نفس الوقت.</p>
+
+    <footer>
+      موعد+ · مسار تعاون موحّد · حدّث هذا الدليل عند تغيير قواعد الفريق
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>موعد+ — خطة التنفيذ + Git (Branches & PR)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#0c1220;
+      --surface:#151d2e;
+      --surface2:#1c2739;
+      --border:#2a3a55;
+      --text:#e8edf5;
+      --muted:#94a3b8;
+      --accent:#22d3ee;
+      --accent2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --radius:14px;
+      --shadow:0 8px 32px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.75;
+      min-height:100vh;
+    }
+    .bg-grid{
+      position:fixed;inset:0;
+      background-image:
+        linear-gradient(rgba(42,58,85,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,58,85,.12) 1px, transparent 1px);
+      background-size:48px 48px;
+      pointer-events:none;
+      z-index:0;
+    }
+    .glow{
+      position:fixed;
+      top:-140px; right:-80px;
+      width:440px; height:440px;
+      background:radial-gradient(circle, rgba(34,211,238,.14) 0%, transparent 70%);
+      pointer-events:none;
+      z-index:0;
+    }
+    main{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2.6rem 1.25rem 4rem;}
+    header.hero{text-align:center;margin-bottom:2.25rem;}
+    header .badge{
+      display:inline-block;
+      font-size:.72rem;font-weight:700;letter-spacing:.06em;
+      color:var(--accent);
+      border:1px solid var(--border);
+      background:var(--surface);
+      padding:.35rem .85rem;border-radius:999px;
+      margin-bottom:.9rem;
+    }
+    header h1{margin:0 0 .55rem;font-size:clamp(1.65rem,3.5vw,2.25rem);letter-spacing:-.02em;}
+    header p{margin:.35rem auto 0;max-width:72ch;color:var(--muted);font-size:1.02rem;}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    h2{
+      margin:2.15rem 0 .75rem;
+      font-size:1.2rem;font-weight:700;
+      color:var(--accent);
+      border-bottom:1px solid var(--border);
+      padding-bottom:.35rem;
+    }
+    h3{margin:1.25rem 0 .35rem;font-size:1.03rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin:1rem 0;}
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:1.05rem 1.2rem;
+      box-shadow:var(--shadow);
+    }
+    .card.ok{border-right:4px solid var(--ok);background:linear-gradient(-90deg, rgba(52,211,153,.08) 0%, var(--surface) 35%);}
+    .card.warn{border-right:4px solid var(--warn);background:linear-gradient(-90deg, rgba(251,191,36,.08) 0%, var(--surface) 35%);}
+    .card.bad{border-right:4px solid var(--bad);background:linear-gradient(-90deg, rgba(251,113,133,.08) 0%, var(--surface) 35%);}
+    .pill{
+      display:inline-block;
+      font-size:.68rem;font-weight:700;
+      padding:.15rem .45rem;border-radius:7px;
+      border:1px solid var(--border);
+      background:var(--surface2);
+      color:var(--muted);
+      margin-left:.35rem;
+    }
+    .pill.a{border-color:rgba(167,139,250,.5);color:#d7ccff}
+    .pill.b{border-color:rgba(34,211,238,.55);color:#bdf7ff}
+    .pill.c{border-color:rgba(52,211,153,.55);color:#b9ffd9}
+    p,li{color:var(--muted)}
+    p strong, li strong{color:var(--text)}
+    ul,ol{margin:.35rem 0 .8rem;padding-right:1.35rem}
+    li{margin-bottom:.35rem}
+    pre{
+      direction:ltr;text-align:left;
+      background:var(--surface2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:.85rem 1rem;
+      overflow-x:auto;
+      font-size:.78rem;
+      line-height:1.6;
+      color:#cbd5e1;
+      margin:.65rem 0;
+    }
+    code{font-family:ui-monospace,Consolas,monospace}
+    table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.9rem}
+    th,td{border:1px solid var(--border);padding:.55rem .65rem;vertical-align:top}
+    th{background:var(--surface2);color:var(--text);text-align:right}
+    .kbd{
+      display:inline-block;
+      direction:ltr;
+      font-family:ui-monospace,Consolas,monospace;
+      font-size:.75rem;
+      padding:.1rem .4rem;
+      border-radius:8px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.25);
+      color:#dbeafe;
+    }
+    .section-links{
+      display:flex;flex-wrap:wrap;gap:.5rem;
+      justify-content:center;
+      margin:1rem 0 0;
+    }
+    .section-links a{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      padding:.35rem .65rem;border-radius:999px;
+      color:var(--muted);
+    }
+    .section-links a:hover{color:var(--text);text-decoration:none;border-color:rgba(34,211,238,.45)}
+    footer{
+      margin-top:2.6rem;padding-top:1.2rem;
+      border-top:1px solid var(--border);
+      text-align:center;color:var(--muted);font-size:.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main>
+    <header class="hero">
+      <span class="badge">Mawid+ · Execution + Git</span>
+      <h1>خطة تنفيذ كاملة لكل مهندس + GitHub (Branches & Pull Requests)</h1>
+      <p>
+        هذه الصفحة تلخّص “مين يعمل إيه” + “إزاي نشتغل صح على GitHub” طبقًا للتوزيع الحالي في
+        <a href="MawidPlus-Team-Flow.html">MawidPlus-Team-Flow.html</a>
+        ومع قواعد عملية للمبتدئين في Git.
+      </p>
+      <div class="section-links">
+        <a href="#roles">مسؤوليات كل مهندس</a>
+        <a href="#workflow">الـ Workflow القياسي</a>
+        <a href="#branches">ما هو الـ Branch؟</a>
+        <a href="#pr">إزاي تعمل Pull Request</a>
+        <a href="#setup">إعداد التشغيل</a>
+        <a href="#rewrite">خطة إعادة كتابة الكود</a>
+      </div>
+    </header>
+
+    <h2 id="roles">١) مسؤوليات كل مهندس (طبقًا للتوزيع الحالي)</h2>
+    <div class="grid">
+      <section class="card ok">
+        <h3>صبري <span class="pill a">Lead</span> <span class="pill b">Supabase تشغيل</span> <span class="pill b">Web Auth + UI</span> <span class="pill b">AI</span></h3>
+        <ul>
+          <li><strong>Supabase (تشغيل على السحابة):</strong> تطبيق سكربتات <code>migrations</code> في SQL Editor، التحقق من RLS/Realtime/publication، ربط Storage لصور الأطباء، اختبار سياسات الطبيب/المريض.</li>
+          <li><strong>Web:</strong> Login + ProtectedRoute + Auth + إشعارات الويب (TopBar/Notifications) + صفحات/واجهات (Profile/Schedule/Toast/Skeletons/Decor).</li>
+          <li><strong>Android (Shell + Navigation):</strong> Routes/AppNavGraph + Splash + Notifications + WorkManager reminders + MainActivity/PatientApp + Home ربط زر المساعد لاحقًا.</li>
+          <li><strong>AI:</strong> بناء RAG (مجلدات/ملفات جديدة لاحقًا) + تنسيق migrations 016/017 مع إسراء ثم تطبيقها على Supabase.</li>
+        </ul>
+        <p class="small"><strong>ملفات مرجعية:</strong> راجع القسم 2/3/4/5 في <a href="MawidPlus-Team-Flow.html">Team Flow</a>.</p>
+      </section>
+
+      <section class="card">
+        <h3>إسراء <span class="pill c">Data Owner</span></h3>
+        <ul>
+          <li><strong>منطق البيانات (Web):</strong> services + hooks + data components (appointments/queue/charts) + تنسيقات.</li>
+          <li><strong>Android Data:</strong> SupabaseProvider + repositories + DTOs + models + Result/SeedDoctorIds.</li>
+          <li><strong>Supabase (داخل Git):</strong> مراجعة/تحديث migrations كـ domain owner (لكن التشغيل على السحابة لصبري).</li>
+        </ul>
+        <p class="small"><strong>قاعدة:</strong> أي تغيير في schema/DTO/contracts لازم يتنسّق قبل الدمج.</p>
+      </section>
+
+      <section class="card">
+        <h3>حنين <span class="pill c">UI Owner</span></h3>
+        <ul>
+          <li><strong>Android UI:</strong> Auth screens (login/register) + profile + theme + components + strings/resources.</li>
+          <li><strong>Android Feature Screens:</strong> search/detail/map + booking + appointments + queue (تستهلك repositories إسراء).</li>
+          <li><strong>Web الأساسية:</strong> DashboardShell/Sidebar + صفحات Dashboard/Appointments/Queue (تستهلك hooks/components إسراء).</li>
+        </ul>
+        <p class="small"><strong>قاعدة:</strong> حنين تجمع الواجهات، إسراء تضمن صحة البيانات.</p>
+      </section>
+    </div>
+
+    <h2 id="workflow">٢) الـ Workflow القياسي اللي نمشي به (مختصر واضح)</h2>
+    <div class="card ok">
+      <ol>
+        <li><strong>اسحب آخر نسخة</strong> من GitHub قبل أي شغل: <code>git checkout main</code> ثم <code>git pull</code>.</li>
+        <li><strong>اعمل Branch</strong> لميزة/إصلاح/إعادة كتابة: <code>git checkout -b feature/…</code> أو <code>rewrite/…</code>.</li>
+        <li><strong>عدّل</strong> في نطاق ملفاتك فقط (حسب Team Flow).</li>
+        <li><strong>Commit صغير</strong> كل خطوة منطقية (لا تنتظر يوم كامل).</li>
+        <li><strong>Push</strong> للفرع: <code>git push -u origin &lt;branch&gt;</code>.</li>
+        <li><strong>افتح Pull Request</strong> → مراجعة → Merge إلى <code>main</code>.</li>
+        <li><strong>بعد الدمج</strong> ارجع <code>main</code> واعمل <code>pull</code> وكمّل.</li>
+      </ol>
+    </div>
+
+    <h2 id="branches">٣) Branches يعني إيه؟ (باللغة العملية)</h2>
+    <div class="card">
+      <p><strong>Branch</strong> = “مسار موازي” للكود بعيد عن <code>main</code>. تشتغل براحتك وتكسر وتجرب، وبعدين تدمج لما تستقر.</p>
+      <p><strong>إحنا هنستخدم 3 أنواع أساسية:</strong></p>
+      <ul>
+        <li><strong><code>feature/&lt;name&gt;-&lt;scope&gt;</code></strong> لميزة جديدة (مثال: <code>feature/hanin-android-profile</code>).</li>
+        <li><strong><code>fix/&lt;scope&gt;-&lt;issue&gt;</code></strong> لإصلاح (مثال: <code>fix/web-ci-env</code>).</li>
+        <li><strong><code>rewrite/&lt;name&gt;-&lt;scope&gt;</code></strong> لإعادة كتابة جزء بهدف الفهم (مثال: <code>rewrite/esraa-repositories</code>).</li>
+      </ul>
+      <p class="small"><strong>ممنوع:</strong> الشغل المباشر على <code>main</code> إلا في حالات طارئة وبموافقة صبري.</p>
+    </div>
+
+    <h2 id="pr">٤) Pull Request (PR) — يعمل إيه وإزاي نستخدمه؟</h2>
+    <div class="grid">
+      <div class="card ok">
+        <h3>وظيفة الـ PR</h3>
+        <ul>
+          <li><strong>مراجعة</strong> قبل الدمج (مافيش مفاجآت على main).</li>
+          <li><strong>CI</strong> يشتغل تلقائيًا (ويب + أندرويد).</li>
+          <li><strong>توثيق</strong> التغيير (عنوان + وصف + ملفات).</li>
+        </ul>
+      </div>
+      <div class="card warn">
+        <h3>قواعد PR عندنا</h3>
+        <ul>
+          <li><strong>صغير أفضل</strong>: PR كبير جدًا = صعب يتراجع.</li>
+          <li><strong>ملفات مشتركة</strong> (AppNavGraph/Routes): لازم mention لصبري.</li>
+          <li><strong>ما ترفعش أسرار</strong>: لا <code>.env</code> ولا <code>local.properties</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>خطوات فتح PR (ببساطة)</h3>
+      <ol>
+        <li>بعد <code>push</code> افتح المستودع على GitHub.</li>
+        <li>روح <strong>Pull requests</strong> → <strong>New pull request</strong>.</li>
+        <li><strong>Base</strong> = <code>main</code> و<strong>Compare</strong> = فرعك.</li>
+        <li>اكتب عنوانًا واضحًا + وصف “ليه” + “إزاي أختبر”.</li>
+        <li>Create PR ثم اطلب مراجعة من صبري (أو الشخص المناسب).</li>
+      </ol>
+      <p class="small"><strong>قالب وصف PR مقترح:</strong></p>
+      <pre>## Summary
+- ...
+
+## Test plan
+- [ ] android: ...
+- [ ] web: ...</pre>
+    </div>
+
+    <h2 id="setup">٥) إعداد التشغيل لكل واحد (عشان يقدر يبني ويختبر)</h2>
+    <div class="card ok">
+      <h3>Web (Mawid-Web)</h3>
+      <pre>cd Mawid-Web
+npm install
+copy .env.example .env   # على Windows
+npm test
+npm run dev</pre>
+      <p class="small"><strong>ملحوظة:</strong> CI بيستخدم قيم placeholder، لكن عند التشغيل المحلي محتاج <code>.env</code> فعلي.</p>
+    </div>
+    <div class="card ok">
+      <h3>Android (Mawid-Android)</h3>
+      <pre>cd Mawid-Android
+# أنشئ local.properties في الجذر (غير مرفوع لـ Git)
+./gradlew testDebugUnitTest
+./gradlew assembleDebug</pre>
+      <p class="small"><strong>الأفضل تشغيل Android Studio</strong> للمحاكي والتصحيح.</p>
+    </div>
+
+    <h2 id="rewrite">٦) هدفك الحالي: “إعادة كتابة الكود للفهم” — نعملها إزاي من غير ما نبوّظ main؟</h2>
+    <div class="card warn">
+      <p><strong>القاعدة الذهبية:</strong> <code>main</code> يفضل reference شغال. إعادة الكتابة تكون على فروع <code>rewrite/…</code> وتندمج على دفعات.</p>
+      <p><strong>ليه؟</strong> عشان نحتفظ بنسخة شغالة دايمًا + نسمح بالتعلّم بدون ضغط.</p>
+    </div>
+
+    <div class="card">
+      <h3>الطريقة المضمونة (لكل مهندس)</h3>
+      <ol>
+        <li>ابدأ من <code>main</code>: <code>git checkout main</code> ثم <code>git pull</code>.</li>
+        <li>اعمل فرع rewrite:
+          <ul>
+            <li>صبري: <code>rewrite/sabry-web-auth-ui</code> أو <code>rewrite/sabry-ai-rag</code></li>
+            <li>إسراء: <code>rewrite/esraa-data-layer</code></li>
+            <li>حنين: <code>rewrite/hanin-android-ui</code> أو <code>rewrite/hanin-web-shell</code></li>
+          </ul>
+        </li>
+        <li>اقسم إعادة الكتابة إلى “وحدات صغيرة” (مثال: صفحة واحدة + ViewModel واحد + repo call واحد).</li>
+        <li>كل وحدة: اختبر → commit → push → PR صغير.</li>
+      </ol>
+      <p class="small"><strong>نصيحة:</strong> إعادة الكتابة لا تعني copy/paste. اقرأ ثم اكتب بنفسك.</p>
+    </div>
+
+    <h2>٧) قوالب أوامر جاهزة لكل واحد (انسخ/الصق)</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>إنشاء فرع + رفع أول مرة</h3>
+        <pre>git checkout main
+git pull origin main
+git checkout -b feature/&lt;name&gt;-&lt;scope&gt;
+git add .
+git commit -m \"feat(scope): short description\"
+git push -u origin feature/&lt;name&gt;-&lt;scope&gt;</pre>
+      </div>
+      <div class="card">
+        <h3>تحديث فرعك قبل ما تكمل</h3>
+        <pre>git checkout main
+git pull origin main
+git checkout &lt;your-branch&gt;
+git merge main</pre>
+        <p class="small">لو حصل تعارض (conflict) اطلب مساعدة صبري فورًا.</p>
+      </div>
+    </div>
+
+    <h2>٨) “مين يعمل إيه” كقائمة تنفيذ (نقطة بداية)</h2>
+    <div class="card ok">
+      <table>
+        <thead>
+          <tr>
+            <th>المهندس</th>
+            <th>ابدأ بـ</th>
+            <th>ناتج ملموس (Definition of Done)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>صبري</strong></td>
+            <td>Supabase تشغيل + Web Login/ProtectedRoute</td>
+            <td>دكتور يقدر يسجّل دخول + صفحات محمية + CI web أخضر</td>
+          </tr>
+          <tr>
+            <td><strong>إسراء</strong></td>
+            <td>Data layer: repositories/DTO + web services/hooks</td>
+            <td>استعلامات المواعيد/الطابور ثابتة + عقود بيانات واضحة + tests (إن وجدت) محدثة</td>
+          </tr>
+          <tr>
+            <td><strong>حنين</strong></td>
+            <td>Android UI: login/register + web shell pages</td>
+            <td>تدفق تسجيل مريض يعمل + صفحات لوحة تظهر بيانات من hooks بدون كسر</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card bad">
+      <h3>ممنوعات (تمنع مشاكل كبيرة)</h3>
+      <ul>
+        <li><strong>لا ترفع</strong> <code>Mawid-Web/.env</code> أو <code>Mawid-Android/local.properties</code>.</li>
+        <li><strong>لا تغيّر</strong> schema/DTO بدون تنسيق (إسراء + صبري).</li>
+        <li><strong>لا تعمل</strong> PR ضخم جدًا مرة واحدة. قسمه.</li>
+      </ul>
+    </div>
+
+    <footer>
+      Mawid+ · التنفيذ المنظم + GitHub · راجع أيضًا: <a href="MawidPlus-Team-Flow.html">Team Flow</a> و <a href="MawidPlus-Collaboration-Guide.html">Collaboration Guide</a>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="موعد+ (Mawid+) — منصة ربط المرضى بالعيادات، تطبيق أندرويد، لوحة أطباء ويب، ومساعد طبي ذكي." />
+  <title>موعد+ | يوم علمي — عرض المنصة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --bg-card: rgba(18, 26, 42, 0.75);
+      --border: rgba(94, 234, 212, 0.18);
+      --text: #e8edf5;
+      --muted: #94a3b8;
+      --accent: #2dd4bf;
+      --accent-dim: #0d9488;
+      --violet: #a78bfa;
+      --sun: #fbbf24;
+      --radius: 18px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --max: 1100px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Tajawal", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 1.05rem;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    .glow {
+      position: fixed;
+      width: 60vmax;
+      height: 60vmax;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.12) 0%, transparent 70%);
+      top: -20%;
+      left: -10%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-2 {
+      bottom: -15%;
+      right: -10%;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+      top: auto;
+      left: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(10, 15, 26, 0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 28px rgba(45, 212, 191, 0.35);
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1rem;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    main { position: relative; z-index: 1; }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem 1.25rem 4rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(45, 212, 191, 0.08);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      margin: 0 0 1rem;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+    }
+    .hero h1 span {
+      background: linear-gradient(120deg, var(--accent), #5eead4, var(--violet));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-lead {
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: 1.15rem;
+      margin-bottom: 2rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.35rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      color: #042f2e;
+      box-shadow: 0 12px 40px rgba(45, 212, 191, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem;
+    }
+    .section-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      margin: 0 0 2rem;
+      max-width: 42rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.35rem;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(45, 212, 191, 0.35);
+      transform: translateY(-3px);
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .card-icon.a { background: rgba(45, 212, 191, 0.15); }
+    .card-icon.b { background: rgba(167, 139, 250, 0.15); }
+    .card-icon.c { background: rgba(251, 191, 36, 0.12); }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .card p { margin: 0; color: var(--muted); font-size: 0.98rem; }
+    .card ul {
+      margin: 1rem 0 0;
+      padding-right: 1.1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .card ul li { margin-bottom: 0.35rem; }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.28rem 0.65rem;
+      border-radius: 8px;
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .flow-step {
+      text-align: center;
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+      background: rgba(18, 26, 42, 0.5);
+    }
+    .flow-step strong {
+      display: block;
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .gallery figure {
+      margin: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: middle;
+    }
+    .gallery figcaption {
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .qr-box {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, rgba(45, 212, 191, 0.06), rgba(167, 139, 250, 0.05));
+      text-align: center;
+    }
+    .qr-box p { color: var(--muted); margin: 0 0 1rem; max-width: 32rem; margin-inline: auto; }
+    .qr-placeholder {
+      width: min(220px, 70vw);
+      height: min(220px, 70vw);
+      margin: 0 auto 1rem;
+      border-radius: 16px;
+      border: 2px dashed rgba(45, 212, 191, 0.4);
+      display: grid;
+      place-items: center;
+      font-size: 0.9rem;
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding: 2rem 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    footer strong { color: var(--text); }
+
+    @media print {
+      header { position: static; }
+      .btn, nav { display: none; }
+      body { background: #fff; color: #111; }
+      .card, .flow-step { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <span>موعد+ <small style="font-weight:500;color:var(--muted);font-size:0.85em">Mawid+</small></span>
+      </div>
+      <nav aria-label="أقسام الصفحة">
+        <ul>
+          <li><a href="#about">عن المنصة</a></li>
+          <li><a href="#products">مكونات المشروع</a></li>
+          <li><a href="#tech">التقنيات</a></li>
+          <li><a href="#flow">كيف تعمل</a></li>
+          <li><a href="#gallery">لقطات</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="hero-badge">عرض يوم علمي — كلية الحاسبات والمعلومات</div>
+      <h1>منصة <span>موعد+</span><br />من المريض إلى العيادة… بذكاء</h1>
+      <p class="hero-lead">
+        منظومة متكاملة لحجز المواعيد ومتابعة الطوابير: تطبيق <strong>أندرويد</strong> للمريض،
+        <strong>لوحة ويب</strong> لإدارة العيادة، و<strong>مساعد طبي ذكي</strong> (FastAPI) يدعم المحادثة واقتراح التخصص والأطباء مع ربط <strong>Supabase</strong>.
+      </p>
+      <div class="hero-actions">
+        <!-- بعد رفع الصفحة على الإنترنت: ضع رابط الاستضافة في href للزر الأول -->
+        <a class="btn btn-primary" href="#products">استكشف المشروع</a>
+        <a class="btn btn-ghost" href="#tech">التقنيات المستخدمة</a>
+      </div>
+    </div>
+
+    <section id="about">
+      <h2 class="section-title">عن المنصة</h2>
+      <p class="section-sub">
+        تهدف موعد+ إلى تبسيط رحلة المريض: البحث عن طبيب، حجز موعد، متابعة الدور، والاستفادة من إرشادات أولية عبر مساعد ذكي
+        — مع احترام خصوصية البيانات والربط الآمن بالخلفية السحابية.
+      </p>
+    </section>
+
+    <section id="products">
+      <h2 class="section-title">مكونات المشروع</h2>
+      <p class="section-sub">ثلاث طبقات رئيسية تعمل معاً على قاعدة بيانات ومصادقة موحدة.</p>
+      <div class="grid-3">
+        <article class="card">
+          <div class="card-icon a" aria-hidden="true">📱</div>
+          <h3>تطبيق المريض (Android)</h3>
+          <p>Jetpack Compose، MVVM، Supabase Kotlin SDK، إشعارات، خرائط، وشاشات متعددة.</p>
+          <ul>
+            <li>الرئيسية، البحث، الحجز، الطابور، المواعيد، الملف الشخصي</li>
+            <li>مساعد موعد+ (دردشة + بطاقة اقتراح طبيب)</li>
+            <li>واجهة عربية مع دعم RTL</li>
+          </ul>
+          <div class="stack">
+            <span class="tag">Kotlin</span>
+            <span class="tag">Compose</span>
+            <span class="tag">Coroutines</span>
+            <span class="tag">StateFlow</span>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-icon b" aria-hidden="true">🖥️</div>
+          <h3>لوحة الأطباء (ويب)</h3>
+          <p>واجهة ويب لإدارة الجداول والمواعيد والطابور وربطها بـ Supabase.</p>
+          <ul>
+            <li>جدول المواعيد وتصدير PDF</li>
+            <li>إدارة قائمة الانتظار</li>
+            <li>تكامل مع نفس قاعدة البيانات</li>
+          </ul>
+          <div class="stack">
+            <span class="tag">React</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">Vite</span>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-icon c" aria-hidden="true">🤖</div>
+          <h3>المساعد الذكي (FastAPI)</h3>
+          <p>خادم Python يقدم REST API للمحادثة: RAG، نموذج لغوي، كشف تخصص، واستعلام أطباء من قاعدة البيانات.</p>
+          <ul>
+            <li>مسارات: chat، doctors، appointments</li>
+            <li>تحقق من الجلسة عبر Supabase Auth</li>
+            <li>قاعدة معرفة طبية عربية</li>
+          </ul>
+          <div class="stack">
+            <span class="tag">FastAPI</span>
+            <span class="tag">Python</span>
+            <span class="tag">RAG / LLM</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="tech">
+      <h2 class="section-title">التقنيات والبنية</h2>
+      <p class="section-sub">ملخص تقني يصلح للمناقشة الأكاديمية أو اللوحة العلمية.</p>
+      <div class="grid-3">
+        <article class="card">
+          <h3>الواجهات</h3>
+          <ul>
+            <li>Material 3 على أندرويد</li>
+            <li>تصميم متجاوب للويب</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>الخلفية والبيانات</h3>
+          <ul>
+            <li>Supabase: Postgres + Auth + Storage</li>
+            <li>سياسات RLS ومهاجرات SQL</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>الذكاء الاصطناعي</h3>
+          <ul>
+            <li>استرجاع معزز (RAG) للسياق الطبي</li>
+            <li>مطابقة التخصص مع قيم قاعدة البيانات</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="flow">
+      <h2 class="section-title">تدفق مبسّط</h2>
+      <p class="section-sub">من لحظة فتح التطبيق حتى اقتراح طبيب من المساعد.</p>
+      <div class="flow">
+        <div class="flow-step"><strong>1</strong> المريض يسجّل الدخول عبر Supabase Auth</div>
+        <div class="flow-step"><strong>2</strong> يتصفح الأطباء ويحجز موعداً في الجدول</div>
+        <div class="flow-step"><strong>3</strong> يتابع الطابور والإشعارات من التطبيق</div>
+        <div class="flow-step"><strong>4</strong> يتحدث مع المساعد؛ الخادم يستدعي LLM + RAG</div>
+        <div class="flow-step"><strong>5</strong> عند الجاهزية: عرض أطباء مطابقين للتخصص</div>
+      </div>
+
+      <div class="qr-box" id="qr">
+        <p><strong>رمز QR للجميع (إنترنت)</strong> — استخدم هذا الرمز بعد تفعيل <strong>GitHub Pages</strong> على المستودع (مجلد <code dir="ltr">/docs</code>). يفتح عند أي شخص من أي شبكة أو باقة داتا. التفاصيل خطوة بخطوة في الملف <code dir="ltr">HOSTING-AR.txt</code> داخل مجلد العرض.</p>
+        <figure style="margin:0 auto 1rem;max-width:280px">
+          <img src="yom-elmy-mawid-qr-github.png" alt="QR لرابط GitHub Pages العام لموعد+" width="280" height="280" style="border-radius:16px;background:#fff;padding:10px;display:block;margin-inline:auto" loading="lazy" />
+        </figure>
+        <p style="font-size:0.88rem;color:var(--muted);margin:0 0 1.25rem">الرابط داخل الرمز: <code dir="ltr" style="background:rgba(0,0,0,.25);padding:4px 10px;border-radius:8px;font-size:0.85em">https://sabryalaa10.github.io/mawid-plus/</code></p>
+        <p style="font-size:0.92rem;color:var(--muted);margin:0;border-top:1px solid var(--border);padding-top:1.25rem"><strong>ملاحظة:</strong> QR على عنوان <code dir="ltr">192.168.x.x</code> (شبكة منزلية) <strong>لا يعمل</strong> لأصحابك على واي فاي آخر أو باقة موبايل — هذا طبيعي وليس عطلاً في الصفحة.</p>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2 class="section-title">لقطات من المنصة</h2>
+      <p class="section-sub">الصور داخل <code dir="ltr">docs/assets/screenshots/</code> وتُعرض تلقائياً عند فتح الصفحة من <strong>رابط عام</strong> (GitHub Pages) أو من الخادم المحلي.</p>
+      <div class="gallery">
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20060852.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 1</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20060916.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 2</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20060934.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 3</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20060945.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 4</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20060957.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 5</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061006.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 6</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061416.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 7</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061443.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 8</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061456.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 9</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061505.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 10</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061514.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 11</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/Screenshot%202026-04-28%20061522.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 12</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/screenshots/screen.png" alt="موعد+ — لقطة شاشة" loading="lazy" />
+          <figcaption>لقطة 13 — screen.png</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>تنويه:</strong> المساعد الذكي للإرشاد الأولي فقط ولا يغني عن تشخيص أو علاج من طبيب مختص.</p>
+    <p style="margin-top:0.75rem">مشروع موعد+ — عرض يوم علمي. يمكن إضافة روابط GitHub أو فيديو توضيحي في نسختك.</p>
+  </footer>
+</body>
+</html>
